@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.inter().fontFamily,
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter MVVM'),
+      home: const MyHomePage(title: 'Expenses'),
     );
   }
 }
@@ -42,8 +42,23 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        centerTitle: true,
+        title: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 0.5),
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          child: Text(widget.title, style: const TextStyle(fontSize: 14.0)),
+        ),
+        leading: const Padding(
+            padding: EdgeInsets.only(left: 16.0), child: CircleAvatar()),
+        actions: [
+          Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: IconButton(
+                  onPressed: () => {}, icon: const Icon(Icons.notifications)))
+        ],
       ),
       body: Center(
         child: Column(
