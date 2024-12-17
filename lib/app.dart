@@ -30,55 +30,79 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: 0.5),
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-          child: Text(widget.title, style: const TextStyle(fontSize: 14.0)),
+    AppBar appBar = AppBar(
+      centerTitle: true,
+      title: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey, width: 0.5),
+          borderRadius: BorderRadius.circular(30.0),
         ),
-        leading: const Padding(
-            padding: EdgeInsets.only(left: 16.0), child: CircleAvatar()),
-        actions: [
-          Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: IconButton(
-                  onPressed: () => {}, icon: const Icon(Icons.notifications)))
-        ],
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Text(widget.title, style: const TextStyle(fontSize: 14.0)),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      leading: const Padding(
+          padding: EdgeInsets.only(left: 16.0), child: CircleAvatar()),
+      actions: [
+        Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: IconButton(
+                onPressed: () => {}, icon: const Icon(Icons.notifications)))
+      ],
     );
+    return Scaffold(
+        appBar: appBar,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const Center(
+                child: Text('Account Balances'),
+              ),
+              const Center(
+                child: Text(
+                  '\$9000',
+                  style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w700),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(10),
+                height: 200,
+                child: GridView.count(
+                  crossAxisSpacing: 10,
+                  shrinkWrap: true,
+                  childAspectRatio: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 2,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      child: Card(
+                        color: Colors.teal[100],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          child: Text("He'd have you all unravel at the"),
+                        ),
+                      ),
+                    ),
+                    Card(
+                      color: Colors.teal[100],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        child: Text("He'd have you all unravel at the"),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
