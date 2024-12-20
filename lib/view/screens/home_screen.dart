@@ -55,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: appBar,
         body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               const Center(
@@ -66,20 +67,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w700),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.all(10),
-                height: 200,
-                child: GridView.count(
-                  crossAxisSpacing: 10,
-                  shrinkWrap: true,
-                  childAspectRatio: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 2,
-                  children: const [
-                    IncomeExpensesCardWidget(title: 'Income', amount: 2000),
-                    IncomeExpensesCardWidget(title: 'Expense', amount: 2000)
-                  ],
-                ),
+              GridView.count(
+                crossAxisSpacing: 10,
+                shrinkWrap: true,
+                childAspectRatio: 2,
+                mainAxisSpacing: 10,
+                crossAxisCount: 2,
+                children: const [
+                  IncomeExpensesCardWidget(title: 'Income', amount: 2000),
+                  IncomeExpensesCardWidget(title: 'Expense', amount: 2000)
+                ],
               )
             ],
           ),
