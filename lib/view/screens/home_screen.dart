@@ -57,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Center(
                 child: Text('Account Balances'),
@@ -68,16 +69,33 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               GridView.count(
+                padding: const EdgeInsets.all(8.0),
                 crossAxisSpacing: 10,
                 shrinkWrap: true,
                 childAspectRatio: 2,
                 mainAxisSpacing: 10,
                 crossAxisCount: 2,
                 children: const [
-                  IncomeExpensesCardWidget(title: 'Income', amount: 2000),
-                  IncomeExpensesCardWidget(title: 'Expense', amount: 2000)
+                  IncomeExpensesCardWidget(
+                    title: 'Income',
+                    amount: 2000,
+                    icon: Icons.arrow_downward,
+                    color: Color.fromRGBO(0, 168, 107, 100),
+                  ),
+                  IncomeExpensesCardWidget(
+                    title: 'Expense',
+                    amount: 2000,
+                    icon: Icons.arrow_upward,
+                    color: Colors.red,
+                  )
                 ],
-              )
+              ),
+              const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Spend Frequency',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ))
             ],
           ),
         ));
