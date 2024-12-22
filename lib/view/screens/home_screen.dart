@@ -1,3 +1,4 @@
+import 'package:expense_tracker/view/widgets/chart/line_chart.dart';
 import 'package:expense_tracker/view/widgets/income_expenses_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -95,7 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(
                     'Spend Frequency',
                     style: TextStyle(fontWeight: FontWeight.w600),
-                  ))
+                  )),
+              const LineChartWidget()
             ],
           ),
         ));
