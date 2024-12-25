@@ -23,13 +23,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
       children: <Widget>[
         AspectRatio(
           aspectRatio: 1.70,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              right: 18,
-              left: 12,
-              top: 24,
-              bottom: 12,
-            ),
+          child: SizedBox(
             child: LineChart(
               showAvg ? avgData() : mainData(),
             ),
@@ -64,14 +58,26 @@ class _LineChartSample2State extends State<LineChartWidget> {
     );
     Widget text;
     switch (value.toInt()) {
+      case 1:
+        text = const Text('Mon', style: style);
+        break;
       case 2:
-        text = const Text('MAR', style: style);
+        text = const Text('Tue', style: style);
+        break;
+      case 3:
+        text = const Text('Wed', style: style);
+        break;
+      case 4:
+        text = const Text('Thu', style: style);
         break;
       case 5:
-        text = const Text('JUN', style: style);
+        text = const Text('Fri', style: style);
         break;
-      case 8:
-        text = const Text('SEP', style: style);
+      case 6:
+        text = const Text('Sat', style: style);
+        break;
+      case 7:
+        text = const Text('Sun', style: style);
         break;
       default:
         text = const Text('', style: style);
@@ -153,7 +159,7 @@ class _LineChartSample2State extends State<LineChartWidget> {
         ),
       ),
       borderData: FlBorderData(
-        show: true,
+        show: false,
         border: Border.all(color: const Color(0xff37434d)),
       ),
       minX: 0,
