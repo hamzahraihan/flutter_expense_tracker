@@ -1,6 +1,11 @@
 import 'dart:ui';
 
 extension ColorExtension on Color {
+  double get r => 0.0;
+  double get g => 0.0;
+  double get b => 0.0;
+  double get a => 0.0;
+
   /// Convert the color to a darken color based on the [percent]
   Color darken([int percent = 40]) {
     assert(1 <= percent && percent <= 100);
