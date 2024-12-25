@@ -19,8 +19,8 @@ class BarChartWidget extends StatefulWidget {
       ];
 
   final Color barBackgroundColor =
-      AppColors.contentColorWhite.darken().withOpacity(0.3);
-  final Color barColor = AppColors.contentColorWhite;
+      AppColors.contentColorWhite.darken().withOpacity(0.1);
+  final Color barColor = AppColors.contentColorBlue;
   final Color touchedBarColor = AppColors.contentColorGreen;
 
   @override
@@ -41,37 +41,21 @@ class BarChartSample1State extends State<BarChartWidget> {
       child: Stack(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                const Text(
-                  'Mingguan',
-                  style: TextStyle(
-                    color: AppColors.contentColorGreen,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 const SizedBox(
                   height: 4,
                 ),
-                Text(
-                  'Grafik konsumsi kalori',
-                  style: TextStyle(
-                    color: AppColors.contentColorGreen.darken(),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 const SizedBox(
-                  height: 38,
+                  height: 10,
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: BarChart(
-                      isPlaying ? randomData() : mainBarData(),
+                      mainBarData(),
                       duration: animDuration,
                     ),
                   ),
@@ -82,26 +66,6 @@ class BarChartSample1State extends State<BarChartWidget> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: Icon(
-                  isPlaying ? Icons.pause : Icons.play_arrow,
-                  color: AppColors.contentColorGreen,
-                ),
-                onPressed: () {
-                  setState(() {
-                    isPlaying = !isPlaying;
-                    if (isPlaying) {
-                      refreshState();
-                    }
-                  });
-                },
-              ),
-            ),
-          )
         ],
       ),
     );
@@ -162,8 +126,8 @@ class BarChartSample1State extends State<BarChartWidget> {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-          getTooltipColor: (_) => Colors.blueGrey,
-          tooltipHorizontalAlignment: FLHorizontalAlignment.right,
+          getTooltipColor: (_) => Colors.white,
+          tooltipHorizontalAlignment: FLHorizontalAlignment.center,
           tooltipMargin: -10,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
             String weekDay;
@@ -195,7 +159,7 @@ class BarChartSample1State extends State<BarChartWidget> {
             return BarTooltipItem(
               '$weekDay\n',
               const TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -203,7 +167,7 @@ class BarChartSample1State extends State<BarChartWidget> {
                 TextSpan(
                   text: (rod.toY - 1).toString(),
                   style: const TextStyle(
-                    color: Colors.white, //widget.touchedBarColor,
+                    color: Colors.black, //widget.touchedBarColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -255,7 +219,7 @@ class BarChartSample1State extends State<BarChartWidget> {
 
   Widget getTitles(double value, TitleMeta meta) {
     const style = TextStyle(
-      color: Colors.white,
+      color: Colors.black,
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
