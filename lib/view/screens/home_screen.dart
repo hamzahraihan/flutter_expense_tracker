@@ -1,4 +1,4 @@
-import 'package:expense_tracker/view/widgets/chart/line_chart.dart';
+import 'package:expense_tracker/view/widgets/chart/bar_chart.dart';
 import 'package:expense_tracker/view/widgets/income_expenses_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,6 +35,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     AppBar appBar = AppBar(
+      surfaceTintColor: Colors.black45,
+      scrolledUnderElevation: 4.0,
+      forceMaterialTransparency: true,
       centerTitle: true,
       title: Container(
         decoration: BoxDecoration(
@@ -97,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     'Spend Frequency',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   )),
-              const LineChartWidget()
+              BarChartWidget()
             ],
           ),
         ));
