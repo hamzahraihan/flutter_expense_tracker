@@ -18,16 +18,15 @@ class BarChartWidget extends StatefulWidget {
         AppColors.contentColorRed,
       ];
 
-  final Color barBackgroundColor =
-      AppColors.contentColorWhite.darken().withOpacity(0.1);
-  final Color barColor = AppColors.contentColorBlue;
+  final Color barBackgroundColor = AppColors.contentColorBlack.withOpacity(0.5);
+  final Color barColor = AppColors.contentColorWhite;
   final Color touchedBarColor = AppColors.contentColorGreen;
 
   @override
-  State<StatefulWidget> createState() => BarChartSample1State();
+  State<BarChartWidget> createState() => _BarChartWidgetState();
 }
 
-class BarChartSample1State extends State<BarChartWidget> {
+class _BarChartWidgetState extends State<BarChartWidget> {
   final Duration animDuration = const Duration(milliseconds: 250);
 
   int touchedIndex = -1;
@@ -37,19 +36,20 @@ class BarChartSample1State extends State<BarChartWidget> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1,
+      aspectRatio: 2,
       child: Stack(
         children: <Widget>[
-          Padding(
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.contentColorCyan,
+              borderRadius: BorderRadius.circular(16),
+            ),
             padding: const EdgeInsets.all(4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 const SizedBox(
-                  height: 4,
-                ),
-                const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 Expanded(
                   child: Padding(
@@ -60,9 +60,7 @@ class BarChartSample1State extends State<BarChartWidget> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -220,7 +218,7 @@ class BarChartSample1State extends State<BarChartWidget> {
   Widget getTitles(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Colors.black,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w900,
       fontSize: 14,
     );
     Widget text;
