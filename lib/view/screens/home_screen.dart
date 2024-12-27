@@ -1,3 +1,4 @@
+import 'package:expense_tracker/view/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/view/widgets/chart/bar_chart.dart';
 import 'package:expense_tracker/view/widgets/income_expenses_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -104,12 +105,13 @@ class _MyHomePageState extends State<MyHomePage> {
               const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'Recent Transactions',
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
-                      
+                      PrimaryButtonWidget(title: 'See All')
                     ],
                   ))
             ],
