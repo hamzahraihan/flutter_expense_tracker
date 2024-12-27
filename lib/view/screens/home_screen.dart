@@ -100,7 +100,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     'Spend Frequency',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   )),
-              BarChartWidget()
+              BarChartWidget(),
+              const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Recent Transactions',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      
+                    ],
+                  ))
             ],
           ),
         ));
