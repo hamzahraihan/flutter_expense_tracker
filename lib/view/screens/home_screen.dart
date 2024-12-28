@@ -48,74 +48,75 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Text(widget.title, style: const TextStyle(fontSize: 14.0)),
       ),
-      leading: const Padding(
-          padding: EdgeInsets.only(left: 16.0), child: CircleAvatar()),
+      leading: IconButton(onPressed: () {}, icon: const Icon(Icons.person)),
       actions: [
-        Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: IconButton(
-                onPressed: () => {}, icon: const Icon(Icons.notifications)))
+        IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.notifications,
+            ))
       ],
     );
     return Scaffold(
-        appBar: appBar,
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Center(
-                child: Text('Account Balances'),
+      padding: const EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SafeArea(child: appBar),
+          const SizedBox(height: 16.0),
+          const Center(
+            child: Text('Account Balances'),
+          ),
+          const Center(
+            child: Text(
+              '\$9000',
+              style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w700),
+            ),
+          ),
+          GridView.count(
+            padding: const EdgeInsets.all(8.0),
+            crossAxisSpacing: 10,
+            shrinkWrap: true,
+            childAspectRatio: 2,
+            mainAxisSpacing: 10,
+            crossAxisCount: 2,
+            children: const [
+              IncomeExpensesCardWidget(
+                title: 'Income',
+                amount: 2000,
+                icon: Icons.arrow_downward,
+                color: Color.fromRGBO(0, 168, 107, 100),
               ),
-              const Center(
-                child: Text(
-                  '\$9000',
-                  style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w700),
-                ),
-              ),
-              GridView.count(
-                padding: const EdgeInsets.all(8.0),
-                crossAxisSpacing: 10,
-                shrinkWrap: true,
-                childAspectRatio: 2,
-                mainAxisSpacing: 10,
-                crossAxisCount: 2,
-                children: const [
-                  IncomeExpensesCardWidget(
-                    title: 'Income',
-                    amount: 2000,
-                    icon: Icons.arrow_downward,
-                    color: Color.fromRGBO(0, 168, 107, 100),
-                  ),
-                  IncomeExpensesCardWidget(
-                    title: 'Expense',
-                    amount: 2000,
-                    icon: Icons.arrow_upward,
-                    color: Colors.red,
-                  )
-                ],
-              ),
-              const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Spend Frequency',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  )),
-              BarChartWidget(),
-              const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Recent Transactions',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      PrimaryButtonWidget(title: 'See All')
-                    ],
-                  ))
+              IncomeExpensesCardWidget(
+                title: 'Expense',
+                amount: 2000,
+                icon: Icons.arrow_upward,
+                color: Colors.red,
+              )
             ],
           ),
-        ));
+          const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Spend Frequency',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              )),
+          BarChartWidget(),
+          const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Recent Transactions',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  PrimaryButtonWidget(title: 'See All')
+                ],
+              ))
+        ],
+      ),
+    ));
   }
 }
