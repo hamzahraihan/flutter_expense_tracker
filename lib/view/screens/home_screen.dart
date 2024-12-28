@@ -48,7 +48,11 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Text(widget.title, style: const TextStyle(fontSize: 14.0)),
       ),
-      leading: IconButton(onPressed: () {}, icon: const Icon(Icons.person)),
+      leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.menu,
+          )),
       actions: [
         IconButton(
             onPressed: () {},
@@ -59,7 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     return Scaffold(
         body: SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -75,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           GridView.count(
+            padding: const EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
             crossAxisSpacing: 10,
             shrinkWrap: true,
             childAspectRatio: 2,
@@ -96,14 +100,29 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
           const Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
               child: Text(
                 'Spend Frequency',
                 style: TextStyle(fontWeight: FontWeight.w600),
               )),
-          BarChartWidget(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+            child: BarChartWidget(),
+          ),
           const Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Recent Transactions',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  PrimaryButtonWidget(title: 'See All')
+                ],
+              )),
+          const Padding(
+              padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
