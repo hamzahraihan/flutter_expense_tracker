@@ -1,6 +1,8 @@
+import 'package:expense_tracker/model/transactions_model.dart';
 import 'package:expense_tracker/view/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/view/widgets/chart/bar_chart.dart';
 import 'package:expense_tracker/view/widgets/income_expenses_card_widget.dart';
+import 'package:expense_tracker/view/widgets/recent_transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -121,18 +123,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   PrimaryButtonWidget(title: 'See All')
                 ],
               )),
+          // Padding(
+          //     padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+          //     child: Column(
+          //       children: transactionsDataList.map((item) {
+          //         return Text(item.title);
+          //       }).toList(),
+          //     )),
           const Padding(
               padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Recent Transactions',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  PrimaryButtonWidget(title: 'See All')
-                ],
-              ))
+              child: RecentTransactionsWidget(
+                  icon: Icons.abc,
+                  title: 'Transaction',
+                  description: 'transaction')),
         ],
       ),
     ));
