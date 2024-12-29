@@ -134,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: RecentTransactionsWidget(
                   icon: Icons.shopping_cart,
-                  title: 'Transaction',
+                  title: 'Shopping',
                   description: 'transaction')),
         ],
       ),
