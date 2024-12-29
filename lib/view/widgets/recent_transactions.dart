@@ -1,3 +1,4 @@
+import 'package:expense_tracker/view/util/expenses_color.dart';
 import 'package:flutter/material.dart';
 
 class RecentTransactionsWidget extends StatefulWidget {
@@ -35,17 +36,18 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
-              color: Colors.white,
+              color: ExpensesColor(expenseTitle: title).getColor(),
             ),
             padding: const EdgeInsets.all(16.0),
             child: Icon(icon),
           ),
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
-                color: Colors.white,
               ),
               padding: const EdgeInsets.all(16.0),
               child: Icon(icon),
