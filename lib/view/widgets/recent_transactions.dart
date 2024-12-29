@@ -24,7 +24,7 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
-        color: Colors.grey,
+        color: Colors.grey.shade100,
       ),
       padding: const EdgeInsets.all(16.0),
       width: double.infinity,
@@ -32,19 +32,16 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
-            fit: FlexFit.loose,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                color: Colors.white,
-              ),
-              padding: const EdgeInsets.all(16.0),
-              child: Icon(icon),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              color: Colors.white,
             ),
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(icon),
           ),
-          Flexible(
-            fit: FlexFit.tight,
+          const SizedBox(width: 10,),
+          Expanded(
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
