@@ -133,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const Padding(
               padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: RecentTransactionsWidget(
-                  icon: Icons.abc,
+                  icon: Icons.shopping_cart,
                   title: 'Transaction',
                   description: 'transaction')),
         ],
