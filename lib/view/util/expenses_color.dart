@@ -5,16 +5,29 @@ class ExpensesColor {
 
   const ExpensesColor({required this.expenseTitle});
 
-  Color getColor() {
-    Color color = Colors.white;
+  Color getColorBackground() {
+    Color colorBackground = Colors.white;
     switch (expenseTitle) {
       case 'Shopping':
-        color = Colors.red;
+        colorBackground = Colors.yellow.shade100;
       case 'Food':
-        color = Colors.green;
+        colorBackground = Colors.red.shade100;
       case 'Subscription':
-        color = Colors.blue;
+        colorBackground = Colors.blue.shade100;
     }
-    return color;
+    return colorBackground;
+  }
+
+  Color getColorIcon() {
+    Color colorIcon = Colors.white;
+    switch (expenseTitle) {
+      case 'Shopping':
+        colorIcon = Colors.yellow.shade700;
+      case 'Food':
+        colorIcon = Colors.red.shade700;
+      case 'Subscription':
+        colorIcon = Colors.blue.shade700;
+    }
+    return colorIcon;
   }
 }
