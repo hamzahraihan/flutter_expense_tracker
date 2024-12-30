@@ -123,19 +123,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   PrimaryButtonWidget(title: 'See All')
                 ],
               )),
-          // Padding(
-          //     padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-          //     child: Column(
-          //       children: transactionsDataList.map((item) {
-          //         return Text(item.title);
-          //       }).toList(),
-          //     )),
-          const Padding(
-              padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-              child: RecentTransactionsWidget(
-                  icon: Icons.shopping_cart,
-                  title: 'Shopping',
-                  description: 'transaction')),
+          Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              child: Column(
+                children: transactionsDataList.map((item) {
+                  return RecentTransactionsWidget(
+                      icon: Icons.shopping_cart,
+                      title: item.title,
+                      description: item.description);
+                }).toList(),
+              )),
         ],
       ),
     ));
