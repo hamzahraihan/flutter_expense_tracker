@@ -36,10 +36,10 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
-              color: ExpensesColor(expenseTitle: title).getColor(),
+              color: ExpensesColor(expenseTitle: title).getColorBackground(),
             ),
             padding: const EdgeInsets.all(16.0),
-            child: Icon(icon),
+            child: Icon(icon, color: ExpensesColor(expenseTitle: title).getColorIcon(),),
           ),
           const SizedBox(
             width: 10,
