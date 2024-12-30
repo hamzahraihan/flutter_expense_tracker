@@ -13,7 +13,7 @@ class ExpensesColor {
       case 'Food':
         colorBackground = Colors.red.shade100;
       case 'Subscription':
-        colorBackground = Colors.blue.shade100;
+        colorBackground = Colors.blue.shade100; 
     }
     return colorBackground;
   }
