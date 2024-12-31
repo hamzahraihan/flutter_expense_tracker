@@ -39,7 +39,10 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
               color: ExpensesColor(expenseTitle: title).getColorBackground(),
             ),
             padding: const EdgeInsets.all(16.0),
-            child: Icon(icon, color: ExpensesColor(expenseTitle: title).getColorIcon(),),
+            child: Icon(
+              icon,
+              color: ExpensesColor(expenseTitle: title).getColorIcon(),
+            ),
           ),
           const SizedBox(
             width: 10,
@@ -50,7 +53,16 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               padding: const EdgeInsets.all(16.0),
-              child: Icon(icon),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, textAlign: TextAlign.start),
+                  Text(description,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      textAlign: TextAlign.start)
+                ],
+              ),
             ),
           )
         ],
