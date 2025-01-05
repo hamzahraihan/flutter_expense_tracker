@@ -124,15 +124,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               )),
           Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-              child: Column(
-                children: transactionsDataList.map((item) {
-                  return RecentTransactionsWidget(
+            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+            child: Column(
+              children: transactionsDataList.map((item) {
+                return Column(
+                  children: [
+                    RecentTransactionsWidget(
                       icon: Icons.shopping_cart,
                       title: item.title,
-                      description: item.description);
-                }).toList(),
-              )),
+                      description: item.description,
+                    ),
+                    const SizedBox(height: 8.0), // Add spacing here
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
         ],
       ),
     ));
