@@ -25,13 +25,14 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
-        color: Colors.grey.shade100,
+        color: Colors.grey.shade200,
       ),
       padding: const EdgeInsets.all(16.0),
       width: double.infinity,
       height: 100,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             decoration: BoxDecoration(
@@ -52,9 +53,10 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(2.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(title, textAlign: TextAlign.start),
                   Text(description,
