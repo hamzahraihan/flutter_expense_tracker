@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: BarChartWidget(),
           ),
           const Padding(
-              padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              padding: EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -133,6 +133,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       icon: Icons.shopping_cart,
                       title: item.title,
                       description: item.description,
+                      date: item.date,
+                      expenseType: item.expenseType,
+                      amount: item.amount,
                     ),
                     const SizedBox(height: 8.0), // Add spacing here
                   ],
