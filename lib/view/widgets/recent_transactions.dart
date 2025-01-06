@@ -91,14 +91,18 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
             ),
           ),
           Expanded(
-              flex: 3,
+              flex: 4,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    convertToIdr,
-                    style: const TextStyle(fontSize: 12),
+                    '${expenseType == ExpenseType.expense ? '-' : '+'} $convertToIdr',
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: expenseType == ExpenseType.expense
+                            ? Colors.red
+                            : Colors.green),
                   ),
                   Text(
                     formattedTime,
