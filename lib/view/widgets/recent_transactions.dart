@@ -1,6 +1,7 @@
 import 'package:expense_tracker/model/transactions_model.dart';
 import 'package:expense_tracker/view/util/expenses_color.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class RecentTransactionsWidget extends StatefulWidget {
   final IconData icon;
@@ -9,6 +10,7 @@ class RecentTransactionsWidget extends StatefulWidget {
   final ExpenseType expenseType;
   final DateTime date;
   final double amount;
+
   const RecentTransactionsWidget(
       {super.key,
       required this.icon,
@@ -27,6 +29,10 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
   String get title => widget.title;
   String get description => widget.description;
   ExpenseType get expenseType => widget.expenseType;
+  double get amount => widget.amount;
+  DateTime get date => widget.date;
+
+  late String formattedTime = DateFormat.jm().format(date);
 
   @override
   Widget build(BuildContext context) {
@@ -35,23 +41,24 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
         borderRadius: BorderRadius.circular(15.0),
         color: Colors.grey.shade200,
       ),
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(13.0),
       width: double.infinity,
-      height: 100,
+      height: 80,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.0),
-              color: ExpensesColor(expenseTitle: title).getColorBackground(),
-            ),
-            height: double.infinity,
-            width: 70,
-            child: Icon(
-              icon,
-              color: ExpensesColor(expenseTitle: title).getColorIcon(),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                color: ExpensesColor(expenseTitle: title).getColorBackground(),
+              ),
+              height: double.infinity,
+              child: Icon(
+                icon,
+                color: ExpensesColor(expenseTitle: title).getColorIcon(),
+              ),
             ),
           ),
           const SizedBox(
@@ -78,15 +85,16 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
               ),
             ),
           ),
-          const Expanded(
-              flex: 1,
+          Expanded(
+              flex: 2,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '2000',
+                    'Rp. ${amount.toString()}',
+                    style: const TextStyle(fontSize: 12),
                   ),
-                  Text('2000')
+                  Text(date.hour.toString())
                 ],
               ))
         ],
