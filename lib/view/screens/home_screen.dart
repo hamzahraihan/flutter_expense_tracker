@@ -5,6 +5,7 @@ import 'package:expense_tracker/view/widgets/income_expenses_card_widget.dart';
 import 'package:expense_tracker/view/widgets/recent_transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -37,6 +38,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    int totalAmount =
+        transactionsDataList.fold(0, (sum, item) => sum + item.amount);
+
+    String convertToIdr(int totalAmount) {
+      return NumberFormat.currency(locale: 'id', symbol: 'Rp', decimalDigits: 2)
+          .format(totalAmount);
+    }
+
     AppBar appBar = AppBar(
       surfaceTintColor: Colors.black45,
       scrolledUnderElevation: 4.0,
@@ -73,10 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
           const Center(
             child: Text('Account Balances'),
           ),
-          const Center(
+          Center(
             child: Text(
-              '\$9000',
-              style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w700),
+              convertToIdr(totalAmount),
+              style: TextStyle(
+                  fontSize: totalAmount > 1000000 ? 26 : 32,
+                  fontWeight: FontWeight.w700),
             ),
           ),
           GridView.count(
@@ -145,6 +156,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-    ));
+    ),
+    // bottomNavigationBar: BottomNavigationBar(items: items),
+    );
   }
 }
