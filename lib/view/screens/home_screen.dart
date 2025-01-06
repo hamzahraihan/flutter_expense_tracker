@@ -1,4 +1,5 @@
 import 'package:expense_tracker/model/transactions_model.dart';
+import 'package:expense_tracker/view/widgets/bottom_nav.dart';
 import 'package:expense_tracker/view/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/view/widgets/chart/bar_chart.dart';
 import 'package:expense_tracker/view/widgets/income_expenses_card_widget.dart';
@@ -157,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     ),
-    // bottomNavigationBar: BottomNavigationBar(items: items),
+    bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }
