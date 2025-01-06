@@ -9,7 +9,7 @@ class RecentTransactionsWidget extends StatefulWidget {
   final String description;
   final ExpenseType expenseType;
   final DateTime date;
-  final double amount;
+  final int amount;
 
   const RecentTransactionsWidget(
       {super.key,
@@ -29,9 +29,12 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
   String get title => widget.title;
   String get description => widget.description;
   ExpenseType get expenseType => widget.expenseType;
-  double get amount => widget.amount;
+  int get amount => widget.amount;
   DateTime get date => widget.date;
 
+  late String convertToIdr =
+      NumberFormat.currency(locale: 'id', symbol: 'Rp', decimalDigits: 2)
+          .format(amount);
   late String formattedTime = DateFormat.jm().format(date);
 
   @override
@@ -43,17 +46,19 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
       ),
       padding: const EdgeInsets.all(13.0),
       width: double.infinity,
-      height: 80,
+      height: 85,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
+          Flexible(
+            flex: 2,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 color: ExpensesColor(expenseTitle: title).getColorBackground(),
               ),
+              width: 60,
               height: double.infinity,
               child: Icon(
                 icon,
@@ -65,7 +70,7 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
             width: 10,
           ),
           Expanded(
-            flex: 4,
+            flex: 5,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
@@ -86,15 +91,19 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
             ),
           ),
           Expanded(
-              flex: 2,
+              flex: 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'Rp. ${amount.toString()}',
+                    convertToIdr,
                     style: const TextStyle(fontSize: 12),
                   ),
-                  Text(date.hour.toString())
+                  Text(
+                    formattedTime,
+                    style: const TextStyle(color: Colors.black38, fontSize: 12),
+                  )
                 ],
               ))
         ],
