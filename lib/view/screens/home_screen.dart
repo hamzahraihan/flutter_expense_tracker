@@ -74,91 +74,94 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SafeArea(child: appBar),
-          const SizedBox(height: 16.0),
-          const Center(
-            child: Text('Account Balances'),
-          ),
-          Center(
-            child: Text(
-              convertToIdr(totalAmount),
-              style: TextStyle(
-                  fontSize: totalAmount > 1000000 ? 26 : 32,
-                  fontWeight: FontWeight.w700),
+      body: SingleChildScrollView(
+        primary: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SafeArea(child: appBar),
+            const SizedBox(height: 16.0),
+            const Center(
+              child: Text('Account Balances'),
             ),
-          ),
-          GridView.count(
-            padding: const EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
-            crossAxisSpacing: 10,
-            shrinkWrap: true,
-            childAspectRatio: 2,
-            mainAxisSpacing: 10,
-            crossAxisCount: 2,
-            children: const [
-              IncomeExpensesCardWidget(
-                title: 'Income',
-                amount: 2000,
-                icon: Icons.arrow_downward,
-                color: Color.fromRGBO(0, 168, 107, 100),
-              ),
-              IncomeExpensesCardWidget(
-                title: 'Expense',
-                amount: 2000,
-                icon: Icons.arrow_upward,
-                color: Colors.red,
-              )
-            ],
-          ),
-          const Padding(
-              padding: EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
+            Center(
               child: Text(
-                'Spend Frequency',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              )),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-            child: BarChartWidget(),
-          ),
-          const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Recent Transactions',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  PrimaryButtonWidget(title: 'See All')
-                ],
-              )),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-            child: Column(
-              children: transactionsDataList.map((item) {
-                return Column(
-                  children: [
-                    RecentTransactionsWidget(
-                      icon: Icons.shopping_cart,
-                      title: item.title,
-                      description: item.description,
-                      date: item.date,
-                      expenseType: item.expenseType,
-                      amount: item.amount,
-                    ),
-                    const SizedBox(height: 8.0), // Add spacing here
-                  ],
-                );
-              }).toList(),
+                convertToIdr(totalAmount),
+                style: TextStyle(
+                    fontSize: totalAmount > 1000000 ? 26 : 32,
+                    fontWeight: FontWeight.w700),
+              ),
             ),
-          ),
-        ],
+            GridView.count(
+              padding: const EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
+              crossAxisSpacing: 10,
+              shrinkWrap: true,
+              childAspectRatio: 2,
+              mainAxisSpacing: 10,
+              crossAxisCount: 2,
+              primary: false,
+              physics: const NeverScrollableScrollPhysics(),
+              children: const [
+                IncomeExpensesCardWidget(
+                  title: 'Income',
+                  amount: 2000,
+                  icon: Icons.arrow_downward,
+                  color: Color.fromRGBO(0, 168, 107, 100),
+                ),
+                IncomeExpensesCardWidget(
+                  title: 'Expense',
+                  amount: 2000,
+                  icon: Icons.arrow_upward,
+                  color: Colors.red,
+                )
+              ],
+            ),
+            const Padding(
+                padding: EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
+                child: Text(
+                  'Spend Frequency',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                )),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              child: BarChartWidget(),
+            ),
+            const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Recent Transactions',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    PrimaryButtonWidget(title: 'See All')
+                  ],
+                )),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              child: Column(
+                children: transactionsDataList.map((item) {
+                  return Column(
+                    children: [
+                      RecentTransactionsWidget(
+                        icon: Icons.shopping_cart,
+                        title: item.title,
+                        description: item.description,
+                        date: item.date,
+                        expenseType: item.expenseType,
+                        amount: item.amount,
+                      ),
+                      const SizedBox(height: 8.0), // Add spacing here
+                    ],
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-    bottomNavigationBar: const BottomNavigationBarWidget(),
+      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }
