@@ -1,25 +1,21 @@
 import 'package:expense_tracker/model/transactions_model.dart';
-import 'package:expense_tracker/view/widgets/bottom_nav.dart';
 import 'package:expense_tracker/view/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/view/widgets/chart/bar_chart.dart';
 import 'package:expense_tracker/view/widgets/income_expenses_card_widget.dart';
 import 'package:expense_tracker/view/widgets/recent_transactions.dart';
 import 'package:flutter/material.dart';
-
 import 'package:intl/intl.dart';
 
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  static const String routeName = '/';
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     int totalAmount =
@@ -41,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
           borderRadius: BorderRadius.circular(30.0),
         ),
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-        child: Text(widget.title, style: const TextStyle(fontSize: 14.0)),
+        child: const Text('Expense', style: TextStyle(fontSize: 14.0)),
       ),
       leading: IconButton(
           onPressed: () {},
@@ -75,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontWeight: FontWeight.w700),
               ),
             ),
+            const SizedBox(height: 32.0),
             GridView.count(
               padding: const EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
               crossAxisSpacing: 10,
@@ -144,7 +141,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }
