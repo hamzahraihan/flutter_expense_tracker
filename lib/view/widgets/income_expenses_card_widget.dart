@@ -24,30 +24,33 @@ class _IncomeExpensesCardWidget extends State<IncomeExpensesCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: double.infinity,
-      child: Card(
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
           color: color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                flex: 1,
-                child: Container(
-                  padding: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14.0),
-                    color: Colors.white,
-                  ),
-                  child: Icon(icon, size: 42.0),
+        ),
+        padding: const EdgeInsets.all(13.0),
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14.0),
+                  color: Colors.white,
                 ),
+                child: Icon(icon, size: 42.0),
               ),
-              Column(
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Flexible(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -64,8 +67,8 @@ class _IncomeExpensesCardWidget extends State<IncomeExpensesCardWidget> {
                   )
                 ],
               ),
-            ],
-          )),
-    );
+            ),
+          ],
+        ));
   }
 }
