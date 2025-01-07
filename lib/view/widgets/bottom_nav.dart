@@ -7,37 +7,46 @@ class BottomNavigationBarWidget extends StatefulWidget {
   State<BottomNavigationBarWidget> createState() => _BottomNavigationState();
 }
 
-class NavButton {
-  final IconData icon;
-  final String label;
-
-  NavButton({required this.icon, required this.label});
-}
-
 class _BottomNavigationState extends State<BottomNavigationBarWidget> {
-  int _selectedIndex = 0;
-  final List<NavButton> _navButton = [
-    NavButton(icon: Icons.home, label: 'Home'),
-    NavButton(icon: Icons.payments, label: 'Transactions'),
-    NavButton(icon: Icons.pie_chart, label: 'Budget')
+  int currentPageIndex = 0;
+  final List<NavigationDestination> _navButton = [
+    const NavigationDestination(
+        selectedIcon: Icon(
+          Icons.home,
+          color: Colors.blueAccent,
+        ),
+        icon: Icon(Icons.home_outlined),
+        label: 'Home'),
+    const NavigationDestination(
+      selectedIcon: Icon(
+        Icons.payments,
+        color: Colors.blueAccent,
+      ),
+      icon: Icon(Icons.payments_outlined),
+      label: 'Transactions',
+    ),
+    const NavigationDestination(
+        selectedIcon: Icon(
+          Icons.pie_chart,
+          color: Colors.blueAccent,
+        ),
+        icon: Icon(
+          Icons.pie_chart_outline,
+        ),
+        label: 'Budget')
   ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      items: _navButton.map((item) {
-        return BottomNavigationBarItem(
-            icon: Icon(item.icon), label: item.label);
-      }).toList(),
-      currentIndex: _selectedIndex,
-      selectedItemColor: Colors.blueAccent.shade200,
-      onTap: _onItemTapped,
+    return NavigationBar(
+      onDestinationSelected: (int index) {
+        setState(() {
+          currentPageIndex = index;
+        });
+      },
+      destinations: _navButton,
+      selectedIndex: currentPageIndex,
+      indicatorColor: Colors.white24,
     );
   }
 }
