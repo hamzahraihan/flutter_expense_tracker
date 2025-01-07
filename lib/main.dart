@@ -1,8 +1,11 @@
+import 'package:expense_tracker/view/screens/app.dart';
+import 'package:expense_tracker/view/screens/expense_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:expense_tracker/view/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() {
+  setPathUrlStrategy();
   runApp(const MyApp());
 }
 
@@ -21,9 +24,24 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       initialRoute: '/',
-      routes: {
-        '/': (context) => const MyHomePage(title: 'Expenses'),
-        // '/expenses': (context) {}
+      home: const ExpenseTrackerApp(initialIndex: 0),
+      onGenerateRoute: (RouteSettings routeSettings) {
+        int initialIndex = 0;
+        switch (routeSettings.name) {
+          case ExpenseScreen.routeName:
+            initialIndex = 1;
+            break;
+          case '/budget':
+            initialIndex = 2;
+            break;
+          default:
+            initialIndex = 0;
+            break;
+        }
+        return MaterialPageRoute(
+            builder: (BuildContext context) =>
+                ExpenseTrackerApp(initialIndex: initialIndex),
+            settings: routeSettings);
       },
     );
   }
