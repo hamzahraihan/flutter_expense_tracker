@@ -5,27 +5,10 @@ import 'package:expense_tracker/view/widgets/chart/bar_chart.dart';
 import 'package:expense_tracker/view/widgets/income_expenses_card_widget.dart';
 import 'package:expense_tracker/view/widgets/recent_transactions.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:intl/intl.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Expense',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.white, brightness: Brightness.light),
-        fontFamily: GoogleFonts.inter().fontFamily,
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Expenses'),
-    );
-  }
-}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
