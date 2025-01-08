@@ -50,8 +50,8 @@ class Transactions {
     final List<TransactionsModel> thisMonthTransaction = [];
     final List<TransactionsModel> olderTransactions = [];
 
-    for (final transaction in transactions) {
-      final transactionDate = DateTime(
+    for (final TransactionsModel transaction in transactions) {
+      final DateTime transactionDate = DateTime(
           transaction.date.year, transaction.date.month, transaction.date.day);
 
       // push today transaction to todayTransactions List
