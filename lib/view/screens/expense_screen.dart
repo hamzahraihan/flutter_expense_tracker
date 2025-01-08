@@ -20,8 +20,7 @@ class ExpenseScreen extends StatelessWidget {
         Transactions.filterTransactionsByDate(transactionsDataList).older;
 
     return Scaffold(
-        body: SafeArea(
-            child: ListView(
+        body: ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       children: [
         const Padding(
@@ -120,6 +119,6 @@ class ExpenseScreen extends StatelessWidget {
                   amount: item.amount));
         }).toList()),
       ],
-    )));
+    ));
   }
 }
