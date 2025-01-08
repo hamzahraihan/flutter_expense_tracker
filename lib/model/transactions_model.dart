@@ -1,6 +1,6 @@
 enum ExpenseType { expense, income }
 
-class TransactionsData {
+class TransactionsModel {
   final int id;
   final String title;
   final int amount;
@@ -8,7 +8,7 @@ class TransactionsData {
   final String description;
   final ExpenseType expenseType;
 
-  TransactionsData(
+  TransactionsModel(
       {required this.id,
       required this.title,
       required this.amount,
@@ -17,75 +17,146 @@ class TransactionsData {
       required this.expenseType});
 }
 
-List<TransactionsData> transactionsDataList = [
-  TransactionsData(
+class GroupedTransactions {
+  final List<TransactionsModel> today;
+  final List<TransactionsModel> yesterady;
+  final List<TransactionsModel> thisWeek;
+  final List<TransactionsModel> thisMonth;
+  final List<TransactionsModel> older;
+
+  GroupedTransactions(
+      {required this.today,
+      required this.yesterady,
+      required this.thisWeek,
+      required this.thisMonth,
+      required this.older});
+}
+
+class Transactions {
+  static GroupedTransactions filterTransactionsByDate(
+      List<TransactionsModel> transactions) {
+    transactions.sort((a, b) {
+      return -a.date.compareTo(b.date);
+    });
+    final DateTime now = DateTime.now();
+    final DateTime today = DateTime(now.year, now.month, now.day);
+    final DateTime yesterday = today.subtract(const Duration(days: 1));
+    final DateTime thisWeek = today.subtract(Duration(days: today.weekday - 1));
+    final DateTime thisMonth = DateTime(today.year, today.month, 1);
+
+    final List<TransactionsModel> todayTransactions = [];
+    final List<TransactionsModel> yesterdayTransactions = [];
+    final List<TransactionsModel> thisWeekTransactions = [];
+    final List<TransactionsModel> thisMonthTransaction = [];
+    final List<TransactionsModel> olderTransactions = [];
+
+    for (final transaction in transactions) {
+      final transactionDate = DateTime(
+          transaction.date.year, transaction.date.month, transaction.date.day);
+
+      // push today transaction to todayTransactions List
+      if (transactionDate == today) {
+        todayTransactions.add(transaction);
+      }
+
+      // push yesterday transaction to yesterdayTransactions List
+      if (transactionDate == yesterday) {
+        yesterdayTransactions.add(transaction);
+      }
+
+      // push week transaction to weekTransactions List
+      if (transactionDate.isAfter(thisWeek) &&
+          transactionDate.isBefore(today)) {
+        thisWeekTransactions.add(transaction);
+      }
+
+      // push month transaction to monthTransactions List
+      if (transactionDate.isAfter(thisMonth) &&
+          transactionDate.isBefore(thisWeek)) {
+        thisMonthTransaction.add(transaction);
+      }
+
+      // push older transaction to olderTransactions List
+      olderTransactions.add(transaction);
+    }
+    return GroupedTransactions(
+        today: todayTransactions,
+        yesterady: yesterdayTransactions,
+        thisWeek: thisWeekTransactions,
+        thisMonth: thisMonthTransaction,
+        older: olderTransactions);
+  }
+}
+
+List<TransactionsModel> transactionsDataList = [
+  TransactionsModel(
       id: 1,
-      title: 'Shopping',
-      amount: 20000,
-      date: DateTime(2024, 7, 10, 17, 8),
-      description: 'Bought clothes and accessories from the mall.',
+      title: 'Coffee',
+      amount: 35000,
+      date: DateTime(2025, 1, 8, 9, 30), // Today
+      description: 'Morning coffee at Starbucks',
       expenseType: ExpenseType.expense),
-  TransactionsData(
+  TransactionsModel(
       id: 2,
-      title: 'Subscription',
-      amount: 450000,
-      date: DateTime(2023, 12, 27, 10, 15),
-      description: 'Monthly streaming service subscription.',
+      title: 'Lunch',
+      amount: 75000,
+      date: DateTime(2025, 1, 8, 12, 45), // Today
+      description: 'Lunch with colleagues',
       expenseType: ExpenseType.expense),
-  TransactionsData(
+  TransactionsModel(
       id: 3,
-      title: 'Food',
-      amount: 90000,
-      date: DateTime(2023, 12, 25, 9, 30),
-      description: 'Groceries and snacks for the week.',
-      expenseType: ExpenseType.expense),
-  TransactionsData(
-      id: 4,
-      title: 'Internet Subscription',
+      title: 'Taxi',
       amount: 50000,
-      date: DateTime(2023, 12, 20, 14, 0),
-      description: 'Monthly home internet plan payment.',
+      date: DateTime(2025, 1, 7, 18, 30), // Yesterday
+      description: 'Taxi ride home from office',
       expenseType: ExpenseType.expense),
-  TransactionsData(
+  TransactionsModel(
+      id: 4,
+      title: 'Groceries',
+      amount: 250000,
+      date: DateTime(2025, 1, 7, 14, 20), // Yesterday
+      description: 'Weekly grocery shopping',
+      expenseType: ExpenseType.expense),
+  TransactionsModel(
       id: 5,
-      title: 'Dining Out',
-      amount: 120000,
-      date: DateTime(2023, 12, 26, 20, 45),
-      description: 'Dinner with friends at a fancy restaurant.',
+      title: 'Movie Tickets',
+      amount: 100000,
+      date: DateTime(2025, 1, 6, 19, 00), // 2 days ago
+      description: 'Weekend movie with friends',
       expenseType: ExpenseType.expense),
-  TransactionsData(
+  TransactionsModel(
       id: 6,
-      title: 'Car Maintenance',
-      amount: 300000,
-      date: DateTime(2023, 12, 15, 11, 30),
-      description: 'Replaced tires and changed oil.',
-      expenseType: ExpenseType.expense),
-  TransactionsData(
+      title: 'Salary',
+      amount: 8000000,
+      date: DateTime(2025, 1, 5, 10, 00), // 3 days ago
+      description: 'Monthly salary deposit',
+      expenseType: ExpenseType.income),
+  TransactionsModel(
       id: 7,
-      title: 'Gym Membership',
-      amount: 40000,
-      date: DateTime(2023, 12, 5, 6, 0),
-      description: 'Monthly gym membership fee.',
+      title: 'Internet Bill',
+      amount: 400000,
+      date: DateTime(2025, 1, 4, 15, 30), // 4 days ago
+      description: 'Monthly internet subscription',
       expenseType: ExpenseType.expense),
-  TransactionsData(
+  TransactionsModel(
       id: 8,
-      title: 'Gift Purchase',
-      amount: 150000,
-      date: DateTime(2023, 12, 18, 16, 20),
-      description: 'Bought a birthday gift for a friend.',
+      title: 'Gym',
+      amount: 350000,
+      date: DateTime(2025, 1, 3, 8, 00), // 5 days ago
+      description: 'Monthly gym membership',
       expenseType: ExpenseType.expense),
-  TransactionsData(
+  TransactionsModel(
       id: 9,
-      title: 'Fuel',
-      amount: 65000,
-      date: DateTime(2023, 12, 22, 8, 0),
-      description: 'Filled up the car with fuel for a road trip.',
+      title: 'Online Shopping',
+      amount: 450000,
+      date: DateTime(2025, 1, 2, 13, 15), // 6 days ago
+      description: 'Clothes from online store',
       expenseType: ExpenseType.expense),
-  TransactionsData(
+  TransactionsModel(
       id: 10,
-      title: 'Movie Night',
-      amount: 25000,
-      date: DateTime(2023, 12, 28, 21, 30),
-      description: 'Watched a movie at the local cinema.',
+      title: 'Phone Bill',
+      amount: 200000,
+      date: DateTime(2025, 1, 1, 11, 30), // 7 days ago
+      description: 'Monthly phone bill payment',
       expenseType: ExpenseType.expense),
 ];
