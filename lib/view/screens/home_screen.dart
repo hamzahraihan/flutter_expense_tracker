@@ -26,6 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
           .format(totalAmount);
     }
 
+    transactionsDataList.sort((a, b) {
+      return -a.date.compareTo(b.date);
+    });
+
     AppBar appBar = AppBar(
       surfaceTintColor: Colors.black45,
       scrolledUnderElevation: 4.0,
@@ -121,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: Column(
-                children: transactionsDataList.map((item) {
+                children: transactionsDataList.take(5).map((item) {
                   return Column(
                     children: [
                       RecentTransactionsWidget(
