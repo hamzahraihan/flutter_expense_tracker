@@ -59,14 +59,15 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     ];
 
     return Scaffold(
-      body: IndexedStack(
+      body: SafeArea(
+          child: IndexedStack(
         index: currentPageIndex,
         children: const [
           HomeScreen(),
           ExpenseScreen(),
           Placeholder(), // Budget screen placeholder
         ],
-      ),
+      )),
 
       // bottom navigation bar
       bottomNavigationBar: NavigationBar(
