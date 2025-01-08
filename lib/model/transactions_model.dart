@@ -22,7 +22,7 @@ List<TransactionsData> transactionsDataList = [
       id: 1,
       title: 'Shopping',
       amount: 20000,
-      date: DateTime(1996, 7, 10, 17, 8),
+      date: DateTime(2024, 7, 10, 17, 8),
       description: 'Bought clothes and accessories from the mall.',
       expenseType: ExpenseType.expense),
   TransactionsData(
