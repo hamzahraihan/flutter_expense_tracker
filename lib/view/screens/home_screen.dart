@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SafeArea(child: appBar),
+            appBar,
             const SizedBox(height: 16.0),
             const Center(
               child: Text('Account Balances'),
