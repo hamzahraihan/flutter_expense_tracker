@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
+  const HomeScreen({
+    super.key,
+  });
   static const String routeName = '/';
 
   @override
@@ -18,17 +19,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final List<TransactionsModel> transactions =
+        Transactions.filterTransactionsByDate(transactionsDataList).today;
+    final List<TransactionsModel> olderTransactions =
+        Transactions.filterTransactionsByDate(transactionsDataList).older;
+
     int totalAmount =
-        transactionsDataList.fold(0, (sum, item) => sum + item.amount);
+        olderTransactions.fold(0, (sum, item) => sum + item.amount);
 
     String convertToIdr(int totalAmount) {
       return NumberFormat.currency(locale: 'id', symbol: 'Rp', decimalDigits: 2)
           .format(totalAmount);
     }
-
-    transactionsDataList.sort((a, b) {
-      return -a.date.compareTo(b.date);
-    });
 
     AppBar appBar = AppBar(
       surfaceTintColor: Colors.black45,
@@ -125,22 +127,39 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: Column(
-                children: transactionsDataList.take(5).map((item) {
-                  return Column(
-                    children: [
-                      RecentTransactionsWidget(
-                        icon: Icons.shopping_cart,
-                        title: item.title,
-                        description: item.description,
-                        date: item.date,
-                        expenseType: item.expenseType,
-                        amount: item.amount,
-                      ),
-                      const SizedBox(height: 8.0), // Add spacing here
-                    ],
-                  );
-                }).toList(),
-              ),
+                  children: transactions.isNotEmpty
+                      ? transactions.take(5).map<Widget>((item) {
+                          return Column(
+                            children: [
+                              RecentTransactionsWidget(
+                                icon: Icons.shopping_cart,
+                                title: item.title,
+                                description: item.description,
+                                date: item.date,
+                                expenseType: item.expenseType,
+                                amount: item.amount,
+                              ),
+                              const SizedBox(height: 8.0), // Add spacing here
+                            ],
+                          );
+                        }).toList()
+                      : const [
+                          Center(
+                            child: Icon(
+                              Icons.remove_shopping_cart,
+                              size: 100,
+                              color: Colors.black38,
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              "You haven't doing any transaction today!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.black38),
+                            ),
+                          )
+                        ]),
             ),
           ],
         ),
