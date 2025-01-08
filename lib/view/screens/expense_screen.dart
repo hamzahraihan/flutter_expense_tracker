@@ -8,6 +8,10 @@ class ExpenseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    transactionsDataList.sort((a, b) {
+      return -a.date.compareTo(b.date);
+    });
+
     List<TransactionsData> transactions = transactionsDataList;
 
     return Scaffold(
@@ -17,7 +21,7 @@ class ExpenseScreen extends StatelessWidget {
         Column(
             children: transactions.map((item) {
           return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: RecentTransactionsWidget(
                   icon: Icons.shopping_bag,
                   title: item.title,
