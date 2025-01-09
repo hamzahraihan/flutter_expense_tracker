@@ -21,15 +21,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List<TransactionsModel> thisWeektransactions =
-        Transactions.filterTransactionsByDate(transactionsDataList).thisWeek;
+        Transactions.filterTransactionsByDate(transactionsDataList)
+            .thisWeek;
     final List<TransactionsModel> olderTransactions =
-        Transactions.filterTransactionsByDate(transactionsDataList).older;
+        Transactions.filterTransactionsByDate(transactionsDataList)
+            .older;
 
     int totalAmount =
         olderTransactions.fold(0, (sum, item) => sum + item.amount);
 
     String convertToIdr(int totalAmount) {
-      return NumberFormat.currency(locale: 'id', symbol: 'Rp', decimalDigits: 2)
+      return NumberFormat.currency(
+              locale: 'id', symbol: 'Rp', decimalDigits: 2)
           .format(totalAmount);
     }
 
@@ -44,7 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(30.0),
         ),
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-        child: const Text('Expense', style: TextStyle(fontSize: 14.0)),
+        child:
+            const Text('Expense', style: TextStyle(fontSize: 14.0)),
       ),
       leading: IconButton(
           onPressed: () {},
@@ -80,7 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 32.0),
             GridView.count(
-              padding: const EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
+              padding:
+                  const EdgeInsets.fromLTRB(16.0, 2.0, 16.0, 16.0),
               crossAxisSpacing: 10,
               shrinkWrap: true,
               childAspectRatio: 2,
@@ -126,7 +131,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: 'See All',
                       onclick: () {
                         setState(() {
-                          Navigator.of(context).pushReplacementNamed(TransactionsScreen.routeName);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const TransactionsScreen()));
                         });
                       },
                     )
@@ -136,7 +145,9 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: Column(
                   children: thisWeektransactions.isNotEmpty
-                      ? thisWeektransactions.take(5).map<Widget>((item) {
+                      ? thisWeektransactions
+                          .take(5)
+                          .map<Widget>((item) {
                           return Column(
                             children: [
                               RecentTransactionsWidget(
@@ -147,7 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 expenseType: item.expenseType,
                                 amount: item.amount,
                               ),
-                              const SizedBox(height: 8.0), // Add spacing here
+                              const SizedBox(
+                                  height: 8.0), // Add spacing here
                             ],
                           );
                         }).toList()
@@ -164,7 +176,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               "You haven't doing any transaction today!",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 12, color: Colors.black38),
+                                  fontSize: 12,
+                                  color: Colors.black38),
                             ),
                           )
                         ]),
