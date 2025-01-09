@@ -1,4 +1,5 @@
 import 'package:expense_tracker/model/transactions_model.dart';
+import 'package:expense_tracker/view/screens/transactions_screen.dart';
 import 'package:expense_tracker/view/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/view/widgets/chart/bar_chart.dart';
 import 'package:expense_tracker/view/widgets/income_expenses_card_widget.dart';
@@ -19,8 +20,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final List<TransactionsModel> transactions =
-        Transactions.filterTransactionsByDate(transactionsDataList).today;
+    final List<TransactionsModel> thisWeektransactions =
+        Transactions.filterTransactionsByDate(transactionsDataList).thisWeek;
     final List<TransactionsModel> olderTransactions =
         Transactions.filterTransactionsByDate(transactionsDataList).older;
 
@@ -112,23 +113,30 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: BarChartWidget(),
             ),
-            const Padding(
-                padding: EdgeInsets.all(16.0),
+            Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Recent Transactions',
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    PrimaryButtonWidget(title: 'See All')
+                    PrimaryButtonWidget(
+                      title: 'See All',
+                      onclick: () {
+                        setState(() {
+                          Navigator.of(context).pushReplacementNamed(TransactionsScreen.routeName);
+                        });
+                      },
+                    )
                   ],
                 )),
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: Column(
-                  children: transactions.isNotEmpty
-                      ? transactions.take(5).map<Widget>((item) {
+                  children: thisWeektransactions.isNotEmpty
+                      ? thisWeektransactions.take(5).map<Widget>((item) {
                           return Column(
                             children: [
                               RecentTransactionsWidget(
