@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class PrimaryButtonWidget extends StatefulWidget {
   final String title;
-  const PrimaryButtonWidget({super.key, required this.title});
+  final void Function()? onclick;
+  const PrimaryButtonWidget(
+      {super.key, required this.title, required this.onclick});
 
   @override
   State<StatefulWidget> createState() => _PrimaryButtonState();
@@ -10,8 +12,6 @@ class PrimaryButtonWidget extends StatefulWidget {
 
 class _PrimaryButtonState extends State<PrimaryButtonWidget> {
   String get title => widget.title;
-
-  void _onClick() {}
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _PrimaryButtonState extends State<PrimaryButtonWidget> {
 
     return TextButton(
         style: textButtonStyle,
-        onPressed: _onClick,
+        onPressed: widget.onclick,
         child: Text(
           title,
           style: const TextStyle(fontWeight: FontWeight.w600),
