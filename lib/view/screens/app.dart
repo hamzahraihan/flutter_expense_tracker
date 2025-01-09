@@ -1,5 +1,5 @@
-import 'package:expense_tracker/view/screens/expense_screen.dart';
 import 'package:expense_tracker/view/screens/home_screen.dart';
+import 'package:expense_tracker/view/screens/transactions_screen.dart';
 
 import 'package:flutter/material.dart';
 
@@ -64,7 +64,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
         index: currentPageIndex,
         children: const [
           HomeScreen(),
-          ExpenseScreen(),
+          TransactionsScreen(),
           Placeholder(), // Budget screen placeholder
         ],
       )),
