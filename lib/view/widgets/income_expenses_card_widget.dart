@@ -26,10 +26,10 @@ class _IncomeExpensesCardWidget extends State<IncomeExpensesCardWidget> {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(24.0),
           color: color,
         ),
-        padding: const EdgeInsets.all(13.0),
+        padding: const EdgeInsets.all(16.0),
         width: double.infinity,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -40,10 +40,14 @@ class _IncomeExpensesCardWidget extends State<IncomeExpensesCardWidget> {
                 height: double.infinity,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14.0),
+                  borderRadius: BorderRadius.circular(16.0),
                   color: Colors.white,
                 ),
-                child: Icon(icon, size: 42.0),
+                child: Icon(
+                  icon,
+                  size: 42.0,
+                  color: color,
+                ),
               ),
             ),
             const SizedBox(
