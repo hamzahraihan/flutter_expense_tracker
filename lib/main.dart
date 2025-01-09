@@ -1,5 +1,5 @@
 import 'package:expense_tracker/view/screens/app.dart';
-import 'package:expense_tracker/view/screens/expense_screen.dart';
+import 'package:expense_tracker/view/screens/transactions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (RouteSettings routeSettings) {
         int initialIndex = 0;
         switch (routeSettings.name) {
-          case ExpenseScreen.routeName:
+          case TransactionsScreen.routeName:
             initialIndex = 1;
             break;
           case '/budget':
