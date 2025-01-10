@@ -1,5 +1,5 @@
-import 'package:expense_tracker/view/screens/home_screen.dart';
-import 'package:expense_tracker/view/screens/transactions_screen.dart';
+import 'package:expense_tracker/view/screens/home/home_screen.dart';
+import 'package:expense_tracker/view/screens/transactions/transactions_screen.dart';
 
 import 'package:flutter/material.dart';
 
