@@ -1,7 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 enum ExpenseType { expense, income }
 
+extension ExpenseTypeExtension on ExpenseType {
+  String toShortString() {
+    return toString().split('.').last;
+  }
+
+  static ExpenseType fromString(String value) {
+    return ExpenseType.values
+        .firstWhere((e) => e.toShortString() == value);
+  }
+}
+
 class TransactionsModel {
-  final int id;
   final String title;
   final int amount;
   final DateTime date;
@@ -9,13 +21,58 @@ class TransactionsModel {
   final ExpenseType expenseType;
 
   TransactionsModel(
-      {required this.id,
-      required this.title,
+      {required this.title,
       required this.amount,
       required this.date,
       required this.description,
       required this.expenseType});
+
+  factory TransactionsModel.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    final data = snapshot.data();
+    return TransactionsModel(
+      title: data?['title'],
+      amount: data?['amount'],
+      date: (data?['date'] as Timestamp).toDate(),
+      description: data?['description'],
+      expenseType:
+          ExpenseTypeExtension.fromString(data?['expenseType']),
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      "title": title,
+      "amount": amount,
+      "date": date,
+      "description": description,
+      "expenseType": expenseType.toShortString(),
+    };
+  }
 }
+
+// class GetTransactions extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context){
+
+//     return FutureBuilder(future: retrieveData('transactions'),
+//     builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot){
+//       if(snapshot.hasError){
+//         return Text('Something went wrong');
+//       }
+//       if(snapshot.hasData && !snapshot.data!.exists){
+//         return const Text('Document does not exist');
+//       }
+//       if(snapshot.connectionState == ConnectionState.done){
+//         Map<String,dynamic> data = snapshot.data!.data() as Map<String, dynamic>
+//         return
+//       }
+//     }
+//     );
+//   }
+// }
 
 class GroupedTransactions {
   final List<TransactionsModel> today;
@@ -40,8 +97,10 @@ class Transactions {
     });
     final DateTime now = DateTime.now();
     final DateTime today = DateTime(now.year, now.month, now.day);
-    final DateTime yesterday = today.subtract(const Duration(days: 1));
-    final DateTime thisWeek = today.subtract(Duration(days: today.weekday - 1));
+    final DateTime yesterday =
+        today.subtract(const Duration(days: 1));
+    final DateTime thisWeek =
+        today.subtract(Duration(days: today.weekday - 1));
     final DateTime thisMonth = DateTime(today.year, today.month, 1);
 
     final List<TransactionsModel> todayTransactions = [];
@@ -51,8 +110,8 @@ class Transactions {
     final List<TransactionsModel> olderTransactions = [];
 
     for (final TransactionsModel transaction in transactions) {
-      final DateTime transactionDate = DateTime(
-          transaction.date.year, transaction.date.month, transaction.date.day);
+      final DateTime transactionDate = DateTime(transaction.date.year,
+          transaction.date.month, transaction.date.day);
 
       // push today transaction to todayTransactions List
       if (transactionDate == today) {
@@ -88,75 +147,84 @@ class Transactions {
   }
 }
 
-List<TransactionsModel> transactionsDataList = [
-  TransactionsModel(
-      id: 1,
-      title: 'Coffee',
-      amount: 35000,
-      date: DateTime(2025, 1, 8, 9, 30), // Today
-      description: 'Morning coffee at Starbucks',
-      expenseType: ExpenseType.expense),
-  TransactionsModel(
-      id: 2,
-      title: 'Lunch',
-      amount: 75000,
-      date: DateTime(2025, 1, 8, 12, 45), // Today
-      description: 'Lunch with colleagues',
-      expenseType: ExpenseType.expense),
-  TransactionsModel(
-      id: 3,
-      title: 'Taxi',
-      amount: 50000,
-      date: DateTime(2025, 1, 7, 18, 30), // Yesterday
-      description: 'Taxi ride home from office',
-      expenseType: ExpenseType.expense),
-  TransactionsModel(
-      id: 4,
-      title: 'Groceries',
-      amount: 250000,
-      date: DateTime(2025, 1, 7, 14, 20), // Yesterday
-      description: 'Weekly grocery shopping',
-      expenseType: ExpenseType.expense),
-  TransactionsModel(
-      id: 5,
-      title: 'Movie Tickets',
-      amount: 100000,
-      date: DateTime(2025, 1, 6, 19, 00), // 2 days ago
-      description: 'Weekend movie with friends',
-      expenseType: ExpenseType.expense),
-  TransactionsModel(
-      id: 6,
-      title: 'Salary',
-      amount: 8000000,
-      date: DateTime(2025, 1, 5, 10, 00), // 3 days ago
-      description: 'Monthly salary deposit',
-      expenseType: ExpenseType.income),
-  TransactionsModel(
-      id: 7,
-      title: 'Internet Bill',
-      amount: 400000,
-      date: DateTime(2025, 1, 4, 15, 30), // 4 days ago
-      description: 'Monthly internet subscription',
-      expenseType: ExpenseType.expense),
-  TransactionsModel(
-      id: 8,
-      title: 'Gym',
-      amount: 350000,
-      date: DateTime(2025, 1, 3, 8, 00), // 5 days ago
-      description: 'Monthly gym membership',
-      expenseType: ExpenseType.expense),
-  TransactionsModel(
-      id: 9,
-      title: 'Online Shopping',
-      amount: 450000,
-      date: DateTime(2025, 1, 2, 13, 15), // 6 days ago
-      description: 'Clothes from online store',
-      expenseType: ExpenseType.expense),
-  TransactionsModel(
-      id: 10,
-      title: 'Phone Bill',
-      amount: 200000,
-      date: DateTime(2025, 1, 1, 11, 30), // 7 days ago
-      description: 'Monthly phone bill payment',
-      expenseType: ExpenseType.expense),
-];
+Future<List<TransactionsModel>> transactionsDataList() async {
+  final snapshot = await FirebaseFirestore.instance
+      .collection('transactions')
+      .get();
+  return snapshot.docs
+      .map((doc) => TransactionsModel.fromFirestore(doc, null))
+      .toList();
+}
+
+// List<TransactionsModel> transactionsDataList = [
+//   TransactionsModel(
+//       id: 1,
+//       title: 'Coffee',
+//       amount: 35000,
+//       date: DateTime(2025, 1, 8, 9, 30), // Today
+//       description: 'Morning coffee at Starbucks',
+//       expenseType: ExpenseType.expense),
+//   TransactionsModel(
+//       id: 2,
+//       title: 'Lunch',
+//       amount: 75000,
+//       date: DateTime(2025, 1, 8, 12, 45), // Today
+//       description: 'Lunch with colleagues',
+//       expenseType: ExpenseType.expense),
+//   TransactionsModel(
+//       id: 3,
+//       title: 'Taxi',
+//       amount: 50000,
+//       date: DateTime(2025, 1, 7, 18, 30), // Yesterday
+//       description: 'Taxi ride home from office',
+//       expenseType: ExpenseType.expense),
+//   TransactionsModel(
+//       id: 4,
+//       title: 'Groceries',
+//       amount: 250000,
+//       date: DateTime(2025, 1, 7, 14, 20), // Yesterday
+//       description: 'Weekly grocery shopping',
+//       expenseType: ExpenseType.expense),
+//   TransactionsModel(
+//       id: 5,
+//       title: 'Movie Tickets',
+//       amount: 100000,
+//       date: DateTime(2025, 1, 6, 19, 00), // 2 days ago
+//       description: 'Weekend movie with friends',
+//       expenseType: ExpenseType.expense),
+//   TransactionsModel(
+//       id: 6,
+//       title: 'Salary',
+//       amount: 8000000,
+//       date: DateTime(2025, 1, 5, 10, 00), // 3 days ago
+//       description: 'Monthly salary deposit',
+//       expenseType: ExpenseType.income),
+//   TransactionsModel(
+//       id: 7,
+//       title: 'Internet Bill',
+//       amount: 400000,
+//       date: DateTime(2025, 1, 4, 15, 30), // 4 days ago
+//       description: 'Monthly internet subscription',
+//       expenseType: ExpenseType.expense),
+//   TransactionsModel(
+//       id: 8,
+//       title: 'Gym',
+//       amount: 350000,
+//       date: DateTime(2025, 1, 3, 8, 00), // 5 days ago
+//       description: 'Monthly gym membership',
+//       expenseType: ExpenseType.expense),
+//   TransactionsModel(
+//       id: 9,
+//       title: 'Online Shopping',
+//       amount: 450000,
+//       date: DateTime(2025, 1, 2, 13, 15), // 6 days ago
+//       description: 'Clothes from online store',
+//       expenseType: ExpenseType.expense),
+//   TransactionsModel(
+//       id: 10,
+//       title: 'Phone Bill',
+//       amount: 200000,
+//       date: DateTime(2025, 1, 1, 11, 30), // 7 days ago
+//       description: 'Monthly phone bill payment',
+//       expenseType: ExpenseType.expense),
+// ];
