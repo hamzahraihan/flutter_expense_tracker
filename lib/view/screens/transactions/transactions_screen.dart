@@ -19,7 +19,8 @@ class TransactionsScreen extends StatelessWidget {
           }
 
           if (snapshot.hasData && !snapshot.data!.isNotEmpty) {
-            return const Text("Document does not exist");
+            return const Text(
+                "You never do any transactions, atleast for now.");
           }
           if (snapshot.connectionState == ConnectionState.done) {
             final transactions = snapshot.data!;
