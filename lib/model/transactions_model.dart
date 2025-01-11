@@ -19,13 +19,15 @@ class TransactionsModel {
   final DateTime date;
   final String description;
   final ExpenseType expenseType;
+  final String category;
 
   TransactionsModel(
       {required this.title,
       required this.amount,
       required this.date,
       required this.description,
-      required this.expenseType});
+      required this.expenseType,
+      required this.category});
 
   factory TransactionsModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -33,13 +35,13 @@ class TransactionsModel {
   ) {
     final data = snapshot.data();
     return TransactionsModel(
-      title: data?['title'],
-      amount: data?['amount'],
-      date: (data?['date'] as Timestamp).toDate(),
-      description: data?['description'],
-      expenseType:
-          ExpenseTypeExtension.fromString(data?['expenseType']),
-    );
+        title: data?['title'],
+        amount: data?['amount'],
+        date: (data?['date'] as Timestamp).toDate(),
+        description: data?['description'],
+        expenseType:
+            ExpenseTypeExtension.fromString(data?['expenseType']),
+        category: data?['category']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -49,30 +51,10 @@ class TransactionsModel {
       "date": date,
       "description": description,
       "expenseType": expenseType.toShortString(),
+      "category": category
     };
   }
 }
-
-// class GetTransactions extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context){
-
-//     return FutureBuilder(future: retrieveData('transactions'),
-//     builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot){
-//       if(snapshot.hasError){
-//         return Text('Something went wrong');
-//       }
-//       if(snapshot.hasData && !snapshot.data!.exists){
-//         return const Text('Document does not exist');
-//       }
-//       if(snapshot.connectionState == ConnectionState.done){
-//         Map<String,dynamic> data = snapshot.data!.data() as Map<String, dynamic>
-//         return
-//       }
-//     }
-//     );
-//   }
-// }
 
 class GroupedTransactions {
   final List<TransactionsModel> today;
