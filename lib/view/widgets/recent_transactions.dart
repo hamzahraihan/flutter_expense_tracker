@@ -1,40 +1,42 @@
 import 'package:expense_tracker/model/transactions_model.dart';
-import 'package:expense_tracker/view/util/expenses_color.dart';
+import 'package:expense_tracker/view/util/icon_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class RecentTransactionsWidget extends StatefulWidget {
-  final IconData icon;
   final String title;
   final String description;
   final ExpenseType expenseType;
   final DateTime date;
   final int amount;
+  final String category;
 
   const RecentTransactionsWidget(
       {super.key,
-      required this.icon,
       required this.title,
       required this.description,
       required this.expenseType,
       required this.date,
-      required this.amount});
+      required this.amount,
+      required this.category});
 
   @override
-  State<RecentTransactionsWidget> createState() => _RecentTransactionState();
+  State<RecentTransactionsWidget> createState() =>
+      _RecentTransactionState();
 }
 
-class _RecentTransactionState extends State<RecentTransactionsWidget> {
-  IconData get icon => widget.icon;
+class _RecentTransactionState
+    extends State<RecentTransactionsWidget> {
   String get title => widget.title;
+  String get category => widget.category;
   String get description => widget.description;
   ExpenseType get expenseType => widget.expenseType;
   int get amount => widget.amount;
   DateTime get date => widget.date;
 
-  late String convertToIdr =
-      NumberFormat.currency(locale: 'id', symbol: 'Rp', decimalDigits: 2)
-          .format(amount);
+  late String convertToIdr = NumberFormat.currency(
+          locale: 'id', symbol: 'Rp', decimalDigits: 2)
+      .format(amount);
   late String formattedTime = DateFormat.jm().format(date);
 
   @override
@@ -56,13 +58,16 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
-                color: ExpensesColor(expenseTitle: title).getColorBackground(),
+                color: IconSelection(category: category)
+                    .getColorBackground(),
               ),
               width: 60,
               height: double.infinity,
               child: Icon(
-                icon,
-                color: ExpensesColor(expenseTitle: title).getColorIcon(),
+                IconSelection(category: category).getColorIcon().icon,
+                color: IconSelection(category: category)
+                    .getColorIcon()
+                    .color,
               ),
             ),
           ),
@@ -84,8 +89,8 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
                       overflow: TextOverflow.ellipsis,
                       softWrap: true,
                       textAlign: TextAlign.start,
-                      style:
-                          const TextStyle(color: Colors.black38, fontSize: 12))
+                      style: const TextStyle(
+                          color: Colors.black38, fontSize: 12))
                 ],
               ),
             ),
@@ -106,7 +111,8 @@ class _RecentTransactionState extends State<RecentTransactionsWidget> {
                   ),
                   Text(
                     formattedTime,
-                    style: const TextStyle(color: Colors.black38, fontSize: 12),
+                    style: const TextStyle(
+                        color: Colors.black38, fontSize: 12),
                   )
                 ],
               ))
