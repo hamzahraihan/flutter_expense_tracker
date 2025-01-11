@@ -4,7 +4,6 @@ import 'package:expense_tracker/view/screens/transactions/transactions_screen.da
 import 'package:expense_tracker/view/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/view/widgets/chart/bar_chart.dart';
 import 'package:expense_tracker/view/widgets/income_expenses_card_widget.dart';
-import 'package:expense_tracker/view/widgets/loading.dart';
 import 'package:expense_tracker/view/widgets/recent_transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -175,12 +174,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   return Column(
                                     children: [
                                       RecentTransactionsWidget(
-                                        icon: Icons.shopping_cart,
                                         title: item.title,
                                         description: item.description,
                                         date: item.date,
                                         expenseType: item.expenseType,
                                         amount: item.amount,
+                                        category: item.category,
                                       ),
                                       const SizedBox(
                                           height:
@@ -212,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
           }
-          return const Loading();
+          return const Text('');
         });
   }
 }
