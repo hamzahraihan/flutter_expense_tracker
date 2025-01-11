@@ -38,12 +38,13 @@ class _TransactionsListState extends State<TransactionsList> {
                       padding:
                           const EdgeInsets.symmetric(vertical: 4.0),
                       child: RecentTransactionsWidget(
-                          icon: Icons.shopping_bag,
-                          title: item.title,
-                          description: item.description,
-                          expenseType: item.expenseType,
-                          date: item.date,
-                          amount: item.amount));
+                        title: item.title,
+                        description: item.description,
+                        expenseType: item.expenseType,
+                        date: item.date,
+                        amount: item.amount,
+                        category: item.category,
+                      ));
                 }).toList()),
               ]
             : []);
