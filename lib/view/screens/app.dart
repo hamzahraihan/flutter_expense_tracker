@@ -1,9 +1,6 @@
-import 'package:expense_tracker/view/screens/add_expense/add_expense_screen.dart';
 import 'package:expense_tracker/view/screens/home/home_screen.dart';
 import 'package:expense_tracker/view/screens/transactions/transactions_screen.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
 class ExpenseTrackerApp extends StatefulWidget {
   const ExpenseTrackerApp({super.key, required this.initialIndex});
@@ -23,13 +20,6 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     });
 
     // Navigator.of(context).pushReplacementNamed(_routes[index]);
-  }
-
-  void _handleExpandableNavigation(BuildContext context, screen) {
-    setState(() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => screen));
-    });
   }
 
   @override
@@ -87,46 +77,6 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
         indicatorColor: Colors.white24,
         animationDuration: Duration.zero,
       ),
-      floatingActionButtonLocation: ExpandableFab.location,
-      floatingActionButton: ExpandableFab(
-          openButtonBuilder: RotateFloatingActionButtonBuilder(
-            child: const Icon(Icons.add),
-            fabSize: ExpandableFabSize.regular,
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.blueAccent,
-            shape: const CircleBorder(),
-          ),
-          closeButtonBuilder: RotateFloatingActionButtonBuilder(
-            child: const Icon(Icons.close),
-            fabSize: ExpandableFabSize.regular,
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.blueAccent,
-            shape: const CircleBorder(),
-          ),
-          distance: 80,
-          children: [
-            FloatingActionButton.small(
-              heroTag: 'expense button',
-              tooltip: 'expense',
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.red.shade500,
-              shape: const CircleBorder(),
-              onPressed: () => _handleExpandableNavigation(
-                  context, const AddExpenseScreen()),
-              child: const Icon(Icons.trending_down),
-            ),
-            FloatingActionButton.small(
-              heroTag: 'income button',
-              tooltip: 'income',
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.green.shade500,
-              shape: const CircleBorder(),
-              // TODO MAKE AN ADD INCOME SCREEN
-              onPressed: () => _handleExpandableNavigation(
-                  context, const Placeholder()),
-              child: const Icon(Icons.trending_up),
-            ),
-          ]),
     );
   }
 }
