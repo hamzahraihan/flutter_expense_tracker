@@ -94,14 +94,16 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   ]),
               floatingActionButtonLocation: ExpandableFab.location,
               floatingActionButton: ExpandableFab(
+                  type: ExpandableFabType.side,
                   key: _key,
+                  overlayStyle: const ExpandableFabOverlayStyle(
+                      color: Colors.black38),
                   openButtonBuilder:
                       RotateFloatingActionButtonBuilder(
                     child: const Icon(Icons.add),
                     fabSize: ExpandableFabSize.regular,
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.blueAccent,
-                    shape: const CircleBorder(),
                   ),
                   closeButtonBuilder:
                       RotateFloatingActionButtonBuilder(
@@ -117,7 +119,6 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       tooltip: 'expense',
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.red.shade500,
-                      shape: const CircleBorder(),
                       onPressed: () => _handleExpandableNavigation(
                           context, const AddExpenseScreen()),
                       child: const Icon(Icons.trending_down),
@@ -127,7 +128,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       tooltip: 'income',
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.green.shade500,
-                      shape: const CircleBorder(),
+
                       // TODO MAKE AN ADD INCOME SCREEN
                       onPressed: () => _handleExpandableNavigation(
                           context, const Placeholder()),
