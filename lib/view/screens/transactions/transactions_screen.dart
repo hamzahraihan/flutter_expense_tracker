@@ -92,6 +92,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       dateTitle: 'Older',
                     ),
                   ]),
+              floatingActionButtonLocation: ExpandableFab.location,
               floatingActionButton: ExpandableFab(
                   key: _key,
                   openButtonBuilder:
