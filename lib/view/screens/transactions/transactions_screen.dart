@@ -16,6 +16,8 @@ class TransactionsScreen extends StatefulWidget {
 }
 
 class _TransactionsScreenState extends State<TransactionsScreen> {
+  final _key = GlobalKey<ExpandableFabState>();
+
   void _handleExpandableNavigation(BuildContext context, screen) {
     setState(() {
       Navigator.push(
@@ -90,8 +92,8 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       dateTitle: 'Older',
                     ),
                   ]),
-              floatingActionButtonLocation: ExpandableFab.location,
               floatingActionButton: ExpandableFab(
+                  key: _key,
                   openButtonBuilder:
                       RotateFloatingActionButtonBuilder(
                     child: const Icon(Icons.add),
@@ -108,7 +110,6 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                     backgroundColor: Colors.blueAccent,
                     shape: const CircleBorder(),
                   ),
-                  distance: 80,
                   children: [
                     FloatingActionButton.small(
                       heroTag: 'expense button',
