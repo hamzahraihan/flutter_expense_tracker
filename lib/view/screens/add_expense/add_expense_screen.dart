@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
@@ -10,6 +9,14 @@ class AddExpenseScreen extends StatefulWidget {
 }
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,21 +56,31 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         child: Text(
                           'Rp.',
                           style: TextStyle(
-                              color: Colors.white, fontSize: 32.0),
+                              color: Colors.white,
+                              fontSize: 32.0,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                       Flexible(
+                        flex: 6,
                         child: TextField(
+                          controller: _controller,
                           keyboardType: TextInputType.number,
                           inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
+                            CurrencyInputFormatter(
+                                mantissaLength: 0,
+                                thousandSeparator:
+                                    ThousandSeparator.Period)
                           ],
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 32.0),
+                              color: Colors.white,
+                              fontSize: 32.0,
+                              fontWeight: FontWeight.bold),
                           decoration: InputDecoration(
                               hintStyle: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 32.0),
+                                  fontSize: 32.0,
+                                  fontWeight: FontWeight.bold),
                               hintText: '0',
                               border: OutlineInputBorder(
                                   borderRadius:
@@ -74,7 +91,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     ],
                   )),
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 26),
                 height: 630,
                 width: double.infinity,
                 decoration: const BoxDecoration(
