@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class AddExpenseScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         backgroundColor: Colors.red.shade400,
         body: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
@@ -54,6 +55,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       Flexible(
                         child: TextField(
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           style: const TextStyle(
                               color: Colors.white, fontSize: 32.0),
                           decoration: InputDecoration(
@@ -70,9 +74,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     ],
                   )),
               Container(
-                height: 500,
+                padding: const EdgeInsets.all(20),
+                height: 630,
                 width: double.infinity,
-                decoration: const BoxDecoration(color: Colors.white),
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(42),
+                        topRight: Radius.circular(42))),
                 child: const Text('data'),
               ),
             ],
