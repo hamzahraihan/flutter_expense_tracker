@@ -40,6 +40,7 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
       width: double.infinity,
       initialSelection: dropdownValue,
       dropdownMenuEntries: menuEntries,
+      enableSearch: false,
       onSelected: (value) {
         setState(() {
           dropdownValue = value!;
