@@ -33,9 +33,32 @@
     <link rel="manifest" href="manifest.json" />
   </head>
   <body>
-    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js"></script>
+    <!-- <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js';
+      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js';
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
 
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: 'AIzaSyBpDZmN9XiqDhQVu0xcl2zTkel2ogri8vg',
+        authDomain: 'flutter-expenses-tracker-aa3a2.firebaseapp.com',
+        projectId: 'flutter-expenses-tracker-aa3a2',
+        storageBucket: 'flutter-expenses-tracker-aa3a2.firebasestorage.app',
+        messagingSenderId: '1089112343158',
+        appId: '1:1089112343158:web:9cbb0c58e5cefae1511557',
+        measurementId: 'G-D18XL54RC7',
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script> -->
+    <script>
+      window.global = window;
+    </script>
     <script src="flutter_bootstrap.js" async></script>
   </body>
 </html>
