@@ -41,17 +41,21 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 height: 100,
               ),
               const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
                   child: Text(
                     'How much?',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.white70,
+                      color: Colors.white,
                     ),
                   )),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 12.0),
                 child: TextFormField(
+                  controller: _controller,
                   validator: (value) {
                     if (value == null ||
                         value.isEmpty ||
@@ -71,6 +75,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       fontSize: 32.0,
                       fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(0),
+                      errorStyle: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white54,
+                      ),
+                      errorBorder: InputBorder.none,
                       prefixIcon: const Text(
                         'Rp. ',
                         style: TextStyle(
