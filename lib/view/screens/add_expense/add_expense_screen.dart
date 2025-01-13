@@ -10,7 +10,7 @@ class AddExpenseScreen extends StatefulWidget {
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final TextEditingController _controller = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
     _controller.dispose();
@@ -31,6 +31,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         ),
         backgroundColor: Colors.red.shade400,
         body: SingleChildScrollView(
+            child: Form(
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,48 +50,45 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     ),
                   )),
               Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    children: [
-                      const Flexible(
-                        child: Text(
-                          'Rp.',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 32.0,
-                              fontWeight: FontWeight.bold),
-                        ),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null ||
+                        value.isEmpty ||
+                        value == '0') {
+                      return 'Please enter nominal';
+                    }
+                    return null;
+                  },
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    CurrencyInputFormatter(
+                        mantissaLength: 0,
+                        thousandSeparator: ThousandSeparator.Period)
+                  ],
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 32.0,
+                      fontWeight: FontWeight.bold),
+                  decoration: InputDecoration(
+                      prefixIcon: const Text(
+                        'Rp. ',
+                        style: TextStyle(
+                            fontSize: 32,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
                       ),
-                      Flexible(
-                        flex: 6,
-                        child: TextField(
-                          controller: _controller,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            CurrencyInputFormatter(
-                                mantissaLength: 0,
-                                thousandSeparator:
-                                    ThousandSeparator.Period)
-                          ],
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 32.0,
-                              fontWeight: FontWeight.bold),
-                          decoration: InputDecoration(
-                              hintStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32.0,
-                                  fontWeight: FontWeight.bold),
-                              hintText: '0',
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(10),
-                                  borderSide: BorderSide.none)),
-                        ),
+                      hintStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  )),
+                      hintText: '0',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none)),
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 16, vertical: 26),
@@ -100,10 +99,27 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(42),
                         topRight: Radius.circular(42))),
-                child: const Text('data'),
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Validate returns true if the form is valid, or false otherwise.
+                        if (_formKey.currentState!.validate()) {
+                          // If the form is valid, display a snackbar. In the real world,
+                          // you'd often call a server or save the information in a database.
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Processing Data')),
+                          );
+                        }
+                      },
+                      child: const Text('Submit'),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-        ));
+        )));
   }
 }
