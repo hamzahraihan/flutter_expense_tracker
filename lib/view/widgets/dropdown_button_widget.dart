@@ -30,14 +30,13 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
   Widget build(BuildContext context) {
     // TODO: Dropdown Button Component
     return DropdownMenu(
-      menuStyle: const MenuStyle(
-        fixedSize: WidgetStatePropertyAll<Size>(Size.fromWidth(30)),
-      ),
       inputDecorationTheme: const InputDecorationTheme(
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black26),
-            borderRadius: BorderRadius.all(Radius.circular(16))),
-      ),
+          border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black26),
+              borderRadius: BorderRadius.all(Radius.circular(16))),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black26),
+              borderRadius: BorderRadius.all(Radius.circular(16)))),
       width: double.infinity,
       initialSelection: dropdownValue,
       dropdownMenuEntries: menuEntries,
