@@ -9,12 +9,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env.local');
+  WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform);
 
-  setPathUrlStrategy();
   runApp(const MyApp());
 }
 
