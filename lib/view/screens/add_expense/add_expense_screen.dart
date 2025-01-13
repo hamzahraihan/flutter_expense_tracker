@@ -1,3 +1,4 @@
+import 'package:expense_tracker/view/widgets/dropdown_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
@@ -30,8 +31,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           backgroundColor: Colors.red.shade400,
         ),
         backgroundColor: Colors.red.shade400,
-        body: SingleChildScrollView(
-            child: Form(
+        body: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,10 +99,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           borderSide: BorderSide.none)),
                 ),
               ),
-              Container(
+              Expanded(
+                  child: Container(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 16, vertical: 26),
-                height: 630,
                 width: double.infinity,
                 decoration: const BoxDecoration(
                     color: Colors.white,
@@ -111,6 +111,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         topRight: Radius.circular(42))),
                 child: Column(
                   children: [
+                    const DropdownButtonWidget(),
                     ElevatedButton(
                       onPressed: () {
                         // Validate returns true if the form is valid, or false otherwise.
@@ -127,9 +128,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     ),
                   ],
                 ),
-              ),
+              )),
             ],
           ),
-        )));
+        ));
   }
 }
