@@ -1,3 +1,4 @@
+import 'package:expense_tracker/view/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/view/widgets/dropdown_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
@@ -13,7 +14,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final TextEditingController _descriptionInputController =
       TextEditingController();
   final TextEditingController _dropdownButtonController =
+      TextEditingController(text: 'Subscription');
+  final TextEditingController _descriptionController =
       TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -119,8 +123,28 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     DropdownButtonWidget(
                         dropdownController:
                             _dropdownButtonController),
-                    ElevatedButton(
-                      onPressed: () {
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: _descriptionController,
+                      maxLines: 2,
+                      maxLength: 64,
+                      decoration: InputDecoration(
+                        hintText: 'Description',
+                        border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16)),
+                      ),
+                    ),
+                    PrimaryButtonWidget(
+                      title: 'Submit',
+                      onclick: () {
                         // Validate returns true if the form is valid, or false otherwise.
                         if (_formKey.currentState!.validate()) {
                           // If the form is valid, display a snackbar. In the real world,
@@ -131,7 +155,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           );
                         }
                       },
-                      child: const Text('Submit'),
                     ),
                   ],
                 ),
