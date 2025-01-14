@@ -62,9 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.connectionState == ConnectionState.done) {
             final List<TransactionsModel> transactions =
                 snapshot.data!;
-            final List<TransactionsModel> thisWeektransactions =
+            final List<TransactionsModel> todayTransactions =
                 Transactions.filterTransactionsByDate(transactions)
-                    .thisWeek;
+                    .today;
             final List<TransactionsModel> olderTransactions =
                 Transactions.filterTransactionsByDate(transactions)
                     .older;
@@ -167,8 +167,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding:
                           const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
                       child: Column(
-                          children: thisWeektransactions.isNotEmpty
-                              ? thisWeektransactions
+                          children: todayTransactions.isNotEmpty
+                              ? todayTransactions
                                   .take(5)
                                   .map<Widget>((item) {
                                   return Column(
