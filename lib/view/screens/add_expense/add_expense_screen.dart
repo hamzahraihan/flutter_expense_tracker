@@ -33,6 +33,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         MediaQuery.of(context).orientation;
 
     return Scaffold(
+        // resizeToAvoidBottomInset: false,
         appBar: AppBar(
           forceMaterialTransparency: true,
           centerTitle: true,
@@ -113,7 +114,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               ),
               Container(
                 height:
-                    orientation == Orientation.landscape ? 200 : 500,
+                    orientation == Orientation.landscape ? 200 : 400,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 26,
