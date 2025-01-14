@@ -10,11 +10,16 @@ class AddExpenseScreen extends StatefulWidget {
 }
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
-  final TextEditingController _controller = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _descriptionInputController =
+      TextEditingController();
+  final TextEditingController _dropdownButtonController =
+      TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
-    _controller.dispose();
+    _descriptionInputController.dispose();
+    _dropdownButtonController.dispose();
     super.dispose();
   }
 
@@ -55,7 +60,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 16.0, vertical: 12.0),
                 child: TextFormField(
-                  controller: _controller,
+                  controller: _descriptionInputController,
                   validator: (value) {
                     if (value == null ||
                         value.isEmpty ||
@@ -111,7 +116,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         topRight: Radius.circular(42))),
                 child: Column(
                   children: [
-                    const DropdownButtonWidget(),
+                    DropdownButtonWidget(
+                        dropdownController:
+                            _dropdownButtonController),
                     ElevatedButton(
                       onPressed: () {
                         // Validate returns true if the form is valid, or false otherwise.
