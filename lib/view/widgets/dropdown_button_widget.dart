@@ -10,7 +10,9 @@ const List<String> list = <String>[
 ];
 
 class DropdownButtonWidget extends StatefulWidget {
-  const DropdownButtonWidget({super.key});
+  final TextEditingController dropdownController;
+  const DropdownButtonWidget(
+      {super.key, required this.dropdownController});
 
   @override
   State<DropdownButtonWidget> createState() =>
@@ -28,8 +30,8 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Dropdown Button Component
     return DropdownMenu(
+      controller: widget.dropdownController,
       inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.black26),
