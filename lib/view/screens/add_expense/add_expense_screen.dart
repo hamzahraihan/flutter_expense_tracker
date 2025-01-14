@@ -29,7 +29,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Orientation isPortrait = MediaQuery.of(context).orientation;
+    final Orientation orientation =
+        MediaQuery.of(context).orientation;
 
     return Scaffold(
         appBar: AppBar(
@@ -112,7 +113,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               ),
               Container(
                 height:
-                    isPortrait == Orientation.landscape ? 200 : 500,
+                    orientation == Orientation.landscape ? 200 : 500,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 26,
