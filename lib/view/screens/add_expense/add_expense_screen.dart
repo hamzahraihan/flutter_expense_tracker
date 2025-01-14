@@ -2,7 +2,8 @@ import 'package:expense_tracker/services/firebase.dart';
 import 'package:expense_tracker/view/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/view/widgets/dropdown_button_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:flutter/services.dart';
+// import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
@@ -30,14 +31,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> transactionUserInput = {
-      'title': _dropdownButtonController.text,
-      'category': _dropdownButtonController.text,
-      'description': _descriptionController.text,
-      'amount': int.parse(_amountTransactionController.text),
-      'date': DateTime.now(),
-      'expenseType': 'income'
-    };
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
@@ -88,9 +81,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   },
                   keyboardType: TextInputType.number,
                   inputFormatters: [
-                    CurrencyInputFormatter(
-                        mantissaLength: 0,
-                        thousandSeparator: ThousandSeparator.Period)
+                    FilteringTextInputFormatter.digitsOnly,
+                    // CurrencyInputFormatter(
+                    //     mantissaLength: 0,
+                    //     thousandSeparator: ThousandSeparator.Period)
                   ],
                   style: const TextStyle(
                       color: Colors.white,
@@ -143,6 +137,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   ),
                   TextFormField(
                     controller: _descriptionController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter description';
+                      }
+                      return null;
+                    },
                     maxLines: 2,
                     maxLength: 64,
                     decoration: InputDecoration(
@@ -158,27 +158,47 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     ),
                   ),
                   PrimaryButtonWidget(
-                    title: 'Submit',
-                    onclick: () {
-                      // Validate returns true if the form is valid, or false otherwise.
-                      if (_formKey.currentState!.validate()) {
-                        // If the form is valid, display a snackbar. In the real world,
-                        // you'd often call a server or save the information in a database.
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Processing Data')),
-                        );
-                        setState(() {
-                          db
+                      title: 'Submit',
+                      onclick: () async {
+                        // Validate returns true if the form is valid, or false otherwise.
+                        Map<String, dynamic> transactionUserInput = {
+                          'title': _dropdownButtonController.text,
+                          'category': _dropdownButtonController.text,
+                          'description': _descriptionController.text,
+                          'amount': int.parse(
+                              _amountTransactionController.text),
+                          'date': DateTime.now(),
+                          'expenseType': 'income'
+                        };
+                        if (_formKey.currentState!.validate()) {
+                          // If the form is valid, display a snackbar. In the real world,
+                          // you'd often call a server or save the information in a database.
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Processing Data')),
+                          );
+                        }
+
+                        try {
+                          await db
                               .collection("transactions")
                               .doc()
-                              .set(transactionUserInput)
-                              .onError((e, _) => print(
-                                  "Error writing document: $e"));
-                        });
-                      }
-                    },
-                  )
+                              .set(transactionUserInput);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                                    content: Text('Data saved')));
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                                    content:
+                                        Text('Saving data failed!')));
+                          }
+                          print('Error: $e');
+                        }
+                      })
                 ])),
               ),
             ],
