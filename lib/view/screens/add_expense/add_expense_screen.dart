@@ -1,3 +1,4 @@
+import 'package:expense_tracker/services/firebase.dart';
 import 'package:expense_tracker/view/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/view/widgets/dropdown_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class AddExpenseScreen extends StatefulWidget {
 }
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
-  final TextEditingController _descriptionInputController =
+  final TextEditingController _amountTransactionController =
       TextEditingController();
   final TextEditingController _dropdownButtonController =
       TextEditingController(text: 'Subscription');
@@ -22,13 +23,21 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   @override
   void dispose() {
-    _descriptionInputController.dispose();
+    _amountTransactionController.dispose();
     _dropdownButtonController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> transactionUserInput = {
+      'title': _dropdownButtonController.text,
+      'category': _dropdownButtonController.text,
+      'description': _descriptionController.text,
+      'amount': int.parse(_amountTransactionController.text),
+      'date': DateTime.now(),
+      'expenseType': 'income'
+    };
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
@@ -68,7 +77,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 16.0, vertical: 12.0),
                 child: TextFormField(
-                  controller: _descriptionInputController,
+                  controller: _amountTransactionController,
                   validator: (value) {
                     if (value == null ||
                         value.isEmpty ||
@@ -159,6 +168,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           const SnackBar(
                               content: Text('Processing Data')),
                         );
+                        setState(() {
+                          db
+                              .collection("transactions")
+                              .doc()
+                              .set(transactionUserInput)
+                              .onError((e, _) => print(
+                                  "Error writing document: $e"));
+                        });
                       }
                     },
                   )
