@@ -165,8 +165,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           'title': _dropdownButtonController.text,
                           'category': _dropdownButtonController.text,
                           'description': _descriptionController.text,
-                          'amount': int.parse(
-                              _amountTransactionController.text),
+                          'amount': int.tryParse(
+                                  _amountTransactionController
+                                      .text) ??
+                              0,
                           'date': DateTime.now(),
                           'expenseType': 'income'
                         };
@@ -177,26 +179,25 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                             const SnackBar(
                                 content: Text('Processing Data')),
                           );
-                        }
-
-                        try {
-                          await db
-                              .collection("transactions")
-                              .doc()
-                              .set(transactionUserInput);
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                    content: Text('Data saved')));
+                          try {
+                            await db
+                                .collection("transactions")
+                                .doc()
+                                .set(transactionUserInput);
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                      content: Text('Data saved')));
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                      content: Text(
+                                          'Saving data failed!')));
+                            }
+                            print('Error: $e');
                           }
-                        } catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                    content:
-                                        Text('Saving data failed!')));
-                          }
-                          print('Error: $e');
                         }
                       })
                 ])),
