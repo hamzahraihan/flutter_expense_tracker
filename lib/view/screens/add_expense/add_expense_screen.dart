@@ -31,6 +31,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          forceMaterialTransparency: true,
           centerTitle: true,
           foregroundColor: Colors.white,
           title: const Text(
@@ -43,12 +44,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         body: Form(
           key: _formKey,
           child: Column(
+            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 100,
-              ),
+              const Spacer(),
               const Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 16.0,
@@ -108,57 +108,57 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           borderSide: BorderSide.none)),
                 ),
               ),
-              Expanded(
-                  child: Container(
+              Container(
+                height: 300,
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 26),
+                  horizontal: 16,
+                  vertical: 26,
+                ),
                 width: double.infinity,
                 decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(42),
                         topRight: Radius.circular(42))),
-                child: Column(
-                  children: [
-                    DropdownButtonWidget(
-                        dropdownController:
-                            _dropdownButtonController),
-                    const SizedBox(
-                      height: 20,
+                child: SingleChildScrollView(
+                    child: Column(children: [
+                  DropdownButtonWidget(
+                      dropdownController: _dropdownButtonController),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: _descriptionController,
+                    maxLines: 2,
+                    maxLength: 64,
+                    decoration: InputDecoration(
+                      hintText: 'Description',
+                      border: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.black26),
+                          borderRadius: BorderRadius.circular(16)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.black26),
+                          borderRadius: BorderRadius.circular(16)),
                     ),
-                    TextFormField(
-                      controller: _descriptionController,
-                      maxLines: 2,
-                      maxLength: 64,
-                      decoration: InputDecoration(
-                        hintText: 'Description',
-                        border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.black26),
-                            borderRadius: BorderRadius.circular(16)),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.black26),
-                            borderRadius: BorderRadius.circular(16)),
-                      ),
-                    ),
-                    PrimaryButtonWidget(
-                      title: 'Submit',
-                      onclick: () {
-                        // Validate returns true if the form is valid, or false otherwise.
-                        if (_formKey.currentState!.validate()) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Processing Data')),
-                          );
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              )),
+                  ),
+                  PrimaryButtonWidget(
+                    title: 'Submit',
+                    onclick: () {
+                      // Validate returns true if the form is valid, or false otherwise.
+                      if (_formKey.currentState!.validate()) {
+                        // If the form is valid, display a snackbar. In the real world,
+                        // you'd often call a server or save the information in a database.
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Processing Data')),
+                        );
+                      }
+                    },
+                  )
+                ])),
+              ),
             ],
           ),
         ));
