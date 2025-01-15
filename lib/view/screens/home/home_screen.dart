@@ -76,6 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
             final List<TransactionsModel> olderTransactions =
                 Transactions.filterTransactionsByDate(transactions)
                     .older;
+            final List<TransactionsModel> thisWeekTransactions =
+                Transactions.filterTransactionsByDate(transactions)
+                    .thisWeek;
 
             int totalAmount = olderTransactions.fold(
                 0,
@@ -148,7 +151,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(
                             16.0, 0, 16.0, 0),
-                        child: BarChartWidget(),
+                        child: BarChartWidget(
+                          thisWeekTransactions: thisWeekTransactions,
+                        ),
                       ),
                       Padding(
                           padding: const EdgeInsets.all(16.0),
