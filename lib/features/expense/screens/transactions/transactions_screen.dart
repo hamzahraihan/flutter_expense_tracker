@@ -1,5 +1,6 @@
 import 'package:expense_tracker/features/expense/screens/upload/add_expense_screen.dart';
 import 'package:expense_tracker/features/expense/screens/transactions/transactions_list.dart';
+import 'package:expense_tracker/features/expense/screens/upload/add_income_screen.dart';
 import 'package:expense_tracker/features/expense/widgets/loading.dart';
 import 'package:expense_tracker/model/transactions_model.dart';
 import 'package:expense_tracker/services/firebase.dart';
@@ -142,7 +143,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
 
                       // TODO MAKE AN ADD INCOME SCREEN
                       onPressed: () => _handleExpandableNavigation(
-                          context, const Placeholder()),
+                          context, const AddIncomeScreen()),
                       child: const Icon(Icons.trending_up),
                     ),
                   ]),
