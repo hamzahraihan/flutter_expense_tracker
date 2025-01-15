@@ -78,9 +78,12 @@ class Transactions {
       return -a.date.compareTo(b.date);
     });
     final DateTime now = DateTime.now();
+
     final DateTime today = DateTime(now.year, now.month, now.day);
+
     final DateTime yesterday =
         today.subtract(const Duration(days: 1));
+
     final DateTime thisWeek =
         today.subtract(Duration(days: today.weekday - 1));
     final DateTime thisMonth = DateTime(today.year, today.month, 1);
@@ -106,14 +109,12 @@ class Transactions {
       }
 
       // push week transaction to weekTransactions List
-      if (transactionDate.isAfter(thisWeek) &&
-          transactionDate.isBefore(today)) {
+      if (transactionDate.isAfter(thisWeek)) {
         thisWeekTransactions.add(transaction);
       }
 
       // push month transaction to monthTransactions List
-      if (transactionDate.isAfter(thisMonth) &&
-          transactionDate.isBefore(thisWeek)) {
+      if (transactionDate.isAfter(thisMonth)) {
         thisMonthTransaction.add(transaction);
       }
 
