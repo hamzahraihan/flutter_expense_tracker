@@ -7,12 +7,12 @@ import 'package:flutter/services.dart';
 
 class AddIncomeScreen extends StatefulWidget {
   const AddIncomeScreen({super.key});
-  static const String routeName = '/add-expense';
+  static const String routeName = '/add-income';
   @override
-  State<AddIncomeScreen> createState() => _AddExpenseScreenState();
+  State<AddIncomeScreen> createState() => _AddIncomeScreenState();
 }
 
-class _AddExpenseScreenState extends State<AddIncomeScreen> {
+class _AddIncomeScreenState extends State<AddIncomeScreen> {
   final TextEditingController _amountTransactionController =
       TextEditingController();
   final TextEditingController _dropdownButtonController =
@@ -41,12 +41,12 @@ class _AddExpenseScreenState extends State<AddIncomeScreen> {
           centerTitle: true,
           foregroundColor: Colors.white,
           title: const Text(
-            'Expense',
+            'Income',
             style: TextStyle(fontSize: 18.0),
           ),
-          backgroundColor: Colors.red.shade400,
+          backgroundColor: Colors.green.shade400,
         ),
-        backgroundColor: Colors.red.shade400,
+        backgroundColor: Colors.green.shade400,
         body: Form(
           key: _formKey,
           child: Column(
@@ -170,7 +170,7 @@ class _AddExpenseScreenState extends State<AddIncomeScreen> {
                                       .text) ??
                               0,
                           'date': DateTime.now(),
-                          'expenseType': 'expense'
+                          'expenseType': 'income'
                         };
                         if (_formKey.currentState!.validate()) {
                           // If the form is valid, display a snackbar. In the real world,
