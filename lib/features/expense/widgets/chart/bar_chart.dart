@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BarChartWidget extends StatefulWidget {
-  final List<TransactionsModel> thisWeekTransactions;
-  BarChartWidget({super.key, required this.thisWeekTransactions});
+  final Iterable<TransactionsModel> filteredThisWeekExpenses;
+  BarChartWidget({super.key, required this.filteredThisWeekExpenses});
 
   List<Color> get availableColors => const <Color>[
         AppColors.contentColorPurple,
@@ -133,7 +133,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       for (int i = 0; i < 7; i++) i: 0.0,
     };
 
-    for (var transaction in widget.thisWeekTransactions) {
+    for (var transaction in widget.filteredThisWeekExpenses) {
       int weekdayIndex = transaction.date.weekday - 1; // Monday = 0
       dailyTotals[weekdayIndex] =
           dailyTotals[weekdayIndex]! + transaction.amount;
@@ -159,7 +159,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   }
 
   // List<BarChartGroupData> showingGroups() {
-  //   return widget.thisWeekTransactions.asMap().entries.map((entry) {
+  //   return widget.filteredThisWeekExpenses.asMap().entries.map((entry) {
   //     int index = entry.key;
   //     TransactionsModel item = entry.value;
   //     return makeGroupData(
@@ -209,7 +209,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               for (int i = 0; i < 7; i++) i: 0.0,
             };
 
-            for (var transaction in widget.thisWeekTransactions) {
+            for (var transaction in widget.filteredThisWeekExpenses) {
               int weekdayIndex =
                   transaction.date.weekday - 1; // Monday = 0
               dailyTotals[weekdayIndex] =
