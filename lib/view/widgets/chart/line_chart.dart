@@ -42,7 +42,9 @@ class _LineChartSample2State extends State<LineChartWidget> {
               'avg',
               style: TextStyle(
                 fontSize: 12,
-                color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white,
+                color: showAvg
+                    ? Colors.white.withOpacity(0.5)
+                    : Colors.white,
               ),
             ),
           ),
@@ -267,9 +269,13 @@ class _LineChartSample2State extends State<LineChartWidget> {
           isCurved: true,
           gradient: LinearGradient(
             colors: [
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
+              ColorTween(
+                      begin: gradientColors[0],
+                      end: gradientColors[1])
                   .lerp(0.2)!,
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
+              ColorTween(
+                      begin: gradientColors[0],
+                      end: gradientColors[1])
                   .lerp(0.2)!,
             ],
           ),
@@ -282,10 +288,14 @@ class _LineChartSample2State extends State<LineChartWidget> {
             show: true,
             gradient: LinearGradient(
               colors: [
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
+                ColorTween(
+                        begin: gradientColors[0],
+                        end: gradientColors[1])
                     .lerp(0.2)!
                     .withOpacity(0.1),
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
+                ColorTween(
+                        begin: gradientColors[0],
+                        end: gradientColors[1])
                     .lerp(0.2)!
                     .withOpacity(0.1),
               ],
