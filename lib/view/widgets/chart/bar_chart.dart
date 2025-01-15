@@ -18,7 +18,8 @@ class BarChartWidget extends StatefulWidget {
         AppColors.contentColorRed,
       ];
 
-  final Color barBackgroundColor = AppColors.contentColorBlack.withOpacity(0.5);
+  final Color barBackgroundColor =
+      AppColors.contentColorBlack.withOpacity(0.5);
   final Color barColor = AppColors.contentColorWhite;
   final Color touchedBarColor = AppColors.contentColorGreen;
 
@@ -53,7 +54,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 2),
                     child: BarChart(
                       mainBarData(),
                       duration: animDuration,
@@ -90,7 +92,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               : const BorderSide(color: Colors.white, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            toY: 20,
+            toY: 100,
             color: widget.barBackgroundColor,
           ),
         ),
@@ -102,19 +104,22 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
+            return makeGroupData(0, 50, isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(1, 90, isTouched: i == touchedIndex);
           case 2:
             return makeGroupData(2, 5, isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+            return makeGroupData(3, 7.5,
+                isTouched: i == touchedIndex);
           case 4:
             return makeGroupData(4, 9, isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+            return makeGroupData(5, 11.5,
+                isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(6, 6.5,
+                isTouched: i == touchedIndex);
           default:
             return throw Error();
         }
@@ -182,7 +187,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               touchedIndex = -1;
               return;
             }
-            touchedIndex = barTouchResponse.spot!.touchedBarGroupIndex;
+            touchedIndex =
+                barTouchResponse.spot!.touchedBarGroupIndex;
           });
         },
       ),
