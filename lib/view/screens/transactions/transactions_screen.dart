@@ -25,6 +25,13 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     });
   }
 
+  Future<void> _refreshData() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      transactionsDataList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<TransactionsModel>>(
@@ -67,31 +74,33 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       fontSize: 17.0, fontWeight: FontWeight.bold),
                 ),
               ),
-              body: ListView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0),
-                  children: [
-                    TransactionsList(
-                      transactionData: todayTransactions,
-                      dateTitle: 'Today',
-                    ),
-                    TransactionsList(
-                      transactionData: yesterdayTransactions,
-                      dateTitle: 'Yesterdays',
-                    ),
-                    TransactionsList(
-                      transactionData: thisWeekTransactions,
-                      dateTitle: 'This Week',
-                    ),
-                    TransactionsList(
-                      transactionData: thisMonthTransaction,
-                      dateTitle: 'This Month',
-                    ),
-                    TransactionsList(
-                      transactionData: olderTransactions,
-                      dateTitle: 'Older',
-                    ),
-                  ]),
+              body: RefreshIndicator(
+                  onRefresh: _refreshData,
+                  child: ListView(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0),
+                      children: [
+                        TransactionsList(
+                          transactionData: todayTransactions,
+                          dateTitle: 'Today',
+                        ),
+                        TransactionsList(
+                          transactionData: yesterdayTransactions,
+                          dateTitle: 'Yesterdays',
+                        ),
+                        TransactionsList(
+                          transactionData: thisWeekTransactions,
+                          dateTitle: 'This Week',
+                        ),
+                        TransactionsList(
+                          transactionData: thisMonthTransaction,
+                          dateTitle: 'This Month',
+                        ),
+                        TransactionsList(
+                          transactionData: olderTransactions,
+                          dateTitle: 'Older',
+                        ),
+                      ])),
               floatingActionButtonLocation: ExpandableFab.location,
               floatingActionButton: ExpandableFab(
                   type: ExpandableFabType.side,
