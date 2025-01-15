@@ -19,6 +19,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Future<void> _refreshData() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      transactionsDataList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     AppBar appBar = AppBar(
@@ -48,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ))
       ],
     );
+
     return FutureBuilder<List<TransactionsModel>>(
         future: transactionsDataList(),
         builder: (BuildContext context,
@@ -81,132 +89,139 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             return Scaffold(
-              body: SingleChildScrollView(
-                primary: true,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    appBar,
-                    const SizedBox(height: 16.0),
-                    const Center(
-                      child: Text('Account Balances'),
-                    ),
-                    Center(
-                      child: Text(
-                        convertToIdr(totalAmount),
-                        style: TextStyle(
-                            fontSize: totalAmount > 1000000 ? 26 : 32,
-                            fontWeight: FontWeight.w700),
+              body: RefreshIndicator(
+                onRefresh: _refreshData,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  primary: true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      appBar,
+                      const SizedBox(height: 16.0),
+                      const Center(
+                        child: Text('Account Balances'),
                       ),
-                    ),
-                    const SizedBox(height: 32.0),
-                    GridView.count(
-                      padding: const EdgeInsets.fromLTRB(
-                          16.0, 2.0, 16.0, 16.0),
-                      crossAxisSpacing: 10,
-                      shrinkWrap: true,
-                      childAspectRatio: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      primary: false,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: const [
-                        IncomeExpensesCardWidget(
-                          title: 'Income',
-                          amount: 2000,
-                          icon: Icons.arrow_downward,
-                          color: Color.fromRGBO(0, 168, 107, 100),
-                        ),
-                        IncomeExpensesCardWidget(
-                          title: 'Expense',
-                          amount: 2000,
-                          icon: Icons.arrow_upward,
-                          color: Colors.red,
-                        )
-                      ],
-                    ),
-                    const Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            16.0, 2.0, 16.0, 16.0),
+                      Center(
                         child: Text(
-                          'Spend Frequency',
-                          style:
-                              TextStyle(fontWeight: FontWeight.w600),
-                        )),
-                    Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-                      child: BarChartWidget(),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Recent Transactions',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            PrimaryButtonWidget(
-                              title: 'See All',
-                              onclick: () {
-                                setState(() {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const TransactionsScreen()));
-                                });
-                              },
-                            )
-                          ],
-                        )),
-                    Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-                      child: Column(
-                          children: todayTransactions.isNotEmpty
-                              ? todayTransactions
-                                  .take(5)
-                                  .map<Widget>((item) {
-                                  return Column(
-                                    children: [
-                                      RecentTransactionsWidget(
-                                        title: item.title,
-                                        description: item.description,
-                                        date: item.date,
-                                        expenseType: item.expenseType,
-                                        amount: item.amount,
-                                        category: item.category,
+                          convertToIdr(totalAmount),
+                          style: TextStyle(
+                              fontSize:
+                                  totalAmount > 1000000 ? 26 : 32,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      const SizedBox(height: 32.0),
+                      GridView.count(
+                        padding: const EdgeInsets.fromLTRB(
+                            16.0, 2.0, 16.0, 16.0),
+                        crossAxisSpacing: 10,
+                        shrinkWrap: true,
+                        childAspectRatio: 2,
+                        mainAxisSpacing: 10,
+                        crossAxisCount: 2,
+                        primary: false,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: const [
+                          IncomeExpensesCardWidget(
+                            title: 'Income',
+                            amount: 2000,
+                            icon: Icons.arrow_downward,
+                            color: Color.fromRGBO(0, 168, 107, 100),
+                          ),
+                          IncomeExpensesCardWidget(
+                            title: 'Expense',
+                            amount: 2000,
+                            icon: Icons.arrow_upward,
+                            color: Colors.red,
+                          )
+                        ],
+                      ),
+                      const Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              16.0, 2.0, 16.0, 16.0),
+                          child: Text(
+                            'Spend Frequency',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                            16.0, 0, 16.0, 0),
+                        child: BarChartWidget(),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Recent Transactions',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              PrimaryButtonWidget(
+                                title: 'See All',
+                                onclick: () {
+                                  setState(() {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const TransactionsScreen()));
+                                  });
+                                },
+                              )
+                            ],
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                            16.0, 0, 16.0, 0),
+                        child: Column(
+                            children: todayTransactions.isNotEmpty
+                                ? todayTransactions
+                                    .take(5)
+                                    .map<Widget>((item) {
+                                    return Column(
+                                      children: [
+                                        RecentTransactionsWidget(
+                                          title: item.title,
+                                          description:
+                                              item.description,
+                                          date: item.date,
+                                          expenseType:
+                                              item.expenseType,
+                                          amount: item.amount,
+                                          category: item.category,
+                                        ),
+                                        const SizedBox(
+                                            height:
+                                                8.0), // Add spacing here
+                                      ],
+                                    );
+                                  }).toList()
+                                : const [
+                                    Center(
+                                      child: Icon(
+                                        Icons.remove_shopping_cart,
+                                        size: 100,
+                                        color: Colors.black38,
                                       ),
-                                      const SizedBox(
-                                          height:
-                                              8.0), // Add spacing here
-                                    ],
-                                  );
-                                }).toList()
-                              : const [
-                                  Center(
-                                    child: Icon(
-                                      Icons.remove_shopping_cart,
-                                      size: 100,
-                                      color: Colors.black38,
                                     ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      "You haven't doing any transaction today!",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.black38),
-                                    ),
-                                  )
-                                ]),
-                    ),
-                  ],
+                                    Center(
+                                      child: Text(
+                                        "You haven't doing any transaction today!",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black38),
+                                      ),
+                                    )
+                                  ]),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
