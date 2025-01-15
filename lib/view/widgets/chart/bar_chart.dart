@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:expense_tracker/model/transactions_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:expense_tracker/view/util/color_extensions.dart';
 import 'package:expense_tracker/view/widgets/chart/resources/chart_resources.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class BarChartWidget extends StatefulWidget {
-  BarChartWidget({super.key});
+  final List<TransactionsModel> thisWeekTransactions;
+  BarChartWidget({super.key, required this.thisWeekTransactions});
 
   List<Color> get availableColors => const <Color>[
         AppColors.contentColorPurple,
@@ -101,29 +104,72 @@ class _BarChartWidgetState extends State<BarChartWidget> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
-        switch (i) {
-          case 0:
-            return makeGroupData(0, 50, isTouched: i == touchedIndex);
-          case 1:
-            return makeGroupData(1, 90, isTouched: i == touchedIndex);
-          case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
-          case 3:
-            return makeGroupData(3, 7.5,
-                isTouched: i == touchedIndex);
-          case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
-          case 5:
-            return makeGroupData(5, 11.5,
-                isTouched: i == touchedIndex);
-          case 6:
-            return makeGroupData(6, 6.5,
-                isTouched: i == touchedIndex);
-          default:
-            return throw Error();
-        }
-      });
+  // List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
+  //       switch (i) {
+  //         case 0:
+  //           return makeGroupData(0, 50, isTouched: i == touchedIndex);
+  //         case 1:
+  //           return makeGroupData(1, 90, isTouched: i == touchedIndex);
+  //         case 2:
+  //           return makeGroupData(2, 5, isTouched: i == touchedIndex);
+  //         case 3:
+  //           return makeGroupData(3, 7.5,
+  //               isTouched: i == touchedIndex);
+  //         case 4:
+  //           return makeGroupData(4, 9, isTouched: i == touchedIndex);
+  //         case 5:
+  //           return makeGroupData(5, 11.5,
+  //               isTouched: i == touchedIndex);
+  //         case 6:
+  //           return makeGroupData(6, 6.5,
+  //               isTouched: i == touchedIndex);
+  //         default:
+  //           return throw Error();
+  //       }
+  //     });
+
+  List<BarChartGroupData> showingGroups() {
+    // Calculate daily totals
+    Map<int, double> dailyTotals = {
+      for (int i = 0; i < 7; i++) i: 0.0,
+    };
+
+    for (var transaction in widget.thisWeekTransactions) {
+      int weekdayIndex = transaction.date.weekday - 1; // Monday = 0
+      dailyTotals[weekdayIndex] =
+          dailyTotals[weekdayIndex]! + transaction.amount;
+    }
+
+    // Find the maximum value
+    double maxTotal = dailyTotals.values
+        .fold(0, (prev, amount) => amount > prev ? amount : prev);
+
+    // Generate bars
+    return List.generate(7, (i) {
+      double totalAmount = dailyTotals[i] ?? 0.0;
+
+      // Normalize the bar height
+      double normalizedHeight = (totalAmount / maxTotal) * 100;
+
+      return makeGroupData(
+        i,
+        normalizedHeight, // Scale based on the max value
+        isTouched: i == touchedIndex,
+      );
+    });
+  }
+
+  // List<BarChartGroupData> showingGroups() {
+  //   return widget.thisWeekTransactions.asMap().entries.map((entry) {
+  //     int index = entry.key;
+  //     TransactionsModel item = entry.value;
+  //     return makeGroupData(
+  //       index,
+  //       item.amount.toDouble(),
+  //       isTouched: index == touchedIndex,
+  //     );
+  //   }).toList();
+  // }
 
   BarChartData mainBarData() {
     return BarChartData(
@@ -159,6 +205,20 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               default:
                 throw Error();
             }
+
+            Map<int, double> dailyTotals = {
+              for (int i = 0; i < 7; i++) i: 0.0,
+            };
+
+            for (var transaction in widget.thisWeekTransactions) {
+              int weekdayIndex =
+                  transaction.date.weekday - 1; // Monday = 0
+              dailyTotals[weekdayIndex] =
+                  dailyTotals[weekdayIndex]! + transaction.amount;
+            }
+
+            double totalAmount = dailyTotals[group.x.toInt()] ?? 0.0;
+
             return BarTooltipItem(
               '$weekDay\n',
               const TextStyle(
@@ -168,7 +228,11 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               ),
               children: <TextSpan>[
                 TextSpan(
-                  text: (rod.toY - 1).toString(),
+                  text: NumberFormat.currency(
+                          locale: 'id-ID',
+                          name: 'Rp.',
+                          decimalDigits: 0)
+                      .format(totalAmount),
                   style: const TextStyle(
                     color: Colors.black, //widget.touchedBarColor,
                     fontSize: 16,
