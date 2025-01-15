@@ -1,7 +1,7 @@
+import 'package:expense_tracker/features/expense/app.dart';
+import 'package:expense_tracker/features/expense/screens/transactions/transactions_screen.dart';
+import 'package:expense_tracker/features/expense/screens/upload/add_expense_screen.dart';
 import 'package:expense_tracker/firebase_options.dart';
-import 'package:expense_tracker/view/screens/add_expense/add_expense_screen.dart';
-import 'package:expense_tracker/view/screens/app.dart';
-import 'package:expense_tracker/view/screens/transactions/transactions_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
