@@ -79,6 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
             final List<TransactionsModel> thisWeekTransactions =
                 Transactions.filterTransactionsByDate(transactions)
                     .thisWeek;
+            // filteredThisWeekExpenses will filter weekly transaction and can be only get expense transaction
+            final Iterable<TransactionsModel>
+                filteredThisWeekExpenses = thisWeekTransactions.where(
+                    (element) =>
+                        element.expenseType == ExpenseType.expense);
 
             int totalAmount = olderTransactions.fold(
                 0,
@@ -152,7 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.fromLTRB(
                             16.0, 0, 16.0, 0),
                         child: BarChartWidget(
-                          thisWeekTransactions: thisWeekTransactions,
+                          filteredThisWeekExpenses:
+                              filteredThisWeekExpenses,
                         ),
                       ),
                       Padding(
