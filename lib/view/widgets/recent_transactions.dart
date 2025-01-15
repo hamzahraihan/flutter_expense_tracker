@@ -58,8 +58,7 @@ class _RecentTransactionState
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
-                color: IconSelection(category: category)
-                    .getColorBackground(),
+                color: IconSelection(category: category).getColorIcon().colorBackground,
               ),
               width: 60,
               height: double.infinity,
