@@ -27,9 +27,11 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
 
   Future<void> _refreshData() async {
     await Future.delayed(const Duration(seconds: 1));
-    setState(() {
-      transactionsDataList();
-    });
+    if (mounted) {
+      setState(() {
+        transactionsDataList();
+      });
+    }
   }
 
   @override
