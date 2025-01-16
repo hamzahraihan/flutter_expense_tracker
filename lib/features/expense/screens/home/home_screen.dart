@@ -80,10 +80,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 Transactions.filterTransactionsByDate(transactions)
                     .thisWeek;
             // filteredThisWeekExpenses will filter weekly transaction and can be only get expense transaction
-            final Iterable<TransactionsModel>
-                filteredThisWeekExpenses = thisWeekTransactions.where(
-                    (element) =>
-                        element.expenseType == ExpenseType.expense);
+            Iterable<TransactionsModel> filteredThisWeekExpenses(
+                ExpenseType expenseType) {
+              return thisWeekTransactions.where(
+                  (element) => element.expenseType == expenseType);
+            }
+
+            int totalWeeklyExpense(ExpenseType expenseType) {
+              return filteredThisWeekExpenses(expenseType).fold(
+                  0,
+                  (int sum, TransactionsModel item) =>
+                      sum + item.amount);
+            }
 
             int totalAmount = olderTransactions.fold(
                 0,
@@ -130,16 +138,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisCount: 2,
                         primary: false,
                         physics: const NeverScrollableScrollPhysics(),
-                        children: const [
+                        children: [
                           IncomeExpensesCardWidget(
                             title: 'Income',
-                            amount: 2000,
+                            amount: totalWeeklyExpense(
+                                ExpenseType.income),
                             icon: Icons.arrow_downward,
-                            color: Color.fromRGBO(0, 168, 107, 100),
+                            color: const Color.fromRGBO(
+                                0, 168, 107, 100),
                           ),
                           IncomeExpensesCardWidget(
                             title: 'Expense',
-                            amount: 2000,
+                            amount: totalWeeklyExpense(
+                                ExpenseType.expense),
                             icon: Icons.arrow_upward,
                             color: Colors.red,
                           )
@@ -158,7 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             16.0, 0, 16.0, 0),
                         child: BarChartWidget(
                           filteredThisWeekExpenses:
-                              filteredThisWeekExpenses,
+                              filteredThisWeekExpenses(
+                                  ExpenseType.expense),
                         ),
                       ),
                       Padding(
