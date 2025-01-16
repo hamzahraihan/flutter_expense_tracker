@@ -133,7 +133,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       for (int i = 0; i < 7; i++) i: 0.0,
     };
 
-    for (var transaction in widget.filteredThisWeekExpenses) {
+    for (TransactionsModel transaction
+        in widget.filteredThisWeekExpenses) {
       int weekdayIndex = transaction.date.weekday - 1; // Monday = 0
       dailyTotals[weekdayIndex] =
           dailyTotals[weekdayIndex]! + transaction.amount;
