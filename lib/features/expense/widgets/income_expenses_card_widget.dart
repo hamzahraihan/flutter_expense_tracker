@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class IncomeExpensesCardWidget extends StatefulWidget {
   final String title;
@@ -13,10 +14,12 @@ class IncomeExpensesCardWidget extends StatefulWidget {
       required this.color});
 
   @override
-  State<IncomeExpensesCardWidget> createState() => _IncomeExpensesCardWidget();
+  State<IncomeExpensesCardWidget> createState() =>
+      _IncomeExpensesCardWidget();
 }
 
-class _IncomeExpensesCardWidget extends State<IncomeExpensesCardWidget> {
+class _IncomeExpensesCardWidget
+    extends State<IncomeExpensesCardWidget> {
   String get title => widget.title;
   int get amount => widget.amount;
   IconData get icon => widget.icon;
@@ -25,54 +28,40 @@ class _IncomeExpensesCardWidget extends State<IncomeExpensesCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.0),
+        color: color,
+      ),
+      width: double.infinity,
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24.0),
-          color: color,
-        ),
-        padding: const EdgeInsets.all(16.0),
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+            color: Colors.white10,
+            borderRadius: BorderRadius.circular(18)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Flexible(
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.0),
-                  color: Colors.white,
-                ),
-                child: Icon(
-                  icon,
-                  size: 42.0,
-                  color: color,
-                ),
-              ),
+            Text(
+              title,
+              style: const TextStyle(
+                  fontSize: 14.0, color: Colors.white),
             ),
-            const SizedBox(
-              width: 10,
-            ),
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(fontSize: 14.0, color: Colors.white),
-                  ),
-                  Text(
-                    '\$${amount.toString()}',
-                    style: const TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white),
-                  )
-                ],
-              ),
-            ),
+            Text(
+              NumberFormat.currency(
+                      decimalDigits: 0,
+                      locale: 'id-ID',
+                      symbol: 'Rp.')
+                  .format(amount),
+              style: const TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white),
+            )
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
