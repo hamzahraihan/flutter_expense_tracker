@@ -1,5 +1,5 @@
-import 'package:expense_tracker/features/expense/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/features/expense/widgets/dropdown_button_widget.dart';
+import 'package:expense_tracker/features/expense/widgets/form_button_widget.dart';
 import 'package:expense_tracker/services/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -157,7 +157,10 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                           borderRadius: BorderRadius.circular(16)),
                     ),
                   ),
-                  PrimaryButtonWidget(
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  FormButtonWidget(
                       title: 'Submit',
                       onclick: () async {
                         // Validate returns true if the form is valid, or false otherwise.
