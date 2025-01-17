@@ -4,6 +4,23 @@ import 'package:expense_tracker/features/expense/domain/repository/transaction_r
 
 class TransactionRepositoryImpl extends TransactionRepository {
   final TransactionsApiService _transactionsApiService;
+  @override
+  Future<void> deleteTransaction(String id) async {
+    try {
+      await _transactionsApiService.deleteTransctions(id);
+    } catch (e) {
+      // Handle error
+    }
+  }
+
+  Future<void> editTransaction(String id) async {
+    try {
+      await _transactionsApiService.editTransaction(id);
+    } catch (e) {
+      // Handle error
+    }
+  }
+
   TransactionRepositoryImpl(this._transactionsApiService);
 
   @override
@@ -13,7 +30,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
           await _transactionsApiService.getTransactions();
       return response;
     } catch (e) {
-      
+      throw Error();
     }
   }
 }
