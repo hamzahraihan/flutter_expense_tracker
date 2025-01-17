@@ -7,15 +7,15 @@ class TransactionRepositoryImpl extends TransactionRepository {
   TransactionRepositoryImpl(this._transactionsApiService);
 
   @override
-
   Future<void> addIncomeTransaction(transaction) async {
     try {
-      await _transactionsApiService
-          .addIncomeTransaction(transaction);
+      await _transactionsApiService.addIncomeTransaction(transaction);
     } catch (e) {
       //handle error
     }
   }
+
+  @override
   Future<void> addExpenseTransaction(transaction) async {
     try {
       await _transactionsApiService
@@ -44,12 +44,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
   @override
   Future<List<TransactionsModel>> getTransactions() async {
-    try {
-      final response =
-          await _transactionsApiService.getTransactions();
-      return response;
-    } catch (e) {
-      throw Error();
-    }
+    final models = await _transactionsApiService.getTransactions();
+    return models.map((TransactionsModel model) => model).toList();
   }
 }
