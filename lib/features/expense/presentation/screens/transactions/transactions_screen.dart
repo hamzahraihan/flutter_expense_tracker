@@ -30,7 +30,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     await Future.delayed(const Duration(seconds: 1));
     if (mounted) {
       setState(() {
-        transactionsDataList();
+        retrieveTransactionData();
       });
     }
   }
@@ -38,7 +38,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<TransactionsModel>>(
-        future: transactionsDataList(),
+        future: retrieveTransactionData(),
         builder: (BuildContext context,
             AsyncSnapshot<List<TransactionsModel>> snapshot) {
           if (snapshot.hasError) {
