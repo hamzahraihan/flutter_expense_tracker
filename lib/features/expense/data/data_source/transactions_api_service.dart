@@ -5,10 +5,14 @@ FirebaseFirestore db = FirebaseFirestore.instance;
 
 abstract class TransactionsApiService {
   Future<List<TransactionsModel>> getTransactions() async {
-    final snapshot = await db.collection('transactions').get();
-    return snapshot.docs
-        .map((doc) => TransactionsModel.fromFirestore(doc, null))
-        .toList();
+    try {
+      final snapshot = await db.collection('transactions').get();
+      return snapshot.docs
+          .map((doc) => TransactionsModel.fromFirestore(doc, null))
+          .toList();
+    } catch (e) {
+      throw Exception('Error fetching transaction: $e');
+    }
   }
 
   Future<void> deleteTransctions(String id);
