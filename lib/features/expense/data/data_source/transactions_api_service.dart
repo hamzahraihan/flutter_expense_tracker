@@ -13,4 +13,6 @@ abstract class TransactionsApiService {
 
   Future<void> deleteTransctions(String id);
   Future<void> editTransaction(String id);
+  Future<void> addExpenseTransaction(TransactionsModel transaction);
+  Future<void> addIncomeTransaction(TransactionsModel transaction);
 }
