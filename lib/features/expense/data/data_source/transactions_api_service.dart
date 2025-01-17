@@ -10,4 +10,7 @@ abstract class TransactionsApiService {
         .map((doc) => TransactionsModel.fromFirestore(doc, null))
         .toList();
   }
+
+  Future<void> deleteTransctions(String id);
+  Future<void> editTransaction(String id);
 }
