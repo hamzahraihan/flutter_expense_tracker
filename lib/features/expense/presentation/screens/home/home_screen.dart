@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _refreshData() async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() {
-      transactionsDataList();
+      retrieveTransactionData();
     });
   }
 
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     return FutureBuilder<List<TransactionsModel>>(
-        future: transactionsDataList(),
+        future: retrieveTransactionData(),
         builder: (BuildContext context,
             AsyncSnapshot<List<TransactionsModel>> snapshot) {
           if (snapshot.hasError) {
