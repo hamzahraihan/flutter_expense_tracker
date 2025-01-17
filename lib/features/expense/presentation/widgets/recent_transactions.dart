@@ -1,5 +1,5 @@
 import 'package:expense_tracker/features/expense/presentation/util/icon_selection.dart';
-import 'package:expense_tracker/model/transactions_model.dart';
+import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
