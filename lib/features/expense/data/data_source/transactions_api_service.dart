@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expense_tracker/model/transactions_model.dart';
+import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
