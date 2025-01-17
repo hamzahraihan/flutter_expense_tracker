@@ -1,6 +1,6 @@
 
-import 'package:expense_tracker/features/expense/screens/home/home_screen.dart';
-import 'package:expense_tracker/features/expense/screens/transactions/transactions_screen.dart';
+import 'package:expense_tracker/features/expense/presentation/screens/home/home_screen.dart';
+import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_screen.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseTrackerApp extends StatefulWidget {

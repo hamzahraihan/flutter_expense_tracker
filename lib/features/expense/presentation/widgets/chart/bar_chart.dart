@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:expense_tracker/features/expense/util/color_extensions.dart';
-import 'package:expense_tracker/features/expense/widgets/chart/resources/chart_resources.dart';
+import 'package:expense_tracker/features/expense/presentation/util/color_extensions.dart';
+import 'package:expense_tracker/features/expense/presentation/widgets/chart/resources/chart_resources.dart';
 import 'package:expense_tracker/model/transactions_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -210,7 +210,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               for (int i = 0; i < 7; i++) i: 0.0,
             };
 
-            for (var transaction in widget.filteredThisWeekExpenses) {
+            for (TransactionsModel transaction in widget.filteredThisWeekExpenses) {
               int weekdayIndex =
                   transaction.date.weekday - 1; // Monday = 0
               dailyTotals[weekdayIndex] =

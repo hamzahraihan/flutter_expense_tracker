@@ -1,8 +1,8 @@
-import 'package:expense_tracker/features/expense/screens/transactions/transactions_screen.dart';
-import 'package:expense_tracker/features/expense/widgets/buttons/primary_button.dart';
-import 'package:expense_tracker/features/expense/widgets/chart/bar_chart.dart';
-import 'package:expense_tracker/features/expense/widgets/income_expenses_card_widget.dart';
-import 'package:expense_tracker/features/expense/widgets/recent_transactions.dart';
+import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_screen.dart';
+import 'package:expense_tracker/features/expense/presentation/widgets/buttons/primary_button.dart';
+import 'package:expense_tracker/features/expense/presentation/widgets/chart/bar_chart.dart';
+import 'package:expense_tracker/features/expense/presentation/widgets/income_expenses_card_widget.dart';
+import 'package:expense_tracker/features/expense/presentation/widgets/recent_transactions.dart';
 import 'package:expense_tracker/model/transactions_model.dart';
 import 'package:expense_tracker/services/firebase.dart';
 import 'package:flutter/material.dart';

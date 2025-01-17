@@ -1,4 +1,4 @@
-import 'package:expense_tracker/features/expense/widgets/recent_transactions.dart';
+import 'package:expense_tracker/features/expense/presentation/widgets/recent_transactions.dart';
 import 'package:expense_tracker/model/transactions_model.dart';
 import 'package:flutter/material.dart';
 
