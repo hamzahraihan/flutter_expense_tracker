@@ -2,7 +2,7 @@ import 'package:expense_tracker/features/expense/presentation/screens/upload/add
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_list.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/upload/add_income_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/loading.dart';
-import 'package:expense_tracker/model/transactions_model.dart';
+import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 import 'package:expense_tracker/services/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
