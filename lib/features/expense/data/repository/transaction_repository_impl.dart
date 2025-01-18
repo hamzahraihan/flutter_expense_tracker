@@ -44,7 +44,6 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
   @override
   Future<List<TransactionsModel>> getTransactions() async {
-    final models = await _transactionsApiService.getTransactions();
-    return models.map((TransactionsModel model) => model).toList();
+    return await _transactionsApiService.getTransactions();
   }
 }
