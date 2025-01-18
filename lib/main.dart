@@ -31,8 +31,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final TransactionsApiService transactionsApiService =
         TransactionsApiService();
+
     final TransactionRepositoryImpl transactionRepository =
         TransactionRepositoryImpl(transactionsApiService);
+
     final GetTransactionsUseCase getTransactionsUseCase =
         GetTransactionsUseCase(transactionRepository);
 
