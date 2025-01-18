@@ -13,21 +13,54 @@ extension TransactionStatusX on TransactionStatus {
 class TransactionFirebaseState extends Equatable {
   final TransactionStatus status;
   final List<TransactionsModel> transactions;
+  final List<TransactionsModel> todayTransactions;
+  final List<TransactionsModel> yesterdayTransactions;
+  final List<TransactionsModel> thisWeekTransactions;
+  final List<TransactionsModel> thisMonthTransaction;
+  final List<TransactionsModel> olderTransactions;
 
   const TransactionFirebaseState(
       {this.status = TransactionStatus.initial,
-      List<TransactionsModel>? transactions})
+      List<TransactionsModel>? transactions,
+      this.todayTransactions = const [],
+      this.yesterdayTransactions = const [],
+      this.thisWeekTransactions = const [],
+      this.thisMonthTransaction = const [],
+      this.olderTransactions = const []})
       : transactions = transactions ?? const [];
 
   TransactionFirebaseState copyWith({
     TransactionStatus? status,
     List<TransactionsModel>? transactions,
+    List<TransactionsModel>? todayTransactions,
+    List<TransactionsModel>? yesterdayTransactions,
+    List<TransactionsModel>? thisWeekTransactions,
+    List<TransactionsModel>? thisMonthTransaction,
+    List<TransactionsModel>? olderTransactions,
   }) {
     return TransactionFirebaseState(
         status: status ?? this.status,
-        transactions: transactions ?? this.transactions);
+        transactions: transactions ?? this.transactions,
+        todayTransactions:
+            todayTransactions ?? this.todayTransactions,
+        yesterdayTransactions:
+            yesterdayTransactions ?? this.yesterdayTransactions,
+        thisWeekTransactions:
+            thisWeekTransactions ?? this.thisWeekTransactions,
+        thisMonthTransaction:
+            thisMonthTransaction ?? this.thisMonthTransaction,
+        olderTransactions:
+            olderTransactions ?? this.olderTransactions);
   }
 
   @override
-  List<Object?> get props => [status, transactions];
+  List<Object?> get props => [
+        status,
+        transactions,
+        todayTransactions,
+        yesterdayTransactions,
+        thisWeekTransactions,
+        thisMonthTransaction,
+        olderTransactions
+      ];
 }
