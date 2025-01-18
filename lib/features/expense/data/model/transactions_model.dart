@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-enum ExpenseType { expense, income }
+import 'package:expense_tracker/features/expense/domain/entitiy/transaction_entities.dart';
 
 extension ExpenseTypeExtension on ExpenseType {
   String toShortString() {
@@ -8,26 +7,19 @@ extension ExpenseTypeExtension on ExpenseType {
   }
 
   static ExpenseType fromString(String value) {
-    return ExpenseType.values
-        .firstWhere((e) => e.toShortString() == value);
+    return ExpenseType.values.firstWhere((ExpenseType e) =>
+        ExpenseTypeExtension(e).toShortString() == value);
   }
 }
 
-class TransactionsModel {
-  final String title;
-  final int amount;
-  final DateTime date;
-  final String description;
-  final ExpenseType expenseType;
-  final String category;
-
-  TransactionsModel(
-      {required this.title,
-      required this.amount,
-      required this.date,
-      required this.description,
-      required this.expenseType,
-      required this.category});
+class TransactionsModel extends TransactionEntities {
+  const TransactionsModel(
+      {required super.title,
+      required super.amount,
+      required super.date,
+      required super.description,
+      required super.expenseType,
+      required super.category});
 
   factory TransactionsModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -50,7 +42,8 @@ class TransactionsModel {
       "amount": amount,
       "date": date,
       "description": description,
-      "expenseType": expenseType.toShortString(),
+      "expenseType":
+          ExpenseTypeExtension(expenseType).toShortString(),
       "category": category
     };
   }
