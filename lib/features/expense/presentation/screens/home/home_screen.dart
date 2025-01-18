@@ -9,7 +9,6 @@ import 'package:expense_tracker/features/expense/presentation/widgets/income_exp
 import 'package:expense_tracker/features/expense/presentation/widgets/loading.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/recent_transactions.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
-import 'package:expense_tracker/services/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -25,10 +24,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<void> _refreshData() async {
+  Future<void> _refreshData(state) async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() {
-      retrieveTransactionData();
+      state;
     });
   }
 
@@ -47,24 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
         case TransactionStatus.loading:
           return const Loading();
         case TransactionStatus.success:
-          final List<TransactionsModel> transactions =
-              state.transactions;
 
-          final List<TransactionsModel> todayTransactions =
-              Transactions.filterTransactionsByDate(transactions)
-                  .today;
-
-          final List<TransactionsModel> olderTransactions =
-              Transactions.filterTransactionsByDate(transactions)
-                  .older;
-
-          final List<TransactionsModel> thisWeekTransactions =
-              Transactions.filterTransactionsByDate(transactions)
-                  .thisWeek;
           // filteredThisWeekExpenses will filter weekly transaction and can be only get expense transaction
           Iterable<TransactionsModel> filteredThisWeekExpenses(
               ExpenseType expenseType) {
-            return thisWeekTransactions.where(
+            return state.thisWeekTransactions.where(
                 (element) => element.expenseType == expenseType);
           }
 
@@ -75,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     sum + item.amount);
           }
 
-          int totalAmount = olderTransactions.fold(0,
+          int totalAmount = state.olderTransactions.fold(0,
               (int sum, TransactionsModel item) => sum + item.amount);
 
           String convertToIdr(int totalAmount) {
@@ -85,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           return Scaffold(
             body: RefreshIndicator(
-              onRefresh: _refreshData,
+              onRefresh: () => _refreshData(state.transactions),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 primary: true,
@@ -180,8 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding:
                           const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
                       child: Column(
-                          children: todayTransactions.isNotEmpty
-                              ? todayTransactions
+                          children: state.todayTransactions.isNotEmpty
+                              ? state.todayTransactions
                                   .take(5)
                                   .map<Widget>((item) {
                                   return Column(
