@@ -9,23 +9,24 @@ class TransactionFirebaseBloc
 
   TransactionFirebaseBloc(this._getTransactionsUseCase)
       : super(const TransactionFirebaseState()) {
-    on<GetTransaction>(onfetchTransactions);
+    on<GetTransaction>(_onfetchTransactions);
   }
 
-  void onfetchTransactions(GetTransaction event,
+  void _onfetchTransactions(GetTransaction event,
       Emitter<TransactionFirebaseState> emit) async {
-    final dataState = await _getTransactionsUseCase.execute();
-
     emit(state.copyWith(status: TransactionStatus.loading));
+    final transactions = await _getTransactionsUseCase.execute();
+
     try {
-      if (dataState.isNotEmpty) {
+      if (transactions.isNotEmpty) {
         emit(state.copyWith(
             status: TransactionStatus.success,
-            transactions: dataState));
+            transactions: transactions));
       }
     } catch (e) {
-      throw Exception(
-          state.copyWith(status: TransactionStatus.failure));
+      emit(state.copyWith(
+        status: TransactionStatus.failure,
+      ));
     }
   }
 }
