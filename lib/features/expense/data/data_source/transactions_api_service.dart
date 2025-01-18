@@ -3,7 +3,7 @@ import 'package:expense_tracker/features/expense/data/model/transactions_model.d
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
-abstract class TransactionsApiService {
+class TransactionsApiService {
   Future<List<TransactionsModel>> getTransactions() async {
     try {
       final snapshot = await db.collection('transactions').get();
@@ -15,8 +15,23 @@ abstract class TransactionsApiService {
     }
   }
 
-  Future<void> deleteTransctions(String id);
-  Future<void> editTransaction(String id);
-  Future<void> addExpenseTransaction(TransactionsModel transaction);
-  Future<void> addIncomeTransaction(TransactionsModel transaction);
+  Future<void> deleteTransctions(String id) {
+    // TODO: implement deleteTransctions
+    throw UnimplementedError();
+  }
+
+  Future<void> editTransaction(String id) {
+    // TODO: implement editTransaction
+    throw UnimplementedError();
+  }
+
+  Future<void> addExpenseTransaction(TransactionsModel transaction) {
+    // TODO: implement addExpenseTransaction
+    throw UnimplementedError();
+  }
+
+  Future<void> addIncomeTransaction(TransactionsModel transaction) {
+    // TODO: implement addIncomeTransaction
+    throw UnimplementedError();
+  }
 }
