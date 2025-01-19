@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 class FormButtonWidget extends StatefulWidget {
   final String title;
   final void Function()? onclick;
+  final bool isButtonDisable;
 
   const FormButtonWidget(
-      {super.key, required this.title, this.onclick});
+      {super.key,
+      required this.title,
+      this.onclick,
+      required this.isButtonDisable});
 
   @override
   State<FormButtonWidget> createState() => _FormButtonWidgetState();
@@ -13,6 +17,7 @@ class FormButtonWidget extends StatefulWidget {
 
 class _FormButtonWidgetState extends State<FormButtonWidget> {
   String get title => widget.title;
+  bool get isButtonDisable => widget.isButtonDisable;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +35,15 @@ class _FormButtonWidgetState extends State<FormButtonWidget> {
 
     return TextButton(
         style: textButtonStyle,
-        onPressed: widget.onclick,
-        child: Text(
-          title,
-          style: const TextStyle(
-              fontWeight: FontWeight.w600, fontSize: 16),
-        ));
+        onPressed: isButtonDisable ? widget.onclick : null,
+        child: isButtonDisable
+            ? const CircularProgressIndicator(
+                color: Colors.white,
+              )
+            : Text(
+                title,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w600, fontSize: 16),
+              ));
   }
 }
