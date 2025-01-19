@@ -1,15 +1,17 @@
+import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FormButtonWidget extends StatefulWidget {
   final String title;
-  final void Function()? onclick;
-  final bool isButtonDisable;
+  final VoidCallback? onclick;
 
-  const FormButtonWidget(
-      {super.key,
-      required this.title,
-      this.onclick,
-      required this.isButtonDisable});
+  const FormButtonWidget({
+    super.key,
+    required this.title,
+    this.onclick,
+  });
 
   @override
   State<FormButtonWidget> createState() => _FormButtonWidgetState();
@@ -17,7 +19,6 @@ class FormButtonWidget extends StatefulWidget {
 
 class _FormButtonWidgetState extends State<FormButtonWidget> {
   String get title => widget.title;
-  bool get isButtonDisable => widget.isButtonDisable;
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +34,13 @@ class _FormButtonWidgetState extends State<FormButtonWidget> {
       disabledForegroundColor: Colors.grey,
     );
 
+    final status = context
+        .select((TransactionFirebaseBloc bloc) => bloc.state.status);
+
     return TextButton(
         style: textButtonStyle,
-        onPressed: isButtonDisable ? widget.onclick : null,
-        child: isButtonDisable
+        onPressed: status.isLoading ? null : widget.onclick,
+        child: status.isLoading
             ? const CircularProgressIndicator(
                 color: Colors.white,
               )
