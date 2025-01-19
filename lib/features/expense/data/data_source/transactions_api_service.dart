@@ -25,12 +25,19 @@ class TransactionsApiService {
     throw UnimplementedError();
   }
 
-  Future<void> addExpenseTransaction(TransactionsModel transaction) {
+  Future<void> addExpenseTransaction(
+      Map<String, dynamic> transaction) async {
     // TODO: implement addExpenseTransaction
-    throw UnimplementedError();
+
+    try {
+      await db.collection("transactions").doc().set(transaction);
+    } catch (e) {
+      throw Exception('Error fetching transaction: $e');
+    }
   }
 
-  Future<void> addIncomeTransaction(TransactionsModel transaction) {
+  Future<void> addIncomeTransaction(
+      Map<String, dynamic> transaction) {
     // TODO: implement addIncomeTransaction
     throw UnimplementedError();
   }
