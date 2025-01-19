@@ -39,9 +39,6 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<TransactionFirebaseBloc>();
-    bloc.add(const GetTransaction());
-
     return BlocBuilder<TransactionFirebaseBloc,
             TransactionFirebaseState>(
         builder:
@@ -52,88 +49,93 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         case TransactionStatus.loading:
           return const Loading();
         case TransactionStatus.success:
-          return Scaffold(
-            appBar: AppBar(
-              forceMaterialTransparency: true,
-              centerTitle: true,
-              title: const Text(
-                'Transactions',
-                style: TextStyle(
-                    fontSize: 17.0, fontWeight: FontWeight.bold),
-              ),
-            ),
-            body: RefreshIndicator(
-                onRefresh: () => _refreshData(state.transactions),
-                child: ListView(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16.0),
-                    children: [
-                      TransactionsList(
-                        transactionData: state.todayTransactions,
-                        dateTitle: 'Today',
-                      ),
-                      TransactionsList(
-                        transactionData: state.yesterdayTransactions,
-                        dateTitle: 'Yesterdays',
-                      ),
-                      TransactionsList(
-                        transactionData: state.thisWeekTransactions,
-                        dateTitle: 'This Week',
-                      ),
-                      TransactionsList(
-                        transactionData: state.thisMonthTransaction,
-                        dateTitle: 'This Month',
-                      ),
-                      TransactionsList(
-                        transactionData: state.olderTransactions,
-                        dateTitle: 'Older',
-                      ),
-                    ])),
-            floatingActionButtonLocation: ExpandableFab.location,
-            floatingActionButton: ExpandableFab(
-                type: ExpandableFabType.side,
-                key: _key,
-                overlayStyle: const ExpandableFabOverlayStyle(
-                    color: Colors.black38),
-                openButtonBuilder: RotateFloatingActionButtonBuilder(
-                  child: const Icon(Icons.add),
-                  fabSize: ExpandableFabSize.regular,
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.blueAccent,
-                ),
-                closeButtonBuilder: RotateFloatingActionButtonBuilder(
-                  child: const Icon(Icons.close),
-                  fabSize: ExpandableFabSize.regular,
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.blueAccent,
-                  shape: const CircleBorder(),
-                ),
-                children: [
-                  FloatingActionButton.small(
-                    heroTag: 'expense button',
-                    tooltip: 'expense',
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.red.shade500,
-                    onPressed: () => _handleExpandableNavigation(
-                        context, const AddExpenseScreen()),
-                    child: const Icon(Icons.trending_down),
-                  ),
-                  FloatingActionButton.small(
-                    heroTag: 'income button',
-                    tooltip: 'income',
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.green.shade500,
-
-                    // TODO MAKE AN ADD INCOME SCREEN
-                    onPressed: () => _handleExpandableNavigation(
-                        context, const AddIncomeScreen()),
-                    child: const Icon(Icons.trending_up),
-                  ),
-                ]),
-          );
+          return _buildBody(state);
         default:
           return const Center(child: Text('Welcome to Transactions'));
       }
     });
+  }
+
+  _buildBody(state) {
+    return Scaffold(
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+        centerTitle: true,
+        title: const Text(
+          'Transactions',
+          style:
+              TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: RefreshIndicator(
+          onRefresh: () async {
+            context
+                .read<TransactionFirebaseBloc>()
+                .add(const GetTransaction());
+          },
+          child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              children: [
+                TransactionsList(
+                  transactionData: state.todayTransactions,
+                  dateTitle: 'Today',
+                ),
+                TransactionsList(
+                  transactionData: state.yesterdayTransactions,
+                  dateTitle: 'Yesterdays',
+                ),
+                TransactionsList(
+                  transactionData: state.thisWeekTransactions,
+                  dateTitle: 'This Week',
+                ),
+                TransactionsList(
+                  transactionData: state.thisMonthTransaction,
+                  dateTitle: 'This Month',
+                ),
+                TransactionsList(
+                  transactionData: state.olderTransactions,
+                  dateTitle: 'Older',
+                ),
+              ])),
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: ExpandableFab(
+          type: ExpandableFabType.side,
+          key: _key,
+          overlayStyle:
+              const ExpandableFabOverlayStyle(color: Colors.black38),
+          openButtonBuilder: RotateFloatingActionButtonBuilder(
+            child: const Icon(Icons.add),
+            fabSize: ExpandableFabSize.regular,
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.blueAccent,
+          ),
+          closeButtonBuilder: RotateFloatingActionButtonBuilder(
+            child: const Icon(Icons.close),
+            fabSize: ExpandableFabSize.regular,
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.blueAccent,
+            shape: const CircleBorder(),
+          ),
+          children: [
+            FloatingActionButton.small(
+              heroTag: 'expense button',
+              tooltip: 'expense',
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.red.shade500,
+              onPressed: () => _handleExpandableNavigation(
+                  context, const AddExpenseScreen()),
+              child: const Icon(Icons.trending_down),
+            ),
+            FloatingActionButton.small(
+              heroTag: 'income button',
+              tooltip: 'income',
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.green.shade500,
+              onPressed: () => _handleExpandableNavigation(
+                  context, const AddIncomeScreen()),
+              child: const Icon(Icons.trending_up),
+            ),
+          ]),
+    );
   }
 }
