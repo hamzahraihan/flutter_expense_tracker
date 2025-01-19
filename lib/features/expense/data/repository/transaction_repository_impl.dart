@@ -11,7 +11,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
     try {
       await _transactionsApiService.addIncomeTransaction(transaction);
     } catch (e) {
-      //handle error
+      throw Exception(e);
     }
   }
 
@@ -21,7 +21,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
       await _transactionsApiService
           .addExpenseTransaction(transaction);
     } catch (e) {
-      //handle error
+      throw Exception(e);
     }
   }
 
