@@ -25,8 +25,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _isButtonDisable = true;
-
   @override
   void dispose() {
     _amountTransactionController.dispose();
@@ -172,7 +170,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       height: 10,
                     ),
                     FormButtonWidget(
-                        isButtonDisable: _isButtonDisable,
                         title: 'Submit',
                         onclick: () async {
                           // Validate returns true if the form is valid, or false otherwise.
@@ -191,16 +188,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                               'date': DateTime.now(),
                               'expenseType': 'expense'
                             };
-                            setState(() {
-                              _isButtonDisable = !_isButtonDisable;
-                            });
+
                             // If the form is valid, display a snackbar. In the real world,
                             // you'd often call a server or save the information in a database.
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(
-                              const SnackBar(
-                                  content: Text('Processing Data')),
-                            );
+                            // ScaffoldMessenger.of(context)
+                            //     .showSnackBar(
+                            //   const SnackBar(
+                            //       content: Text('Processing Data')),
+                            // );
                             try {
                               context
                                   .read<TransactionFirebaseBloc>()
@@ -221,10 +216,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                             'Saving data failed!')));
                               }
                               print('Error: $e');
-                            } finally {
-                              setState(() {
-                                _isButtonDisable = _isButtonDisable;
-                              });
                             }
                           }
                         })
