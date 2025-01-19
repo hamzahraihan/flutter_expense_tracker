@@ -10,10 +10,10 @@ class TransactionFirebaseBloc
 
   TransactionFirebaseBloc(this._getTransactionsUseCase)
       : super(const TransactionFirebaseState()) {
-    on<GetTransaction>(_onfetchTransactions);
+    on<GetTransaction>(_onFetchTransactions);
   }
 
-  void _onfetchTransactions(GetTransaction event,
+  void _onFetchTransactions(GetTransaction event,
       Emitter<TransactionFirebaseState> emit) async {
     emit(state.copyWith(status: TransactionStatus.loading));
     final transactions = await _getTransactionsUseCase.execute();
@@ -29,6 +29,9 @@ class TransactionFirebaseBloc
             thisWeekTransactions: groupedTransactions.thisWeek,
             thisMonthTransaction: groupedTransactions.thisMonth,
             olderTransactions: groupedTransactions.older));
+      } else {
+        emit(state.copyWith(
+            status: TransactionStatus.success, transactions: []));
       }
     } catch (e) {
       emit(state.copyWith(
