@@ -3,6 +3,7 @@ import 'package:expense_tracker/features/expense/data/data_source/transactions_a
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/get_transactions.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/upload/add_expense_screen.dart';
 import 'package:expense_tracker/firebase_options.dart';
@@ -39,8 +40,8 @@ class MyApp extends StatelessWidget {
         GetTransactionsUseCase(transactionRepository);
 
     return BlocProvider<TransactionFirebaseBloc>(
-        create: (context) =>
-            TransactionFirebaseBloc(getTransactionsUseCase),
+        create: (_) => TransactionFirebaseBloc(getTransactionsUseCase)
+          ..add(const GetTransaction()),
         child: MaterialApp(
           title: 'My Expense',
           theme: ThemeData(
