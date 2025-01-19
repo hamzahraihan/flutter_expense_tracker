@@ -7,6 +7,7 @@ abstract class TransactionRepository {
 
   Future<void> deleteTransaction(String id);
 
-  Future<void> addExpenseTransaction(TransactionsModel transaction);
-  Future<void> addIncomeTransaction(TransactionsModel transaction);
+  Future<void> addExpenseTransaction(
+      Map<String, dynamic> transaction);
+  Future<void> addIncomeTransaction(Map<String, dynamic> transaction);
 }
