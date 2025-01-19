@@ -55,6 +55,9 @@ class TransactionFirebaseBloc
     emit(state.copyWith(status: TransactionStatus.loading));
     try {
       await _addExpenseUseCase.execute(event.transaction);
+
+      add(const GetTransaction());
+
       emit(state.copyWith(status: TransactionStatus.success));
     } catch (e) {
       emit(state.copyWith(status: TransactionStatus.failure));
