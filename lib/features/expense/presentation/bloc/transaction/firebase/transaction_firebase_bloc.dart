@@ -1,16 +1,26 @@
 import 'package:bloc/bloc.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
+import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
+import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/get_transactions.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_state.dart';
 
 class TransactionFirebaseBloc
     extends Bloc<TransactionFirebaseEvent, TransactionFirebaseState> {
-  final GetTransactionsUseCase _getTransactionsUseCase;
+  final TransactionRepositoryImpl _transactionRepository;
 
-  TransactionFirebaseBloc(this._getTransactionsUseCase)
-      : super(const TransactionFirebaseState()) {
+  late final GetTransactionsUseCase _getTransactionsUseCase =
+      GetTransactionsUseCase(_transactionRepository);
+
+  late final AddExpenseUseCase _addExpenseUseCase =
+      AddExpenseUseCase(_transactionRepository);
+
+  TransactionFirebaseBloc(
+    this._transactionRepository,
+  ) : super(const TransactionFirebaseState()) {
     on<GetTransaction>(_onFetchTransactions);
+    on<AddExpenseTransaction>(_onAddExpenseTransaction);
   }
 
   void _onFetchTransactions(GetTransaction event,
@@ -37,6 +47,17 @@ class TransactionFirebaseBloc
       emit(state.copyWith(
         status: TransactionStatus.failure,
       ));
+    }
+  }
+
+  void _onAddExpenseTransaction(AddExpenseTransaction event,
+      Emitter<TransactionFirebaseState> emit) async {
+    emit(state.copyWith(status: TransactionStatus.loading));
+    try {
+      await _addExpenseUseCase.execute(event.transaction);
+      emit(state.copyWith(status: TransactionStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: TransactionStatus.failure));
     }
   }
 }
