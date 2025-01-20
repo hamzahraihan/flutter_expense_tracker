@@ -29,6 +29,7 @@ class TransactionFirebaseBloc
     final transactions = await _getTransactionsUseCase.execute();
     final GroupedTransactions groupedTransactions =
         Transactions.filterTransactionsByDate(transactions);
+
     try {
       if (transactions.isNotEmpty) {
         emit(state.copyWith(
