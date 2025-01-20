@@ -19,15 +19,15 @@ class TransactionFirebaseState extends Equatable {
   final List<TransactionsModel> thisMonthTransaction;
   final List<TransactionsModel> olderTransactions;
 
-  const TransactionFirebaseState(
-      {this.status = TransactionStatus.initial,
-      List<TransactionsModel>? transactions,
-      this.todayTransactions = const [],
-      this.yesterdayTransactions = const [],
-      this.thisWeekTransactions = const [],
-      this.thisMonthTransaction = const [],
-      this.olderTransactions = const []})
-      : transactions = transactions ?? const [];
+  const TransactionFirebaseState({
+    this.status = TransactionStatus.initial,
+    List<TransactionsModel>? transactions,
+    this.todayTransactions = const [],
+    this.yesterdayTransactions = const [],
+    this.thisWeekTransactions = const [],
+    this.thisMonthTransaction = const [],
+    this.olderTransactions = const [],
+  }) : transactions = transactions ?? const [];
 
   TransactionFirebaseState copyWith({
     TransactionStatus? status,
@@ -39,18 +39,17 @@ class TransactionFirebaseState extends Equatable {
     List<TransactionsModel>? olderTransactions,
   }) {
     return TransactionFirebaseState(
-        status: status ?? this.status,
-        transactions: transactions ?? this.transactions,
-        todayTransactions:
-            todayTransactions ?? this.todayTransactions,
-        yesterdayTransactions:
-            yesterdayTransactions ?? this.yesterdayTransactions,
-        thisWeekTransactions:
-            thisWeekTransactions ?? this.thisWeekTransactions,
-        thisMonthTransaction:
-            thisMonthTransaction ?? this.thisMonthTransaction,
-        olderTransactions:
-            olderTransactions ?? this.olderTransactions);
+      status: status ?? this.status,
+      transactions: transactions ?? this.transactions,
+      todayTransactions: todayTransactions ?? this.todayTransactions,
+      yesterdayTransactions:
+          yesterdayTransactions ?? this.yesterdayTransactions,
+      thisWeekTransactions:
+          thisWeekTransactions ?? this.thisWeekTransactions,
+      thisMonthTransaction:
+          thisMonthTransaction ?? this.thisMonthTransaction,
+      olderTransactions: olderTransactions ?? this.olderTransactions,
+    );
   }
 
   @override
@@ -61,6 +60,6 @@ class TransactionFirebaseState extends Equatable {
         yesterdayTransactions,
         thisWeekTransactions,
         thisMonthTransaction,
-        olderTransactions
+        olderTransactions,
       ];
 }
