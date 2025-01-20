@@ -37,6 +37,45 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
+    Future<void> handleSubmitExpense() async {
+      // Validate returns true if the form is valid, or false otherwise.
+      if (_formKey.currentState!.validate()) {
+        Map<String, dynamic> transactionUserInput = {
+          'title': _dropdownButtonController.text,
+          'category': _dropdownButtonController.text,
+          'description': _descriptionController.text,
+          'amount':
+              int.tryParse(_amountTransactionController.text) ?? 0,
+          'date': DateTime.now(),
+          'expenseType': 'expense'
+        };
+
+        // If the form is valid, display a snackbar. In the real world,
+        // you'd often call a server or save the information in a database.
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(
+        //   const SnackBar(
+        //       content: Text('Processing Data')),
+        // );
+        try {
+          context
+              .read<TransactionFirebaseBloc>()
+              .add(AddExpenseTransaction(transactionUserInput));
+
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Transaction added')));
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Saving data failed!')));
+          }
+          print('Error: $e');
+        }
+      }
+    }
+
     return BlocBuilder<TransactionFirebaseBloc,
             TransactionFirebaseState>(
         builder:
@@ -170,55 +209,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       height: 10,
                     ),
                     FormButtonWidget(
-                        title: 'Submit',
-                        onclick: () async {
-                          // Validate returns true if the form is valid, or false otherwise.
-                          if (_formKey.currentState!.validate()) {
-                            Map<String, dynamic>
-                                transactionUserInput = {
-                              'title': _dropdownButtonController.text,
-                              'category':
-                                  _dropdownButtonController.text,
-                              'description':
-                                  _descriptionController.text,
-                              'amount': int.tryParse(
-                                      _amountTransactionController
-                                          .text) ??
-                                  0,
-                              'date': DateTime.now(),
-                              'expenseType': 'expense'
-                            };
-
-                            // If the form is valid, display a snackbar. In the real world,
-                            // you'd often call a server or save the information in a database.
-                            // ScaffoldMessenger.of(context)
-                            //     .showSnackBar(
-                            //   const SnackBar(
-                            //       content: Text('Processing Data')),
-                            // );
-                            try {
-                              context
-                                  .read<TransactionFirebaseBloc>()
-                                  .add(AddExpenseTransaction(
-                                      transactionUserInput));
-
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                        content: Text(
-                                            'Transaction added')));
-                              }
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                        content: Text(
-                                            'Saving data failed!')));
-                              }
-                              print('Error: $e');
-                            }
-                          }
-                        })
+                      title: 'Submit',
+                      onclick: handleSubmitExpense,
+                    )
                   ])),
                 ),
               ],
