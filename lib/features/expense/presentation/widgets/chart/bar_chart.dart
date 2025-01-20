@@ -5,12 +5,13 @@ import 'package:expense_tracker/features/expense/presentation/widgets/chart/reso
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
 
 class BarChartWidget extends StatefulWidget {
   final Iterable<TransactionsModel> filteredThisWeekExpenses;
-  BarChartWidget({super.key, required this.filteredThisWeekExpenses});
 
+  BarChartWidget({super.key, required this.filteredThisWeekExpenses});
   List<Color> get availableColors => const <Color>[
         AppColors.contentColorPurple,
         AppColors.contentColorYellow,
@@ -35,7 +36,6 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   int touchedIndex = -1;
 
   bool isPlaying = false;
-
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -59,7 +59,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 2),
                     child: BarChart(
-                      mainBarData(),
+                      mainBarData(widget.filteredThisWeekExpenses),
                       duration: animDuration,
                     ),
                   ),
@@ -127,14 +127,13 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   //       }
   //     });
 
-  List<BarChartGroupData> showingGroups() {
+  List<BarChartGroupData> showingGroups(filteredThisWeekExpenses) {
     // Calculate daily totals
     Map<int, double> dailyTotals = {
       for (int i = 0; i < 7; i++) i: 0.0,
     };
 
-    for (TransactionsModel transaction
-        in widget.filteredThisWeekExpenses) {
+    for (TransactionsModel transaction in filteredThisWeekExpenses) {
       int weekdayIndex = transaction.date.weekday - 1; // Monday = 0
       dailyTotals[weekdayIndex] =
           dailyTotals[weekdayIndex]! + transaction.amount;
@@ -149,7 +148,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       double totalAmount = dailyTotals[i] ?? 0.0;
 
       // Normalize the bar height
-      double normalizedHeight = (totalAmount / maxTotal) * 100;
+      double normalizedHeight =
+          maxTotal > 0 ? (totalAmount / maxTotal) * 100 : 0.0;
 
       return makeGroupData(
         i,
@@ -171,14 +171,15 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   //   }).toList();
   // }
 
-  BarChartData mainBarData() {
+  BarChartData mainBarData(filteredThisWeekExpenses) {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
           getTooltipColor: (_) => Colors.white,
           tooltipHorizontalAlignment: FLHorizontalAlignment.center,
           tooltipMargin: -10,
-          getTooltipItem: (group, groupIndex, rod, rodIndex) {
+          getTooltipItem: (BarChartGroupData group, int groupIndex,
+              BarChartRodData rod, int rodIndex) {
             String weekDay;
             switch (group.x) {
               case 0:
@@ -210,7 +211,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               for (int i = 0; i < 7; i++) i: 0.0,
             };
 
-            for (TransactionsModel transaction in widget.filteredThisWeekExpenses) {
+            for (TransactionsModel transaction
+                in filteredThisWeekExpenses) {
               int weekdayIndex =
                   transaction.date.weekday - 1; // Monday = 0
               dailyTotals[weekdayIndex] =
@@ -280,7 +282,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(),
+      barGroups: showingGroups(filteredThisWeekExpenses),
       gridData: const FlGridData(show: false),
     );
   }
