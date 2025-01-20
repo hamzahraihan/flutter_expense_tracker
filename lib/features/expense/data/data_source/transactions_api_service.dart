@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
+import 'package:expense_tracker/features/expense/domain/entitiy/transaction_entities.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -13,6 +14,16 @@ class TransactionsApiService {
     } catch (e) {
       throw Exception('Error fetching transaction: $e');
     }
+  }
+
+  Iterable<TransactionsModel> filteredThisWeekExpenses(
+      ExpenseType expenseType,
+      List<TransactionsModel> thisWeekTransactions) {
+    if (thisWeekTransactions.isNotEmpty) {
+      return thisWeekTransactions
+          .where((element) => element.expenseType == expenseType);
+    }
+    return [];
   }
 
   Future<void> deleteTransctions(String id) {
