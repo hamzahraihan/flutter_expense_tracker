@@ -1,8 +1,11 @@
+import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_state.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/dropdown_button_widget.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/form_button_widget.dart';
-import 'package:expense_tracker/services/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class AddIncomeScreen extends StatefulWidget {
@@ -34,179 +37,182 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
-    return Scaffold(
-        // resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          forceMaterialTransparency: true,
-          centerTitle: true,
-          foregroundColor: Colors.white,
-          title: const Text(
-            'Income',
-            style: TextStyle(fontSize: 18.0),
+    Future<void> handleSubmitIncome() async {
+      // Validate returns true if the form is valid, or false otherwise.
+      if (_formKey.currentState!.validate()) {
+        Map<String, dynamic> transactionUserInput = {
+          'title': _dropdownButtonController.text,
+          'category': _dropdownButtonController.text,
+          'description': _descriptionController.text,
+          'amount':
+              int.tryParse(_amountTransactionController.text) ?? 0,
+          'date': DateTime.now(),
+          'expenseType': 'income'
+        };
+        // If the form is valid, display a snackbar. In the real world,
+        // you'd often call a server or save the information in a database.
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(
+        //   const SnackBar(
+        //       content: Text('Processing Data')),
+        // );
+        try {
+          context
+              .read<TransactionFirebaseBloc>()
+              .add(AddExpenseTransaction(transactionUserInput));
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Transaction added')));
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Saving data failed!')));
+          }
+          print('Error: $e');
+        }
+      }
+    }
+
+    return BlocBuilder<TransactionFirebaseBloc,
+            TransactionFirebaseState>(
+        builder:
+            (BuildContext context, TransactionFirebaseState state) {
+      return Scaffold(
+          // resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            forceMaterialTransparency: true,
+            centerTitle: true,
+            foregroundColor: Colors.white,
+            title: const Text(
+              'Income',
+              style: TextStyle(fontSize: 18.0),
+            ),
+            backgroundColor: Colors.green.shade400,
           ),
           backgroundColor: Colors.green.shade400,
-        ),
-        backgroundColor: Colors.green.shade400,
-        body: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Spacer(),
-              const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                  ),
-                  child: Text(
-                    'How much?',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
+          body: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Spacer(),
+                const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.0,
                     ),
-                  )),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 12.0),
-                child: TextFormField(
-                  controller: _amountTransactionController,
-                  validator: (value) {
-                    if (value == null ||
-                        value.isEmpty ||
-                        value == '0') {
-                      return 'Please enter nominal';
-                    }
-                    return null;
-                  },
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    // CurrencyInputFormatter(
-                    //     mantissaLength: 0,
-                    //     thousandSeparator: ThousandSeparator.Period)
-                  ],
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 32.0,
-                      fontWeight: FontWeight.bold),
-                  decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(0),
-                      errorStyle: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white54,
-                      ),
-                      errorBorder: InputBorder.none,
-                      prefixIcon: const Text(
-                        'Rp. ',
-                        style: TextStyle(
-                            fontSize: 32,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      hintStyle: const TextStyle(
+                    child: Text(
+                      'How much?',
+                      style: TextStyle(
+                        fontSize: 16,
                         color: Colors.white,
-                        fontSize: 32.0,
-                        fontWeight: FontWeight.bold,
                       ),
-                      hintText: '0',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none)),
-                ),
-              ),
-              Container(
-                height:
-                    orientation == Orientation.landscape ? 200 : 400,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 26,
-                ),
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(42),
-                        topRight: Radius.circular(42))),
-                child: SingleChildScrollView(
-                    child: Column(children: [
-                  DropdownButtonWidget(
-                      dropdownController: _dropdownButtonController),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _descriptionController,
+                    )),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 12.0),
+                  child: TextFormField(
+                    controller: _amountTransactionController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter description';
+                      if (value == null ||
+                          value.isEmpty ||
+                          value == '0') {
+                        return 'Please enter nominal';
                       }
                       return null;
                     },
-                    maxLines: 2,
-                    maxLength: 64,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      // CurrencyInputFormatter(
+                      //     mantissaLength: 0,
+                      //     thousandSeparator: ThousandSeparator.Period)
+                    ],
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
-                      hintText: 'Description',
-                      border: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.black26),
-                          borderRadius: BorderRadius.circular(16)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.black26),
-                          borderRadius: BorderRadius.circular(16)),
+                        contentPadding: const EdgeInsets.all(0),
+                        errorStyle: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.white54,
+                        ),
+                        errorBorder: InputBorder.none,
+                        prefixIcon: const Text(
+                          'Rp. ',
+                          style: TextStyle(
+                              fontSize: 32,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        hintStyle: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 32.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        hintText: '0',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none)),
+                  ),
+                ),
+                Container(
+                  height: orientation == Orientation.landscape
+                      ? 200
+                      : 400,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 26,
+                  ),
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(42),
+                          topRight: Radius.circular(42))),
+                  child: SingleChildScrollView(
+                      child: Column(children: [
+                    DropdownButtonWidget(
+                        dropdownController:
+                            _dropdownButtonController),
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  FormButtonWidget(
-                      title: 'Submit',
-                      onclick: () async {
-                        // Validate returns true if the form is valid, or false otherwise.
-                        Map<String, dynamic> transactionUserInput = {
-                          'title': _dropdownButtonController.text,
-                          'category': _dropdownButtonController.text,
-                          'description': _descriptionController.text,
-                          'amount': int.tryParse(
-                                  _amountTransactionController
-                                      .text) ??
-                              0,
-                          'date': DateTime.now(),
-                          'expenseType': 'income'
-                        };
-                        if (_formKey.currentState!.validate()) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Processing Data')),
-                          );
-                          try {
-                            await db
-                                .collection("transactions")
-                                .doc()
-                                .set(transactionUserInput);
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                      content: Text('Data saved')));
-                            }
-                          } catch (e) {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                      content: Text(
-                                          'Saving data failed!')));
-                            }
-                            print('Error: $e');
-                          }
+                    TextFormField(
+                      controller: _descriptionController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter description';
                         }
-                      })
-                ])),
-              ),
-            ],
-          ),
-        ));
+                        return null;
+                      },
+                      maxLines: 2,
+                      maxLength: 64,
+                      decoration: InputDecoration(
+                        hintText: 'Description',
+                        border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16)),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    FormButtonWidget(
+                        title: 'Submit', onclick: handleSubmitIncome)
+                  ])),
+                ),
+              ],
+            ),
+          ));
+    });
   }
 }
