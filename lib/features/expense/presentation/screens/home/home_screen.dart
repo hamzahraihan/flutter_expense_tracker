@@ -81,6 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
     // filteredThisWeekExpenses will filter weekly transaction and can be only get expense transaction
     Iterable<TransactionsModel> filteredThisWeekExpenses(
         ExpenseType expenseType) {
+      if (state.thisWeekTransactions.isEmpty) {
+        return [];
+      }
       return state.thisWeekTransactions
           .where((element) => element.expenseType == expenseType);
     }
