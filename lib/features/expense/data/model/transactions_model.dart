@@ -102,7 +102,8 @@ class Transactions {
       }
 
       // push week transaction to weekTransactions List
-      if (transactionDate.isAfter(thisWeek)) {
+      if (transactionDate.isAfter(thisWeek) ||
+          transactionDate.isAtSameMomentAs(thisWeek)) {
         thisWeekTransactions.add(transaction);
       }
 
