@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 
 sealed class TransactionFirebaseEvent extends Equatable {
   const TransactionFirebaseEvent();
