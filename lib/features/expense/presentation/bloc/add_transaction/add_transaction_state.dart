@@ -11,7 +11,6 @@ extension AddTransactionStatusX on AddTransactionStatus {
 
 class AddTransactionState extends Equatable {
   final AddTransactionStatus status;
-  final String titleValue;
   final String descriptionValue;
   final String categoryValue;
   final int amountValue;
@@ -19,7 +18,6 @@ class AddTransactionState extends Equatable {
   const AddTransactionState(
       {this.status = AddTransactionStatus.initial,
       this.descriptionValue = '',
-      this.titleValue = '',
       this.amountValue = 0,
       this.categoryValue = ''});
 
@@ -31,7 +29,6 @@ class AddTransactionState extends Equatable {
       int? amountValue}) {
     return AddTransactionState(
       status: status ?? this.status,
-      titleValue: titleValue ?? this.titleValue,
       descriptionValue: descriptionValue ?? this.descriptionValue,
       categoryValue: categoryValue ?? this.categoryValue,
       amountValue: amountValue ?? this.amountValue,
@@ -39,11 +36,6 @@ class AddTransactionState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        status,
-        titleValue,
-        descriptionValue,
-        categoryValue,
-        amountValue
-      ];
+  List<Object?> get props =>
+      [status, descriptionValue, categoryValue, amountValue];
 }
