@@ -18,8 +18,9 @@ class AddExpenseScreen extends StatefulWidget {
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final TextEditingController _amountTransactionController =
       TextEditingController();
-  final TextEditingController _dropdownButtonController =
-      TextEditingController(text: 'Subscription');
+
+  String _selectedDropdownValue = 'Subscription';
+
   final TextEditingController _descriptionController =
       TextEditingController();
 
@@ -28,7 +29,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   @override
   void dispose() {
     _amountTransactionController.dispose();
-    _dropdownButtonController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -41,8 +42,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       // Validate returns true if the form is valid, or false otherwise.
       if (_formKey.currentState!.validate()) {
         Map<String, dynamic> transactionUserInput = {
-          'title': _dropdownButtonController.text,
-          'category': _dropdownButtonController.text,
+          'title': _selectedDropdownValue,
+          'category': _selectedDropdownValue,
           'description': _descriptionController.text,
           'amount':
               int.tryParse(_amountTransactionController.text) ?? 0,
@@ -178,8 +179,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   child: SingleChildScrollView(
                       child: Column(children: [
                     DropdownButtonWidget(
-                        dropdownController:
-                            _dropdownButtonController),
+                      initialValue: _selectedDropdownValue,
+                      onSelected: (value) {
+                        setState(() {
+                          _selectedDropdownValue = value;
+                        });
+                      },
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
