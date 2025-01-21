@@ -11,14 +11,6 @@ final class RefreshTransaction extends AddTransactionEvent {
   const RefreshTransaction();
 }
 
-final class AddTransactionTitleChanged extends AddTransactionEvent {
-  final String titleValue;
-  const AddTransactionTitleChanged(this.titleValue);
-
-  @override
-  List<Object?> get props => [titleValue];
-}
-
 final class AddTransactionDescriptionChanged
     extends AddTransactionEvent {
   final String descriptionValue;
