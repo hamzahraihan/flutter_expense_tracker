@@ -1,6 +1,5 @@
 import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
-import 'package:expense_tracker/features/expense/domain/entitiy/transaction_entities.dart';
 import 'package:expense_tracker/features/expense/domain/repository/transaction_repository.dart';
 
 class TransactionRepositoryImpl extends TransactionRepository {
@@ -47,11 +46,4 @@ class TransactionRepositoryImpl extends TransactionRepository {
   Future<List<TransactionsModel>> getTransactions() async {
     return await _transactionsApiService.getTransactions();
   }
-
-  @override 
-
-    Iterable<TransactionsModel> filteredThisWeekExpenses(ExpenseType expenseType, thisWeekTransactions)  {
-      return  _transactionsApiService.filteredThisWeekExpenses(expenseType, thisWeekTransactions);
-    }
-
 }
