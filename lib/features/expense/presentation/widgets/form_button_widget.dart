@@ -1,8 +1,7 @@
-import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
-import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_state.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 class FormButtonWidget extends StatefulWidget {
   final String title;
@@ -36,7 +35,7 @@ class _FormButtonWidgetState extends State<FormButtonWidget> {
     );
 
     final status = context
-        .select((TransactionFirebaseBloc bloc) => bloc.state.status);
+        .select((AddTransactionBloc bloc) => bloc.state.status);
 
     return TextButton(
         style: textButtonStyle,
