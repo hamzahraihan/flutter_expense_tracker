@@ -7,6 +7,10 @@ sealed class AddTransactionEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+final class RefreshTransaction extends AddTransactionEvent {
+  const RefreshTransaction();
+}
+
 final class AddTransactionTitleChanged extends AddTransactionEvent {
   final String titleValue;
   const AddTransactionTitleChanged(this.titleValue);
