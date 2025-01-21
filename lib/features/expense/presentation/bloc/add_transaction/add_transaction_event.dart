@@ -46,9 +46,5 @@ final class AddTransactionAmountChanged extends AddTransactionEvent {
 }
 
 final class AddTransactionSubmitted extends AddTransactionEvent {
-  final Map<String, dynamic> transaction;
-  const AddTransactionSubmitted(this.transaction);
-
-  @override
-  List<Object?> get props => [transaction];
+  const AddTransactionSubmitted();
 }
