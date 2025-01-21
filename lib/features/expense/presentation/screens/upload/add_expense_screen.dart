@@ -1,6 +1,6 @@
-import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
-import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
-import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_state.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/dropdown_button_widget.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/form_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -16,22 +16,9 @@ class AddExpenseScreen extends StatefulWidget {
 }
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
-  final TextEditingController _amountTransactionController =
-      TextEditingController();
-
-  String _selectedDropdownValue = 'Subscription';
-
-  final TextEditingController _descriptionController =
-      TextEditingController();
+  final String intialCategoryValue = 'Subscription';
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    _amountTransactionController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,15 +28,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     Future<void> handleSubmitExpense() async {
       // Validate returns true if the form is valid, or false otherwise.
       if (_formKey.currentState!.validate()) {
-        Map<String, dynamic> transactionUserInput = {
-          'title': _selectedDropdownValue,
-          'category': _selectedDropdownValue,
-          'description': _descriptionController.text,
-          'amount':
-              int.tryParse(_amountTransactionController.text) ?? 0,
-          'date': DateTime.now(),
-          'expenseType': 'expense'
-        };
+        // Map<String, dynamic> transactionUserInput = {
+        //   'title': _selectedDropdownValue,
+        //   'category': _selectedDropdownValue,
+        //   'description': _descriptionController.text,
+        //   'amount':
+        //       int.tryParse(_amountTransactionController.text) ?? 0,
+        //   'date': DateTime.now(),
+        //   'expenseType': 'expense'
+        // };
 
         // If the form is valid, display a snackbar. In the real world,
         // you'd often call a server or save the information in a database.
@@ -60,8 +47,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         // );
         try {
           context
-              .read<TransactionFirebaseBloc>()
-              .add(AddExpenseTransaction(transactionUserInput));
+              .read<AddTransactionBloc>()
+              .add(const AddTransactionSubmitted());
 
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -77,10 +64,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       }
     }
 
-    return BlocBuilder<TransactionFirebaseBloc,
-            TransactionFirebaseState>(
-        builder:
-            (BuildContext context, TransactionFirebaseState state) {
+    return BlocBuilder<AddTransactionBloc, AddTransactionState>(
+        builder: (BuildContext context, AddTransactionState state) {
       return Scaffold(
           // resizeToAvoidBottomInset: false,
           appBar: AppBar(
@@ -117,7 +102,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 12.0),
                   child: TextFormField(
-                    controller: _amountTransactionController,
+                    onChanged: (value) {
+                      final int amount = int.tryParse(value) ?? 0;
+                      context
+                          .read<AddTransactionBloc>()
+                          .add(AddTransactionAmountChanged(amount));
+                    },
                     validator: (value) {
                       if (value == null ||
                           value.isEmpty ||
@@ -179,18 +169,20 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   child: SingleChildScrollView(
                       child: Column(children: [
                     DropdownButtonWidget(
-                      initialValue: _selectedDropdownValue,
+                      initialValue: intialCategoryValue,
                       onSelected: (value) {
-                        setState(() {
-                          _selectedDropdownValue = value;
-                        });
+                        context.read<AddTransactionBloc>().add(
+                            AddTransactionCategoryChanged(value));
                       },
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     TextFormField(
-                      controller: _descriptionController,
+                      onChanged: (value) {
+                        context.read<AddTransactionBloc>().add(
+                            AddTransactionDescriptionChanged(value));
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter description';
