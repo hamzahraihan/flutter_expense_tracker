@@ -2,30 +2,29 @@ import 'package:expense_tracker/features/expense/data/repository/transaction_rep
 import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddTransactionBloc
     extends Bloc<AddTransactionEvent, AddTransactionState> {
   final TransactionRepositoryImpl _transactionRepository;
+  final TransactionFirebaseBloc _transactionBloc;
 
   late final AddExpenseUseCase _addExpenseUseCase =
       AddExpenseUseCase(_transactionRepository);
 
   AddTransactionBloc(
+    this._transactionBloc,
     this._transactionRepository,
   ) : super(const AddTransactionState()) {
-    on<AddTransactionTitleChanged>(_onAddTransactionTitleChanged);
     on<AddTransactionDescriptionChanged>(
         _onAddTransactionDescriptionChanged);
     on<AddTransactionCategoryChanged>(
         _onAddTransactionCategoryChanged);
     on<AddTransactionAmountChanged>(_onAddTransactionAmountChanged);
     on<AddTransactionSubmitted>(_onAddExpenseTransaction);
-  }
-
-  void _onAddTransactionTitleChanged(AddTransactionTitleChanged event,
-      Emitter<AddTransactionState> emit) {
-    emit(state.copyWith(titleValue: event.titleValue));
   }
 
   void _onAddTransactionDescriptionChanged(
@@ -53,14 +52,18 @@ class AddTransactionBloc
     emit(state.copyWith(status: AddTransactionStatus.loading));
     try {
       final Map<String, dynamic> transaction = {
-        'titleValue': state.titleValue,
-        'descriptionValue': state.descriptionValue,
-        'categoryValue': state.categoryValue,
-        'amountValue': state.amountValue,
+        'title': state.categoryValue,
+        'category': state.categoryValue,
+        'description': state.descriptionValue,
+        'amount': state.amountValue,
+        'date': DateTime.now(),
+        'expenseType': 'expense'
       };
-      await _addExpenseUseCase.execute(transaction);
 
-      add(const RefreshTransaction());
+      // Execute expense use case add transaction data
+      await _addExpenseUseCase.execute(transaction);
+      // Notify another bloc to fetch updated transactions
+      _transactionBloc.add(const GetTransaction());
 
       emit(state.copyWith(status: AddTransactionStatus.success));
     } catch (e) {
