@@ -10,9 +10,12 @@ const List<String> list = <String>[
 ];
 
 class DropdownButtonWidget extends StatefulWidget {
-  final TextEditingController dropdownController;
+  final String initialValue;
+  final ValueChanged<String> onSelected;
   const DropdownButtonWidget(
-      {super.key, required this.dropdownController});
+      {super.key,
+      required this.initialValue,
+      required this.onSelected});
 
   @override
   State<DropdownButtonWidget> createState() =>
@@ -26,12 +29,17 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
       UnmodifiableListView<MenuEntry>(list.map<MenuEntry>(
           (String name) => MenuEntry(value: name, label: name)));
 
-  String dropdownValue = list.first;
+  late String dropdownValue;
+
+  @override
+  void initState() {
+    super.initState();
+    dropdownValue = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
-      controller: widget.dropdownController,
       inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.black26),
@@ -44,9 +52,12 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
       dropdownMenuEntries: menuEntries,
       enableSearch: false,
       onSelected: (value) {
-        setState(() {
-          dropdownValue = value!;
-        });
+        if (value != null) {
+          setState(() {
+            dropdownValue = value;
+          });
+        }
+        widget.onSelected(value!);
       },
     );
   }
