@@ -36,8 +36,7 @@ class TransactionsApiService {
     throw UnimplementedError();
   }
 
-  Future<void> addExpenseTransaction(
-      Map<String, dynamic> transaction) async {
+  Future<void> addExpenseTransaction(transaction) async {
     // TODO: implement addExpenseTransaction
 
     try {
