@@ -15,6 +15,11 @@ class AddTransactionBloc
     this._transactionRepository,
   ) : super(const AddTransactionState()) {
     on<AddTransactionTitleChanged>(_onAddTransactionTitleChanged);
+    on<AddTransactionDescriptionChanged>(
+        _onAddTransactionDescriptionChanged);
+    on<AddTransactionCategoryChanged>(
+        _onAddTransactionCategoryChanged);
+    on<AddTransactionAmountChanged>(_onAddTransactionAmountChanged);
     on<AddTransactionSubmitted>(_onAddExpenseTransaction);
   }
 
@@ -23,11 +28,37 @@ class AddTransactionBloc
     emit(state.copyWith(titleValue: event.titleValue));
   }
 
+  void _onAddTransactionDescriptionChanged(
+      AddTransactionDescriptionChanged event,
+      Emitter<AddTransactionState> emit) {
+    emit(state.copyWith(descriptionValue: event.descriptionValue));
+  }
+
+  void _onAddTransactionCategoryChanged(
+      AddTransactionCategoryChanged event,
+      Emitter<AddTransactionState> emit) {
+    emit(state.copyWith(categoryValue: event.categoryValue));
+  }
+
+  void _onAddTransactionAmountChanged(
+      AddTransactionAmountChanged event,
+      Emitter<AddTransactionState> emit) {
+    if (state.amountValue != event.amountValue) {
+      emit(state.copyWith(amountValue: event.amountValue));
+    }
+  }
+
   void _onAddExpenseTransaction(AddTransactionSubmitted event,
       Emitter<AddTransactionState> emit) async {
     emit(state.copyWith(status: AddTransactionStatus.loading));
     try {
-      await _addExpenseUseCase.execute(event.transaction);
+      final Map<String, dynamic> transaction = {
+        'titleValue': state.titleValue,
+        'descriptionValue': state.descriptionValue,
+        'categoryValue': state.categoryValue,
+        'amountValue': state.amountValue,
+      };
+      await _addExpenseUseCase.execute(transaction);
 
       add(const RefreshTransaction());
 
