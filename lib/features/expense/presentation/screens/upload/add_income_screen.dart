@@ -29,8 +29,11 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
   void dispose() {
     _amountTransactionController.dispose();
     _dropdownButtonController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
+
+  String _selectedDropdownValue = 'Subscription';
 
   @override
   Widget build(BuildContext context) {
@@ -176,8 +179,13 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                   child: SingleChildScrollView(
                       child: Column(children: [
                     DropdownButtonWidget(
-                        dropdownController:
-                            _dropdownButtonController),
+                      initialValue: _selectedDropdownValue,
+                      onSelected: (value) {
+                        setState(() {
+                          _selectedDropdownValue = value;
+                        });
+                      },
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
