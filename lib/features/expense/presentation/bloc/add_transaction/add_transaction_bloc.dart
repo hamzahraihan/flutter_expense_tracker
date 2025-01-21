@@ -2,7 +2,6 @@ import 'package:expense_tracker/features/expense/data/repository/transaction_rep
 import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
-import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddTransactionBloc
@@ -30,7 +29,7 @@ class AddTransactionBloc
     try {
       await _addExpenseUseCase.execute(event.transaction);
 
-      add(const GetTransaction());
+      add(const RefreshTransaction());
 
       emit(state.copyWith(status: AddTransactionStatus.success));
     } catch (e) {
