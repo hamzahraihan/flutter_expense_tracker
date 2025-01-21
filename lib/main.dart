@@ -39,13 +39,14 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) =>
+            create: (context) =>
                 TransactionFirebaseBloc(transactionRepository)
                   ..add(const GetTransaction()),
           ),
           BlocProvider(
-              create: (_) =>
-                  AddTransactionBloc(transactionRepository))
+              create: (context) => AddTransactionBloc(
+                  context.read<TransactionFirebaseBloc>(),
+                  transactionRepository))
         ],
         child: MaterialApp(
           title: 'My Expense',
