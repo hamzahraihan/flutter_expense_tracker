@@ -37,6 +37,15 @@ final class AddTransactionAmountChanged extends AddTransactionEvent {
   List<Object?> get props => [amountValue];
 }
 
+final class AddTransactionExpenseTypeChanged
+    extends AddTransactionEvent {
+  final String expenseType;
+  const AddTransactionExpenseTypeChanged(this.expenseType);
+
+  @override
+  List<Object?> get props => [expenseType];
+}
+
 final class AddTransactionSubmitted extends AddTransactionEvent {
   const AddTransactionSubmitted();
 }
