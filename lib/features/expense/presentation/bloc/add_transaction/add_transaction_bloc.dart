@@ -24,6 +24,8 @@ class AddTransactionBloc
     on<AddTransactionCategoryChanged>(
         _onAddTransactionCategoryChanged);
     on<AddTransactionAmountChanged>(_onAddTransactionAmountChanged);
+    on<AddTransactionExpenseTypeChanged>(
+        _onAddTransactionExpenseTypeChanged);
     on<AddTransactionSubmitted>(_onAddExpenseTransaction);
   }
 
@@ -47,6 +49,13 @@ class AddTransactionBloc
     }
   }
 
+  void _onAddTransactionExpenseTypeChanged(
+      AddTransactionExpenseTypeChanged event,
+      Emitter<AddTransactionState> emit) {
+    print(event.expenseType);
+    emit(state.copyWith(expenseType: event.expenseType));
+  }
+
   void _onAddExpenseTransaction(AddTransactionSubmitted event,
       Emitter<AddTransactionState> emit) async {
     emit(state.copyWith(status: AddTransactionStatus.loading));
@@ -57,9 +66,9 @@ class AddTransactionBloc
         'description': state.descriptionValue,
         'amount': state.amountValue,
         'date': DateTime.now(),
-        'expenseType': 'expense'
+        'expenseType': state.expenseType
       };
-
+      print(transaction);
       // Execute expense use case add transaction data
       await _addExpenseUseCase.execute(transaction);
       // Notify another bloc to fetch updated transactions
