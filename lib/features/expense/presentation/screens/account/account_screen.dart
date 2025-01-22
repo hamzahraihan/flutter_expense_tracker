@@ -21,7 +21,37 @@ class _AccountScreenState extends State<AccountScreen> {
               TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
         ),
       ),
-      body: const Center(child: Text('Account')),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            // Your refresh logic here
+          });
+          return;
+        },
+        child: ListView(
+          children: const [
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 40),
+                child: Column(
+                  children: [
+                    Center(
+                        child: Text(
+                      'Account Balance',
+                      style: TextStyle(
+                          color: Colors.black38, fontSize: 14),
+                    )),
+                    Center(
+                        child: Text(
+                      'Rp. 20.000',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 32),
+                    ))
+                  ],
+                ))
+            
+          ],
+        ),
+      ),
     );
   }
 }
