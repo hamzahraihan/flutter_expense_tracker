@@ -1,4 +1,4 @@
-
+import 'package:expense_tracker/features/expense/presentation/screens/account/account_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/home/home_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_screen.dart';
 import 'package:flutter/material.dart';
@@ -49,13 +49,13 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
       ),
       const NavigationDestination(
           selectedIcon: Icon(
-            Icons.pie_chart,
+            Icons.credit_card_outlined,
             color: Colors.blueAccent,
           ),
           icon: Icon(
-            Icons.pie_chart_outline,
+            Icons.credit_card_outlined,
           ),
-          label: 'Budget')
+          label: 'Account')
     ];
 
     return Scaffold(
@@ -65,7 +65,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
         children: const [
           HomeScreen(),
           TransactionsScreen(),
-          Placeholder(), // Budget screen placeholder
+          AccountScreen(),
         ],
       )),
 
@@ -75,7 +75,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
             _handleNavigation(index, context),
         destinations: navButton,
         selectedIndex: currentPageIndex,
-        indicatorColor: Colors.white24,
+        indicatorColor: Colors.transparent,
         animationDuration: Duration.zero,
       ),
     );
