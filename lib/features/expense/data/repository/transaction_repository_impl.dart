@@ -7,16 +7,8 @@ class TransactionRepositoryImpl extends TransactionRepository {
   TransactionRepositoryImpl(this._transactionsApiService);
 
   @override
-  Future<void> addIncomeTransaction(transaction) async {
-    try {
-      await _transactionsApiService.addIncomeTransaction(transaction);
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  @override
-  Future<void> addExpenseTransaction(transaction) async {
+  Future<void> addExpenseTransaction(
+      Map<String, dynamic> transaction) async {
     try {
       await _transactionsApiService
           .addExpenseTransaction(transaction);
