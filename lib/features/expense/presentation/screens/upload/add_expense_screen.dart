@@ -19,9 +19,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final String intialCategoryValue = 'Subscription';
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
+    context
+        .read<AddTransactionBloc>()
+        .add(const AddTransactionExpenseTypeChanged('expense'));
+
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
@@ -79,142 +82,151 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             backgroundColor: Colors.red.shade400,
           ),
           backgroundColor: Colors.red.shade400,
-          body: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Spacer(),
-                const Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.0,
+          body: SingleChildScrollView(
+              physics: orientation == Orientation.landscape
+                  ? const AlwaysScrollableScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
+              primary: true,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 100,
                     ),
-                    child: Text(
-                      'How much?',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    )),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 12.0),
-                  child: TextFormField(
-                    onChanged: (value) {
-                      final int amount = int.tryParse(value) ?? 0;
-                      context
-                          .read<AddTransactionBloc>()
-                          .add(AddTransactionAmountChanged(amount));
-                    },
-                    validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          value == '0') {
-                        return 'Please enter nominal';
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      // CurrencyInputFormatter(
-                      //     mantissaLength: 0,
-                      //     thousandSeparator: ThousandSeparator.Period)
-                    ],
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 32.0,
-                        fontWeight: FontWeight.bold),
-                    decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(0),
-                        errorStyle: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.white54,
+                    const Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.0,
                         ),
-                        errorBorder: InputBorder.none,
-                        prefixIcon: const Text(
-                          'Rp. ',
+                        child: Text(
+                          'How much?',
                           style: TextStyle(
-                              fontSize: 32,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 12.0),
+                      child: TextFormField(
+                        onChanged: (value) {
+                          final int amount = int.tryParse(value) ?? 0;
+                          context.read<AddTransactionBloc>().add(
+                              AddTransactionAmountChanged(amount));
+                        },
+                        validator: (value) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              value == '0') {
+                            return 'Please enter nominal';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          // CurrencyInputFormatter(
+                          //     mantissaLength: 0,
+                          //     thousandSeparator: ThousandSeparator.Period)
+                        ],
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 32.0,
+                            fontWeight: FontWeight.bold),
+                        decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(0),
+                            errorStyle: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white54,
+                            ),
+                            errorBorder: InputBorder.none,
+                            prefixIcon: const Text(
+                              'Rp. ',
+                              style: TextStyle(
+                                  fontSize: 32,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            hintStyle: const TextStyle(
                               color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        hintStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 32.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        hintText: '0',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none)),
-                  ),
-                ),
-                Container(
-                  height: orientation == Orientation.landscape
-                      ? 200
-                      : 400,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 26,
-                  ),
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(42),
-                          topRight: Radius.circular(42))),
-                  child: SingleChildScrollView(
-                      child: Column(children: [
-                    DropdownButtonWidget(
-                      initialValue: intialCategoryValue,
-                      onSelected: (value) {
-                        context.read<AddTransactionBloc>().add(
-                            AddTransactionCategoryChanged(value));
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      onChanged: (value) {
-                        context.read<AddTransactionBloc>().add(
-                            AddTransactionDescriptionChanged(value));
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter description';
-                        }
-                        return null;
-                      },
-                      maxLines: 2,
-                      maxLength: 64,
-                      decoration: InputDecoration(
-                        hintText: 'Description',
-                        border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.black26),
-                            borderRadius: BorderRadius.circular(16)),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.black26),
-                            borderRadius: BorderRadius.circular(16)),
+                              fontSize: 32.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            hintText: '0',
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(10),
+                                borderSide: BorderSide.none)),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    FormButtonWidget(
-                      title: 'Submit',
-                      onclick: handleSubmitExpense,
-                    )
-                  ])),
+                    Container(
+                        height: orientation == Orientation.portrait
+                            ? 1200
+                            : null,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 26,
+                        ),
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(42),
+                                topRight: Radius.circular(42))),
+                        child: Column(children: [
+                          DropdownButtonWidget(
+                            initialValue: intialCategoryValue,
+                            onSelected: (value) {
+                              context.read<AddTransactionBloc>().add(
+                                  AddTransactionCategoryChanged(
+                                      value));
+                            },
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            onChanged: (value) {
+                              context.read<AddTransactionBloc>().add(
+                                  AddTransactionDescriptionChanged(
+                                      value));
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter description';
+                              }
+                              return null;
+                            },
+                            maxLines: 2,
+                            maxLength: 64,
+                            decoration: InputDecoration(
+                              hintText: 'Description',
+                              border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.black26),
+                                  borderRadius:
+                                      BorderRadius.circular(16)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.black26),
+                                  borderRadius:
+                                      BorderRadius.circular(16)),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          FormButtonWidget(
+                            title: 'Submit',
+                            onclick: handleSubmitExpense,
+                          )
+                        ]))
+                  ],
                 ),
-              ],
-            ),
-          ));
+              )));
     });
   }
 }
