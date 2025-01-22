@@ -13,8 +13,13 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        forceMaterialTransparency: false,
-        title: const Text('Account'),
+        forceMaterialTransparency: true,
+        centerTitle: true,
+        title: const Text(
+          'Account',
+          style:
+              TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+        ),
       ),
       body: const Center(child: Text('Account')),
     );
