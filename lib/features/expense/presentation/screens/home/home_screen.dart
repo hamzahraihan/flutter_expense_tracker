@@ -3,10 +3,10 @@ import 'package:expense_tracker/features/expense/presentation/bloc/transaction/f
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_state.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_screen.dart';
-import 'package:expense_tracker/features/expense/presentation/widgets/buttons/primary_button.dart';
+import 'package:expense_tracker/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/chart/bar_chart.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/income_expenses_card_widget.dart';
-import 'package:expense_tracker/features/expense/presentation/widgets/loading.dart';
+import 'package:expense_tracker/widgets/loading.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/recent_transactions.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 import 'package:flutter/material.dart';
