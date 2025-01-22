@@ -4,7 +4,7 @@ import 'package:expense_tracker/features/expense/presentation/bloc/transaction/f
 import 'package:expense_tracker/features/expense/presentation/screens/upload/add_expense_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_list.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/upload/add_income_screen.dart';
-import 'package:expense_tracker/features/expense/presentation/widgets/loading.dart';
+import 'package:expense_tracker/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
