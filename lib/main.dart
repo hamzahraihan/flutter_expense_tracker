@@ -4,6 +4,7 @@ import 'package:expense_tracker/features/expense/data/repository/transaction_rep
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
+import 'package:expense_tracker/features/expense/presentation/screens/account/account_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/upload/add_expense_screen.dart';
 import 'package:expense_tracker/firebase_options.dart';
@@ -65,14 +66,14 @@ class MyApp extends StatelessWidget {
               case TransactionsScreen.routeName:
                 initialIndex = 1;
                 break;
-              case '/budget':
+              case AddExpenseScreen.routeName:
                 initialIndex = 2;
                 break;
-              case AddExpenseScreen.routeName:
+              case AccountScreen.routeName:
                 initialIndex = 3;
                 break;
               default:
-                initialIndex = 0;
+                initialIndex = 1;
                 break;
             }
             return MaterialPageRoute(
