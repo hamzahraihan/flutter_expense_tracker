@@ -9,6 +9,4 @@ abstract class TransactionRepository {
 
   Future<void> addExpenseTransaction(
       Map<String, dynamic> transaction);
-
-  Future<void> addIncomeTransaction(transaction);
 }
