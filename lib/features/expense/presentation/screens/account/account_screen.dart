@@ -1,3 +1,4 @@
+import 'package:expense_tracker/features/expense/presentation/widgets/account_wallet_widget.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -29,9 +30,10 @@ class _AccountScreenState extends State<AccountScreen> {
           return;
         },
         child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           children: const [
             Padding(
-                padding: EdgeInsets.symmetric(vertical: 40),
+                padding: EdgeInsets.symmetric(vertical: 64),
                 child: Column(
                   children: [
                     Center(
@@ -47,8 +49,8 @@ class _AccountScreenState extends State<AccountScreen> {
                           fontWeight: FontWeight.bold, fontSize: 32),
                     ))
                   ],
-                ))
-            
+                )),
+            AccountWalletWidget()
           ],
         ),
       ),
