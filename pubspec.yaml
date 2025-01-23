@@ -49,6 +49,7 @@ dependencies:
   get_it: ^8.0.3
   bloc: ^9.0.0
   equatable: ^2.0.7
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - .env.local
+    - assets/svg/mandiri.svg
+    - assets/svg/bca.svg
+    - assets/svg/jago.svg
+    - assets/svg/paypal.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
