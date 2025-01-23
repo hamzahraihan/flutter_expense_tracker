@@ -22,10 +22,8 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   final _key = GlobalKey<ExpandableFabState>();
 
   void _handleExpandableNavigation(BuildContext context, screen) {
-    setState(() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => screen));
-    });
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => screen));
   }
 
   @override
@@ -90,7 +88,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
               ])),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
-          type: ExpandableFabType.side,
+          type: ExpandableFabType.up,
           key: _key,
           overlayStyle:
               const ExpandableFabOverlayStyle(color: Colors.black38),
