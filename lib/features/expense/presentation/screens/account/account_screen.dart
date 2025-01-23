@@ -6,11 +6,11 @@ final List<String> wallets = [
   'Jago',
   'Mandiri',
   'BCA',
-  'Cypher',
-  'Bitcoin',
-  'Gopay',
-  'ShopeePay',
-  'Other'
+  // 'Cypher',
+  // 'Bitcoin',
+  // 'Gopay',
+  // 'ShopeePay',
+  // 'Other'
 ];
 
 class AccountScreen extends StatefulWidget {
