@@ -1,3 +1,4 @@
+import 'package:expense_tracker/features/expense/presentation/screens/upload/add_account_wallet_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/account_wallet_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,11 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  void _handleFloatingButton(BuildContext context, screen) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => screen));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,10 +83,11 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => _handleFloatingButton(
+            context, const AddAccountWalletScreen()),
         foregroundColor: Colors.white,
         backgroundColor: Colors.blueAccent,
-        child: const Icon(Icons.credit_card),
+        child: const Icon(Icons.account_balance_wallet_rounded),
       ),
     );
   }
