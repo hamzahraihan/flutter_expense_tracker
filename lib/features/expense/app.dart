@@ -49,11 +49,11 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
       ),
       const NavigationDestination(
           selectedIcon: Icon(
-            Icons.credit_card_outlined,
+            Icons.account_balance_wallet,
             color: Colors.blueAccent,
           ),
           icon: Icon(
-            Icons.credit_card_outlined,
+            Icons.account_balance_wallet_outlined,
           ),
           label: 'Account')
     ];
