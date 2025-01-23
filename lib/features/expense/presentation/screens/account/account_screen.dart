@@ -76,6 +76,12 @@ class _AccountScreenState extends State<AccountScreen> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.blueAccent,
+        child: const Icon(Icons.credit_card),
+      ),
     );
   }
 }
