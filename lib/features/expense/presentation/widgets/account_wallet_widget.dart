@@ -1,3 +1,4 @@
+import 'package:expense_tracker/features/expense/presentation/util/svg_selection.dart';
 import 'package:flutter/material.dart';
 
 class AccountWalletWidget extends StatefulWidget {
@@ -18,12 +19,30 @@ class _AccountWalletWidgetState extends State<AccountWalletWidget> {
         borderRadius: BorderRadius.circular(15.0),
         color: Colors.grey.shade200,
       ),
-      padding: const EdgeInsets.all(13.0),
+      padding: const EdgeInsets.all(16.0),
       width: double.infinity,
-      height: 85,
+      height: 80,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text(widget.wallet), const Text('Rp.20.000')],
+        children: [
+          Row(children: [
+            Container(
+              height: double.infinity,
+              width: 48,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                color: Colors.white,
+              ),
+              padding: const EdgeInsets.all(10),
+              child: SvgSelection(svgName: widget.wallet),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(widget.wallet)
+          ]),
+          const Text('Rp.20.000')
+        ],
       ),
     );
   }
