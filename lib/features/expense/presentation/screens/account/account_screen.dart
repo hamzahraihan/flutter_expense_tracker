@@ -1,6 +1,18 @@
 import 'package:expense_tracker/features/expense/presentation/widgets/account_wallet_widget.dart';
 import 'package:flutter/material.dart';
 
+final List<String> wallets = [
+  'Paypal',
+  'Jago',
+  'Mandiri',
+  'BCA',
+  'Cypher',
+  'Bitcoin',
+  'Gopay',
+  'ShopeePay',
+  'Other'
+];
+
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
   static const String routeName = 'Account';
@@ -30,9 +42,10 @@ class _AccountScreenState extends State<AccountScreen> {
           return;
         },
         child: ListView(
+          primary: true,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          children: const [
-            Padding(
+          children: [
+            const Padding(
                 padding: EdgeInsets.symmetric(vertical: 64),
                 child: Column(
                   children: [
@@ -50,7 +63,16 @@ class _AccountScreenState extends State<AccountScreen> {
                     ))
                   ],
                 )),
-            AccountWalletWidget()
+            ListView(
+              primary: false,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              children: wallets
+                  .map((element) => (AccountWalletWidget(
+                        wallet: element,
+                      )))
+                  .toList(),
+            )
           ],
         ),
       ),
