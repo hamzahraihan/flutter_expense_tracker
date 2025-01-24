@@ -52,7 +52,7 @@ class AddTransactionBloc
   void _onAddTransactionExpenseTypeChanged(
       AddTransactionExpenseTypeChanged event,
       Emitter<AddTransactionState> emit) {
-    print(event.expenseType);
+    
     emit(state.copyWith(expenseType: event.expenseType));
   }
 
