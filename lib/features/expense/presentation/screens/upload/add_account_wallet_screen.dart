@@ -89,7 +89,7 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Saving data failed!')));
           }
-          print('Error: $e');
+          throw Exception('Error $e');
         }
       }
     }
