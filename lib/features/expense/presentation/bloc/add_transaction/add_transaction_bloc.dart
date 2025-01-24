@@ -52,7 +52,6 @@ class AddTransactionBloc
   void _onAddTransactionExpenseTypeChanged(
       AddTransactionExpenseTypeChanged event,
       Emitter<AddTransactionState> emit) {
-    
     emit(state.copyWith(expenseType: event.expenseType));
   }
 
@@ -68,7 +67,7 @@ class AddTransactionBloc
         'date': DateTime.now(),
         'expenseType': state.expenseType
       };
-      print(transaction);
+
       // Execute expense use case add transaction data
       await _addExpenseUseCase.execute(transaction);
       // Notify another bloc to fetch updated transactions
