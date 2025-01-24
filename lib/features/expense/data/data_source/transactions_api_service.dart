@@ -7,7 +7,8 @@ FirebaseFirestore db = FirebaseFirestore.instance;
 class TransactionsApiService {
   Future<List<TransactionsModel>> getTransactions() async {
     try {
-      final snapshot = await db.collection('transactions').get();
+      final QuerySnapshot<Map<String, dynamic>> snapshot =
+          await db.collection('transactions').get();
       return snapshot.docs
           .map((doc) => TransactionsModel.fromFirestore(doc, null))
           .toList();
@@ -20,10 +21,10 @@ class TransactionsApiService {
       ExpenseType expenseType,
       List<TransactionsModel> thisWeekTransactions) {
     if (thisWeekTransactions.isNotEmpty) {
-      return thisWeekTransactions
-          .where((element) => element.expenseType == expenseType);
+      return thisWeekTransactions.where((TransactionsModel element) =>
+          element.expenseType == expenseType);
     }
-    return [];
+    return <TransactionsModel>[];
   }
 
   Future<void> deleteTransctions(String id) {
@@ -38,7 +39,6 @@ class TransactionsApiService {
 
   Future<void> addExpenseTransaction(
       Map<String, dynamic> transaction) async {
-    // TODO: implement addExpenseTransaction
     try {
       await db.collection("transactions").doc().set(transaction);
     } catch (e) {
