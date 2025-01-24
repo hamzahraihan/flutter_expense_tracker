@@ -193,8 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
                 child: Column(
-                    children: state.todayTransactions.isNotEmpty
-                        ? state.todayTransactions
+                    children: state.thisWeekTransactions.isNotEmpty
+                        ? state.thisWeekTransactions
                             .take(5)
                             .map<Widget>((item) {
                             return Column(
@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Center(
                               child: Text(
-                                "You haven't doing any transaction today!",
+                                "You haven't doing any transaction this week!",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 12,
