@@ -22,7 +22,7 @@ class BarChartWidget extends StatefulWidget {
       ];
 
   final Color barBackgroundColor =
-      AppColors.contentColorBlack.withOpacity(0.5);
+      AppColors.contentColorBlack.withValues(alpha: 0.5);
   final Color barColor = AppColors.contentColorWhite;
   final Color touchedBarColor = AppColors.contentColorGreen;
 
