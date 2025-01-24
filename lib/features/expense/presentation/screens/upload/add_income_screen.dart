@@ -77,7 +77,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Saving data failed!')));
           }
-          print('Error: $e');
+        throw Exception('error: $e');
         }
       }
     }
