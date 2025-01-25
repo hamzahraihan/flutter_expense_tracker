@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
-import 'package:expense_tracker/features/expense/domain/entitiy/transaction_entities.dart';
+import 'package:expense_tracker/features/expense/domain/entity/transaction_entities.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
