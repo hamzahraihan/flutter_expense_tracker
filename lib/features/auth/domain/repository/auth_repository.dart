@@ -9,10 +9,10 @@ import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
 abstract class AuthRepository {
   Stream<AuthEntities> get authUser;
 
-  Future<AuthEntities> signUp(
+  Future<AuthEntities> signUpWithEmailAndPassword(
       {required String email, required String password});
 
-  Future<AuthEntities> signIn(
+  Future<AuthEntities> signInWithEmailAndPassword(
       {required String email, required String password});
 
   Future<void> signOut();
