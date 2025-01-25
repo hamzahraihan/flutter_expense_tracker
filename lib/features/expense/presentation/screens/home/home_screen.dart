@@ -1,4 +1,4 @@
-import 'package:expense_tracker/features/expense/domain/entitiy/transaction_entities.dart';
+import 'package:expense_tracker/features/expense/domain/entity/transaction_entities.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_state.dart';
