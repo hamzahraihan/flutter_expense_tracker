@@ -1,4 +1,4 @@
-import 'package:expense_tracker/features/expense/domain/entitiy/transaction_entities.dart';
+import 'package:expense_tracker/features/expense/domain/entity/transaction_entities.dart';
 import 'package:expense_tracker/features/expense/presentation/util/icon_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
