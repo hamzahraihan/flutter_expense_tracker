@@ -18,6 +18,11 @@ class AuthModel extends AuthEntities {
         imageUrl: firebaseUser.photoURL);
   }
 
+  AuthModel toEntity() {
+    return AuthModel(
+        uuid: uuid, email: email, name: name, imageUrl: imageUrl);
+  }
+
   Map<String, dynamic> toFirestore() {
     return {
       'uuid': uuid,
