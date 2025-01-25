@@ -1,3 +1,5 @@
+import 'package:expense_tracker/features/auth/data/data_source/auth_api_service.dart';
+import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:expense_tracker/features/expense/app.dart';
 import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
@@ -34,8 +36,13 @@ class MyApp extends StatelessWidget {
     final TransactionsApiService transactionsApiService =
         TransactionsApiService();
 
+    final AuthApiService authApiService = AuthApiService();
+
     final TransactionRepositoryImpl transactionRepository =
         TransactionRepositoryImpl(transactionsApiService);
+
+    final AuthRepositoryImpl authRepository =
+        AuthRepositoryImpl(authApiService);
 
     return MultiBlocProvider(
         providers: [
@@ -59,7 +66,9 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
           initialRoute: '/',
-          home: const ExpenseTrackerApp(initialIndex: 0),
+          home: ExpenseTrackerApp(
+              authUser: authRepository.authUser.first,
+              initialIndex: 0),
           onGenerateRoute: (RouteSettings routeSettings) {
             int initialIndex = 0;
             switch (routeSettings.name) {
@@ -77,8 +86,9 @@ class MyApp extends StatelessWidget {
                 break;
             }
             return MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    ExpenseTrackerApp(initialIndex: initialIndex),
+                builder: (BuildContext context) => ExpenseTrackerApp(
+                    authUser: authRepository.authUser.first,
+                    initialIndex: initialIndex),
                 settings: routeSettings);
           },
         ));
