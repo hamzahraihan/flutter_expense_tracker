@@ -13,6 +13,11 @@ class AuthEntities extends Equatable {
     this.imageUrl,
   });
 
+  static const AuthEntities empty =
+      AuthEntities(uuid: '', email: '', name: '', imageUrl: '');
+
+  bool get isEmpty => this == AuthEntities.empty;
+
   @override
   List<Object?> get props => [uuid, email, name, imageUrl];
 }
