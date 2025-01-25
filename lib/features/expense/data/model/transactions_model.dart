@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expense_tracker/features/expense/domain/entitiy/transaction_entities.dart';
+import 'package:expense_tracker/features/expense/domain/entity/transaction_entities.dart';
 
 extension ExpenseTypeExtension on ExpenseType {
   String toShortString() {
