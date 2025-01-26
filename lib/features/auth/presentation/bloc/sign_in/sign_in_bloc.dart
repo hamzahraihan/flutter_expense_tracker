@@ -1,4 +1,5 @@
 import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
+import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
 import 'package:expense_tracker/features/auth/domain/value_object/email.dart';
 import 'package:expense_tracker/features/auth/domain/value_object/password.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_event.dart';
@@ -6,8 +7,12 @@ import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_
 import 'package:expense_tracker/features/auth/presentation/bloc/status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// TODO create auth repository
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final AuthRepositoryImpl _authRepository;
+
+  late final SignInUseCase _signInUseCase =
+      SignInUseCase(_authRepository);
 
   SignInBloc(this._authRepository) : super(const SignInState()) {
     on<SignInWithEmailAndPassword>(_onSignIn);
@@ -40,6 +45,22 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   void _onSignIn(SignInWithEmailAndPassword event,
       Emitter<SignInState> emit) async {
-    emit(state.copyWith());
+    if (!(state.emailStatus == EmailStatus.valid) ||
+        !(state.passwordStatus == PasswordStatus.valid)) {
+      emit(state.copyWith(formStatus: FormStatus.invalid));
+      emit(state.copyWith(formStatus: FormStatus.initial));
+      return;
+    }
+
+    emit(state.copyWith(formStatus: FormStatus.submissionInProgress));
+
+    try {
+      await _signInUseCase.execute(SignInParams(
+          email: state.email!, password: state.password!));
+
+      emit(state.copyWith(formStatus: FormStatus.submissionSuccess));
+    } catch (e) {
+      emit(state.copyWith(formStatus: FormStatus.submissionFailure));
+    }
   }
 }
