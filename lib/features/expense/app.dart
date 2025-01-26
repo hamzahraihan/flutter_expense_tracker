@@ -1,10 +1,15 @@
+import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/account/account_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/home/home_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_screen.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseTrackerApp extends StatefulWidget {
-  const ExpenseTrackerApp({super.key, required this.initialIndex});
+  const ExpenseTrackerApp(
+      {super.key,
+      required this.initialIndex,
+      required this.authUser});
+  final Future<AuthEntities> authUser;
   final int initialIndex;
   @override
   State<ExpenseTrackerApp> createState() => _ExpenseTrackerAppState();
