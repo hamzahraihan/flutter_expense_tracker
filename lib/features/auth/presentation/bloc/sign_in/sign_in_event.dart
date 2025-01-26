@@ -26,14 +26,3 @@ final class PasswordChanged extends SignInEvent {
 final class SignInWithEmailAndPassword extends SignInEvent {
   const SignInWithEmailAndPassword();
 }
-
-final class SignUpWithEmailAndPassword extends SignInEvent {
-  final String email;
-  final String password;
-
-  const SignUpWithEmailAndPassword(
-      {required this.email, required this.password});
-
-  @override
-  List<Object?> get props => [email, password];
-}
