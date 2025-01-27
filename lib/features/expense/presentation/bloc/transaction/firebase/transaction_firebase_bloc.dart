@@ -26,9 +26,7 @@ class TransactionFirebaseBloc
   void _onFetchTransactions(GetTransaction event,
       Emitter<TransactionFirebaseState> emit) async {
     emit(state.copyWith(status: TransactionStatus.loading));
-    
     final transactions = await _getTransactionsUseCase.execute();
-
     final GroupedTransactions groupedTransactions =
         Transactions.filterTransactionsByDate(transactions);
 
