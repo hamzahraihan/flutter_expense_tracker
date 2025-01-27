@@ -1,4 +1,4 @@
-import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
+import 'package:expense_tracker/features/expense/domain/repository/transaction_repository.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddTransactionBloc
     extends Bloc<AddTransactionEvent, AddTransactionState> {
-  final TransactionRepositoryImpl _transactionRepository;
+  final TransactionRepository _transactionRepository;
   final TransactionFirebaseBloc _transactionBloc;
 
   late final AddExpenseUseCase _addExpenseUseCase =
