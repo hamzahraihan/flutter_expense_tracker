@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -6,6 +6,10 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    throw UnimplementedError();
+    return const Scaffold(
+      body: Center(
+        child: Text('Sign in screen'),
+      ),
+    );
   }
 }
