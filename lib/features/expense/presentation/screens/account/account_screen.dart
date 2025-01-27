@@ -16,7 +16,7 @@ final List<String> wallets = [
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
-  static const String routeName = 'Account';
+  static const String routeName = '/account';
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
