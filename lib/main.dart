@@ -1,8 +1,12 @@
 import 'package:expense_tracker/features/auth/data/data_source/auth_api_service.dart';
 import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
+import 'package:expense_tracker/features/auth/domain/repository/auth_repository.dart';
+import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
+import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_bloc.dart';
 import 'package:expense_tracker/features/expense/app.dart';
 import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
+import 'package:expense_tracker/features/expense/domain/usecase/get_transactions.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
@@ -23,38 +27,60 @@ void main() async {
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const MyApp());
+  // initialize dependencies
+  final AuthApiService authApiService = AuthApiService();
+
+  final TransactionsApiService transactionsApiService =
+      TransactionsApiService();
+
+  final TransactionRepositoryImpl transactionRepositoryImpl =
+      TransactionRepositoryImpl(transactionsApiService);
+
+  final AuthRepositoryImpl authRepositoryImpl =
+      AuthRepositoryImpl(authApiService);
+
+  final SignInUseCase signInUseCase =
+      SignInUseCase(authRepositoryImpl);
+
+  final GetTransactionsUseCase getTransactionsUseCase =
+      GetTransactionsUseCase(transactionRepositoryImpl);
+
+  runApp(MyApp(
+    authRepositoryImpl: authRepositoryImpl,
+    signInUseCase: signInUseCase,
+    getTransactionsUseCase: getTransactionsUseCase,
+    transactionRepositoryImpl: transactionRepositoryImpl,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AuthRepository authRepositoryImpl;
+  final SignInUseCase signInUseCase;
+  final GetTransactionsUseCase getTransactionsUseCase;
+  final TransactionRepositoryImpl transactionRepositoryImpl;
 
-  // This widget is the root of your application.
+  const MyApp(
+      {super.key,
+      required this.authRepositoryImpl,
+      required this.getTransactionsUseCase,
+      required this.signInUseCase,
+      required this.transactionRepositoryImpl});
 
   @override
   Widget build(BuildContext context) {
-    final TransactionsApiService transactionsApiService =
-        TransactionsApiService();
-
-    final AuthApiService authApiService = AuthApiService();
-
-    final TransactionRepositoryImpl transactionRepository =
-        TransactionRepositoryImpl(transactionsApiService);
-
-    final AuthRepositoryImpl authRepository =
-        AuthRepositoryImpl(authApiService);
-
     return MultiBlocProvider(
         providers: [
           BlocProvider(
+              create: (context) => SignInBloc(signInUseCase)),
+          BlocProvider(
             create: (context) =>
-                TransactionFirebaseBloc(transactionRepository)
+                TransactionFirebaseBloc(transactionRepositoryImpl)
                   ..add(const GetTransaction()),
           ),
           BlocProvider(
               create: (context) => AddTransactionBloc(
                   context.read<TransactionFirebaseBloc>(),
-                  transactionRepository))
+                  transactionRepositoryImpl))
         ],
         child: MaterialApp(
           title: 'My Expense',
@@ -67,7 +93,7 @@ class MyApp extends StatelessWidget {
           ),
           initialRoute: '/',
           home: ExpenseTrackerApp(
-              authUser: authRepository.authUser.first,
+              authUser: authRepositoryImpl.authUser.first,
               initialIndex: 0),
           onGenerateRoute: (RouteSettings routeSettings) {
             int initialIndex = 0;
@@ -87,7 +113,7 @@ class MyApp extends StatelessWidget {
             }
             return MaterialPageRoute(
                 builder: (BuildContext context) => ExpenseTrackerApp(
-                    authUser: authRepository.authUser.first,
+                    authUser: authRepositoryImpl.authUser.first,
                     initialIndex: initialIndex),
                 settings: routeSettings);
           },
