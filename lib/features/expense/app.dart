@@ -9,7 +9,7 @@ class ExpenseTrackerApp extends StatefulWidget {
       {super.key,
       required this.initialIndex,
       required this.authUser});
-  final Future<AuthEntities> authUser;
+  final AuthEntities authUser;
   final int initialIndex;
   @override
   State<ExpenseTrackerApp> createState() => _ExpenseTrackerAppState();
