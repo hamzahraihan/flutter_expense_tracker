@@ -5,15 +5,42 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:expense_tracker/features/auth/data/data_source/auth_api_service.dart';
+import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
+import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
+import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
+import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
+import 'package:expense_tracker/features/expense/domain/usecase/get_transactions.dart';
 import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  final AuthApiService authApiService = AuthApiService();
+
+  final TransactionsApiService transactionsApiService =
+      TransactionsApiService();
+
+  final TransactionRepositoryImpl transactionRepositoryImpl =
+      TransactionRepositoryImpl(transactionsApiService);
+
+  final AuthRepositoryImpl authRepositoryImpl =
+      AuthRepositoryImpl(authApiService);
+
+  final SignInUseCase signInUseCase =
+      SignInUseCase(authRepositoryImpl);
+
+  final GetTransactionsUseCase getTransactionsUseCase =
+      GetTransactionsUseCase(transactionRepositoryImpl);
+  testWidgets('Counter increments smoke test',
+      (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp(
+        authUser: await authRepositoryImpl.authUser.first,
+        authRepositoryImpl: authRepositoryImpl,
+        getTransactionsUseCase: getTransactionsUseCase,
+        signInUseCase: signInUseCase,
+        transactionRepositoryImpl: transactionRepositoryImpl));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
