@@ -1,9 +1,11 @@
 import 'package:expense_tracker/features/auth/data/data_source/auth_api_service.dart';
 import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
-import 'package:expense_tracker/features/auth/domain/repository/auth_repository.dart';
 import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
+import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_bloc.dart';
+import 'package:expense_tracker/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:expense_tracker/features/expense/app.dart';
 import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
@@ -23,8 +25,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await dotenv.load(fileName: '.env.local');
+
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform);
 
@@ -56,15 +58,15 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final AuthRepository authRepositoryImpl;
+  final AuthRepositoryImpl authRepositoryImpl;
   final SignInUseCase signInUseCase;
   final GetTransactionsUseCase getTransactionsUseCase;
   final TransactionRepositoryImpl transactionRepositoryImpl;
-  final AuthEntities authUser;
+  final AuthEntities? authUser;
 
   const MyApp(
       {super.key,
-      required this.authUser,
+      this.authUser,
       required this.authRepositoryImpl,
       required this.getTransactionsUseCase,
       required this.signInUseCase,
@@ -74,6 +76,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
+          BlocProvider(
+              create: (context) => AuthBloc(authRepositoryImpl)),
           BlocProvider(
               create: (context) => SignInBloc(signInUseCase)),
           BlocProvider(
@@ -100,26 +104,43 @@ class MyApp extends StatelessWidget {
           //     authUser: authRepositoryImpl.authUser.first,
           //     initialIndex: 0),
           onGenerateRoute: (RouteSettings routeSettings) {
-            int initialIndex = 0;
-            switch (routeSettings.name) {
-              case TransactionsScreen.routeName:
-                initialIndex = 1;
-                break;
-              case AddExpenseScreen.routeName:
-                initialIndex = 2;
-                break;
-              case AccountScreen.routeName:
-                initialIndex = 3;
-                break;
-              default:
-                initialIndex = 1;
-                break;
-            }
-
             return MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ExpenseTrackerApp(
-                      authUser: authUser, initialIndex: initialIndex);
+                  return BlocBuilder<AuthBloc, AuthState>(builder:
+                      (BuildContext context, AuthState state) {
+                    if (state.authStatus!.isLoading) {
+                      return const Scaffold(
+                        body: Center(
+                            child: CircularProgressIndicator()),
+                      );
+                    }
+                    if (state.authStatus!.isUnauthenticated) {
+                      return const SignInScreen();
+                    }
+                    if (state.authStatus!.isAuthenticated) {
+                      int initialIndex = 0;
+                      switch (routeSettings.name) {
+                        case TransactionsScreen.routeName:
+                          initialIndex = 1;
+                          break;
+                        case AddExpenseScreen.routeName:
+                          initialIndex = 2;
+                          break;
+                        case AccountScreen.routeName:
+                          initialIndex = 3;
+                          break;
+                        default:
+                          initialIndex = 1;
+                          break;
+                      }
+
+                      return ExpenseTrackerApp(
+                          authUser: authUser,
+                          initialIndex: initialIndex);
+                    }
+
+                    return const SignInScreen();
+                  });
                 },
                 settings: routeSettings);
           },
