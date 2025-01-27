@@ -1,5 +1,6 @@
 import 'package:expense_tracker/features/auth/data/data_source/auth_api_service.dart';
 import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
+import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
 import 'package:expense_tracker/features/auth/domain/repository/auth_repository.dart';
 import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_bloc.dart';
@@ -50,6 +51,7 @@ void main() async {
     signInUseCase: signInUseCase,
     getTransactionsUseCase: getTransactionsUseCase,
     transactionRepositoryImpl: transactionRepositoryImpl,
+    authUser: await authRepositoryImpl.authUser.first,
   ));
 }
 
@@ -58,9 +60,11 @@ class MyApp extends StatelessWidget {
   final SignInUseCase signInUseCase;
   final GetTransactionsUseCase getTransactionsUseCase;
   final TransactionRepositoryImpl transactionRepositoryImpl;
+  final AuthEntities authUser;
 
   const MyApp(
       {super.key,
+      required this.authUser,
       required this.authRepositoryImpl,
       required this.getTransactionsUseCase,
       required this.signInUseCase,
@@ -92,9 +96,9 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
           initialRoute: '/',
-          home: ExpenseTrackerApp(
-              authUser: authRepositoryImpl.authUser.first,
-              initialIndex: 0),
+          // home: ExpenseTrackerApp(
+          //     authUser: authRepositoryImpl.authUser.first,
+          //     initialIndex: 0),
           onGenerateRoute: (RouteSettings routeSettings) {
             int initialIndex = 0;
             switch (routeSettings.name) {
@@ -111,10 +115,12 @@ class MyApp extends StatelessWidget {
                 initialIndex = 1;
                 break;
             }
+
             return MaterialPageRoute(
-                builder: (BuildContext context) => ExpenseTrackerApp(
-                    authUser: authRepositoryImpl.authUser.first,
-                    initialIndex: initialIndex),
+                builder: (BuildContext context) {
+                  return ExpenseTrackerApp(
+                      authUser: authUser, initialIndex: initialIndex);
+                },
                 settings: routeSettings);
           },
         ));
