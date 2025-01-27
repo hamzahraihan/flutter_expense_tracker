@@ -1,4 +1,3 @@
-import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
 import 'package:expense_tracker/features/auth/domain/value_object/email.dart';
 import 'package:expense_tracker/features/auth/domain/value_object/password.dart';
@@ -9,12 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // TODO create auth repository
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  final AuthRepositoryImpl _authRepository;
+  final SignInUseCase _signInUseCase;
 
-  late final SignInUseCase _signInUseCase =
-      SignInUseCase(_authRepository);
-
-  SignInBloc(this._authRepository) : super(const SignInState()) {
+  SignInBloc(this._signInUseCase) : super(const SignInState()) {
     on<SignInWithEmailAndPassword>(_onSignIn);
     on<EmailChanged>(_onFormEmailChanged);
     on<PasswordChanged>(_onFormPasswordChanged);
