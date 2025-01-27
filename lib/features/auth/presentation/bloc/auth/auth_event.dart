@@ -9,7 +9,7 @@ sealed class AuthEvent extends Equatable {
 }
 
 final class Authenticated extends AuthEvent {
-  final AuthEntities user;
+  final AuthEntities? user;
   const Authenticated(this.user);
 
   @override
