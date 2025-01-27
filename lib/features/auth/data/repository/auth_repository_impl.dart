@@ -8,7 +8,7 @@ class AuthRepositoryImpl extends AuthRepository {
   AuthRepositoryImpl(this._authApiService);
 
   @override
-  Stream<AuthEntities> get authUser {
+  Stream<AuthEntities?> get authUser {
     return _authApiService.user.map((userModel) => userModel == null
         ? AuthEntities.empty
         : userModel.toEntity());
