@@ -1,7 +1,6 @@
 import 'package:expense_tracker/features/auth/data/model/auth_model.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
-
 class AuthApiService {
   AuthApiService({firebase_auth.FirebaseAuth? firebaseAuth})
       : _firebaseAuth =
