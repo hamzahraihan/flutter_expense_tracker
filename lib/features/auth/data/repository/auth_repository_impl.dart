@@ -37,6 +37,15 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
+  Future<void> signInWithGoogle() async {
+    try {
+      return await _authApiService.signInWithGoogle();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
   Future<void> signOut() async {
     try {
       await _authApiService.signOut();
