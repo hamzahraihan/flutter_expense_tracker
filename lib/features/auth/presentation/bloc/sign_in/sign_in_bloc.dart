@@ -1,4 +1,5 @@
-import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
+import 'package:expense_tracker/features/auth/domain/usecase/sign_in_credential.dart';
+import 'package:expense_tracker/features/auth/domain/usecase/sign_in_google.dart';
 import 'package:expense_tracker/features/auth/domain/value_object/email.dart';
 import 'package:expense_tracker/features/auth/domain/value_object/password.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_event.dart';
@@ -8,10 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // TODO create auth repository
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  final SignInUseCase _signInUseCase;
+  final SignInWithCredentialUseCase _signInWithCredentialUseCase;
+  final SignInWithGoogleUseCase _signInWithGoogleUseCase;
 
-  SignInBloc(this._signInUseCase) : super(const SignInState()) {
-    on<SignInWithEmailAndPassword>(_onSignIn);
+  SignInBloc(this._signInWithCredentialUseCase,
+      this._signInWithGoogleUseCase)
+      : super(const SignInState()) {
+    on<SignInWithEmailAndPassword>(_onSignInWithCredential);
+    on<SignInWithGoogle>(_onSignInWithGoogle);
     on<EmailChanged>(_onFormEmailChanged);
     on<PasswordChanged>(_onFormPasswordChanged);
   }
@@ -39,7 +44,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     }
   }
 
-  void _onSignIn(SignInWithEmailAndPassword event,
+  void _onSignInWithCredential(SignInWithEmailAndPassword event,
       Emitter<SignInState> emit) async {
     if (!(state.emailStatus == EmailStatus.valid) ||
         !(state.passwordStatus == PasswordStatus.valid)) {
@@ -51,12 +56,23 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     emit(state.copyWith(formStatus: FormStatus.submissionInProgress));
 
     try {
-      await _signInUseCase.execute(SignInParams(
+      await _signInWithCredentialUseCase.execute(SignInParams(
           email: state.email!, password: state.password!));
 
       emit(state.copyWith(formStatus: FormStatus.submissionSuccess));
     } catch (e) {
       emit(state.copyWith(formStatus: FormStatus.submissionFailure));
+    }
+  }
+
+  void _onSignInWithGoogle(
+      SignInWithGoogle event, Emitter<SignInState> emit) async {
+    emit(state.copyWith(formStatus: FormStatus.submissionInProgress));
+    try {
+      await _signInWithGoogleUseCase.execute();
+      emit(state.copyWith(formStatus: FormStatus.submissionSuccess));
+    } catch (e) {
+      emit(state.copyWith(formStatus: FormStatus.invalid));
     }
   }
 }
