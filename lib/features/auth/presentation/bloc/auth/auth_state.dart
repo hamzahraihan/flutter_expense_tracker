@@ -11,23 +11,20 @@ extension AuthStatusX on AuthStatus {
 }
 
 class AuthState extends Equatable {
-  final AuthEntities? user;
-  final String? message;
-  final AuthStatus? authStatus;
+  const AuthState({AuthEntities user = AuthEntities.empty})
+      : this._(
+          authStatus: user == AuthEntities.empty
+              ? AuthStatus.unauthenticated
+              : AuthStatus.authenticated,
+          user: user,
+        );
 
-  const AuthState(
-      {this.user,
-      this.message,
-      this.authStatus = AuthStatus.unauthenticated});
+  const AuthState._(
+      {this.user = AuthEntities.empty, required this.authStatus});
 
-  AuthState copyWith(
-      {AuthEntities? user, String? message, AuthStatus? authStatus}) {
-    return AuthState(
-        user: user ?? this.user,
-        message: message ?? this.message,
-        authStatus: authStatus ?? this.authStatus);
-  }
+  final AuthEntities user;
+  final AuthStatus authStatus;
 
   @override
-  List<Object?> get props => [user, message, authStatus];
+  List<Object?> get props => [user, authStatus];
 }
