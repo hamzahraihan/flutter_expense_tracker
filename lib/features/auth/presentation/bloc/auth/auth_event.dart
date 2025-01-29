@@ -20,14 +20,6 @@ final class Unauthenticated extends AuthEvent {
   const Unauthenticated();
 }
 
-final class AuthLoading extends AuthEvent {
-  const AuthLoading();
-}
-
-final class AuthError extends AuthEvent {
-  final String message;
-  const AuthError(this.message);
-
-  @override
-  List<Object?> get props => [message];
+final class SignOutPressed extends AuthEvent {
+  const SignOutPressed();
 }
