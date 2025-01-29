@@ -1,3 +1,5 @@
+import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:expense_tracker/features/expense/domain/entity/transaction_entities.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
@@ -43,41 +45,46 @@ class _HomeScreenState extends State<HomeScreen> {
         case TransactionStatus.loading:
           return const Loading();
         case TransactionStatus.success:
-          return _buildTransactions(state);
+          return _buildTransactions(context, state);
         default:
           return const Center(child: Text('Welcome to Transactions'));
       }
     });
   }
 
-  final AppBar _appBar = AppBar(
-    surfaceTintColor: Colors.black45,
-    scrolledUnderElevation: 4.0,
-    forceMaterialTransparency: true,
-    centerTitle: true,
-    title: Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey, width: 0.5),
-        borderRadius: BorderRadius.circular(30.0),
+  AppBar _appBar(BuildContext context) {
+    return AppBar(
+      surfaceTintColor: Colors.black45,
+      scrolledUnderElevation: 4.0,
+      forceMaterialTransparency: true,
+      centerTitle: true,
+      title: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey, width: 0.5),
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child:
+            const Text('Expense', style: TextStyle(fontSize: 14.0)),
       ),
-      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: const Text('Expense', style: TextStyle(fontSize: 14.0)),
-    ),
-    leading: IconButton(
-        onPressed: () {},
-        icon: const Icon(
-          Icons.menu,
-        )),
-    actions: [
-      IconButton(
-          onPressed: () {},
+      leading: IconButton(
+          onPressed: () {
+            context.read<AuthBloc>().add(const SignOutPressed());
+          },
           icon: const Icon(
-            Icons.notifications,
-          ))
-    ],
-  );
+            Icons.logout,
+          )),
+      actions: [
+        IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.notifications,
+            ))
+      ],
+    );
+  }
 
-  _buildTransactions(state) {
+  _buildTransactions(BuildContext context, state) {
     // filteredThisWeekExpenses will filter weekly transaction and can be only get expense transaction
     Iterable<TransactionsModel> filteredThisWeekExpenses(
         ExpenseType expenseType) {
@@ -103,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
+      appBar: _appBar(context),
       body: RefreshIndicator(
         onRefresh: () async {
           context
@@ -115,7 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _appBar,
               const SizedBox(height: 16.0),
               const Center(
                 child: Text('Account Balances'),
