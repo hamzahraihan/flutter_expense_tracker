@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:expense_tracker/features/auth/data/data_source/auth_api_service.dart';
 import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
 import 'package:expense_tracker/features/auth/domain/usecase/sign_in_credential.dart';
 import 'package:expense_tracker/features/auth/domain/usecase/sign_in_google.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/screens/sign_in_screen.dart';
@@ -18,6 +21,7 @@ import 'package:expense_tracker/features/expense/presentation/screens/account/ac
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/upload/add_expense_screen.dart';
 import 'package:expense_tracker/firebase_options.dart';
+import 'package:expense_tracker/widgets/loading.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,7 +76,7 @@ class MyApp extends StatelessWidget {
 
   const MyApp(
       {super.key,
-      this.authUser,
+      required this.authUser,
       required this.authRepositoryImpl,
       required this.getTransactionsUseCase,
       required this.signInWithCredentialUseCase,
@@ -84,7 +88,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-              create: (context) => AuthBloc(authRepositoryImpl)),
+              create: (context) => AuthBloc(authRepositoryImpl)
+                ..add(Authenticated(authUser))),
           BlocProvider(
               create: (context) => SignInBloc(
                   signInWithCredentialUseCase,
@@ -117,38 +122,36 @@ class MyApp extends StatelessWidget {
                 builder: (BuildContext context) {
                   return BlocBuilder<AuthBloc, AuthState>(builder:
                       (BuildContext context, AuthState state) {
-                    if (state.authStatus!.isLoading) {
-                      return const Scaffold(
-                        body: Center(
-                            child: CircularProgressIndicator()),
-                      );
-                    }
-                    if (state.authStatus!.isUnauthenticated) {
-                      return const SignInScreen();
-                    }
-                    if (state.authStatus!.isAuthenticated) {
-                      int initialIndex = 0;
-                      switch (routeSettings.name) {
-                        case TransactionsScreen.routeName:
-                          initialIndex = 1;
-                          break;
-                        case AddExpenseScreen.routeName:
-                          initialIndex = 2;
-                          break;
-                        case AccountScreen.routeName:
-                          initialIndex = 3;
-                          break;
-                        default:
-                          initialIndex = 1;
-                          break;
-                      }
+                    log("${state.authStatus}");
+                    log("${state.user}");
+                    switch (state.authStatus) {
+                      case AuthStatus.loading:
+                        return const Loading();
+                      case AuthStatus.unauthenticated:
+                        return const SignInScreen();
+                      case AuthStatus.authenticated:
+                        int initialIndex = 0;
+                        switch (routeSettings.name) {
+                          case TransactionsScreen.routeName:
+                            initialIndex = 1;
+                            break;
+                          case AddExpenseScreen.routeName:
+                            initialIndex = 2;
+                            break;
+                          case AccountScreen.routeName:
+                            initialIndex = 3;
+                            break;
+                          default:
+                            initialIndex = 1;
+                            break;
+                        }
 
-                      return ExpenseTrackerApp(
-                          authUser: authUser,
-                          initialIndex: initialIndex);
+                        return ExpenseTrackerApp(
+                            authUser: authUser,
+                            initialIndex: initialIndex);
+                      default:
+                        return const SignInScreen();
                     }
-
-                    return const SignInScreen();
                   });
                 },
                 settings: routeSettings);
