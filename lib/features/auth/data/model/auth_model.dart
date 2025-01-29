@@ -3,7 +3,7 @@ import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
 
 class AuthModel extends AuthEntities {
   const AuthModel({
-    required super.uuid,
+    required super.uid,
     required super.email,
     super.name,
     super.imageUrl,
@@ -12,7 +12,7 @@ class AuthModel extends AuthEntities {
   factory AuthModel.fromFirebaseAuthUser(
       firebase_auth.User firebaseUser) {
     return AuthModel(
-        uuid: firebaseUser.uid,
+        uid: firebaseUser.uid,
         email: firebaseUser.email ?? '',
         name: firebaseUser.displayName,
         imageUrl: firebaseUser.photoURL);
@@ -20,12 +20,12 @@ class AuthModel extends AuthEntities {
 
   AuthModel toEntity() {
     return AuthModel(
-        uuid: uuid, email: email, name: name, imageUrl: imageUrl);
+        uid: uid, email: email, name: name, imageUrl: imageUrl);
   }
 
   Map<String, dynamic> toFirestore() {
     return {
-      'uuid': uuid,
+      'uid': uid,
       'email': email,
       'name': name,
       'imageUrl': imageUrl
