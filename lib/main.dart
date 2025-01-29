@@ -10,6 +10,7 @@ import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_event.
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:expense_tracker/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:expense_tracker/features/expense/app.dart';
 import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
@@ -128,7 +129,12 @@ class MyApp extends StatelessWidget {
                       case AuthStatus.loading:
                         return const Loading();
                       case AuthStatus.unauthenticated:
-                        return const SignInScreen();
+                        switch (routeSettings.name) {
+                          case SignUpScreen.routeName:
+                            return const SignUpScreen();
+                          default:
+                            return const SignInScreen();
+                        }
                       case AuthStatus.authenticated:
                         int initialIndex = 0;
                         switch (routeSettings.name) {
