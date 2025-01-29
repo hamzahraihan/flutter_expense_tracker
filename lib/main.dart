@@ -142,7 +142,7 @@ class MyApp extends StatelessWidget {
                             initialIndex = 3;
                             break;
                           default:
-                            initialIndex = 1;
+                            initialIndex = 0;
                             break;
                         }
 
