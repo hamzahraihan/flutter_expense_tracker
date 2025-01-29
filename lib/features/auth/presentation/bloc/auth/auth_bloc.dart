@@ -9,6 +9,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc(this._authRepositoryImpl) : super(AuthState()) {
     on<Authenticated>(_onAuthenticateRequest);
+    on<SignOutPressed>(_onSignOutPressed);
   }
 
   Future<void> _onAuthenticateRequest(
@@ -16,5 +17,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return emit.onEach<AuthEntities>(_authRepositoryImpl.authUser,
         onData: (user) => emit(AuthState(user: user)),
         onError: addError);
+  }
+
+  Future<void> _onSignOutPressed(
+      SignOutPressed event, Emitter<AuthState> emit) async {
+    await _authRepositoryImpl.signOut();
   }
 }
