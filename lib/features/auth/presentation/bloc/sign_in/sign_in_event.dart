@@ -8,7 +8,7 @@ sealed class SignInEvent extends Equatable {
 }
 
 final class EmailChanged extends SignInEvent {
-  final String email;
+  final String? email;
   const EmailChanged(this.email);
 
   @override
