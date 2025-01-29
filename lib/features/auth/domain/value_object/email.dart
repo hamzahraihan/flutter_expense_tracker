@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:built_value/built_value.dart';
 
 part 'email.g.dart';
@@ -16,7 +18,7 @@ abstract class Email implements Built<Email, EmailBuilder> {
     );
 
     if (!emailRegExp.hasMatch(value)) {
-      throw ArgumentError('Invalid email format');
+      log('Invalid email format');
     }
   }
   factory Email([void Function(EmailBuilder) updates]) = _$Email;
