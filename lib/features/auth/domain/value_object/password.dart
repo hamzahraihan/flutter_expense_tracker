@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:built_value/built_value.dart';
 
 part 'password.g.dart';
@@ -7,7 +9,7 @@ abstract class Password implements Built<Password, PasswordBuilder> {
 
   Password._() {
     if (value.length < 8) {
-      throw ArgumentError('Password must be at least 8 characters');
+      log('Password must be at least 8 characters');
     }
 
     final RegExp passwordRegExp = RegExp(
