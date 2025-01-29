@@ -12,7 +12,20 @@
           "package_name": "com.haraif.expense_tracker"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1089112343158-nqvbsh3cm3eqanhlmkplr8tu3t2flqll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.haraif.expense_tracker",
+            "certificate_hash": "80f4694ea80e34c4b88be02c235f0ea2164c6055"
+          }
+        },
+        {
+          "client_id": "1089112343158-1s75r0t7ba91vhk070luk1lji3d6p55h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC54op9tmyROztz8dIAuzFeF32bmpJYk3U"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1089112343158-1s75r0t7ba91vhk070luk1lji3d6p55h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
