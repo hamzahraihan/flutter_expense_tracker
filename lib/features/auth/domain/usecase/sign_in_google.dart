@@ -5,10 +5,6 @@ class SignInWithGoogleUseCase {
   SignInWithGoogleUseCase(this._authRepository);
 
   Future<void> execute() async {
-    try {
-      return await _authRepository.signInWithGoogle();
-    } catch (e) {
-      throw Exception(e);
-    }
+    return await _authRepository.signInWithGoogle();
   }
 }
