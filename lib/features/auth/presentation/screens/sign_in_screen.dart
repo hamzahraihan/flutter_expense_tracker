@@ -154,10 +154,12 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               ElevatedButton.icon(
                 key: const Key('loginForm_googleLogin_raisedButton'),
-                label: const Text(
-                  'SIGN IN WITH GOOGLE',
-                  style: TextStyle(color: Colors.white),
-                ),
+                label: signInState.formStatus.isLoading
+                    ? const CircularProgressIndicator()
+                    : const Text(
+                        'SIGN IN WITH GOOGLE',
+                        style: TextStyle(color: Colors.white),
+                      ),
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -166,9 +168,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     minimumSize: const Size(double.infinity, 50)),
                 icon: const Icon(FontAwesomeIcons.google,
                     color: Colors.white),
-                onPressed: () => context
-                    .read<SignInBloc>()
-                    .add(const SignInWithGoogle()),
+                onPressed: signInState.formStatus.isLoading
+                    ? null
+                    : () => context
+                        .read<SignInBloc>()
+                        .add(const SignInWithGoogle()),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
