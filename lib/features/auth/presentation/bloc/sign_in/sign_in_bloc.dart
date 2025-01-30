@@ -7,7 +7,6 @@ import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_
 import 'package:expense_tracker/features/auth/presentation/bloc/status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// TODO create auth repository
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final SignInWithCredentialUseCase _signInWithCredentialUseCase;
   final SignInWithGoogleUseCase _signInWithGoogleUseCase;
