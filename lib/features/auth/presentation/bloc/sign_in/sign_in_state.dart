@@ -5,7 +5,8 @@ import 'package:expense_tracker/features/auth/presentation/bloc/status.dart';
 
 extension FormStatusX on FormStatus {
   bool get initial => this == FormStatus.initial;
-  bool get isLoading => this == FormStatus.submissionInProgress;
+  bool get submissionInProgress =>
+      this == FormStatus.submissionInProgress;
   bool get isUnauthenticated => this == FormStatus.submissionFailure;
   bool get isAuthenticated => this == FormStatus.submissionSuccess;
   bool get isFailure => this == FormStatus.submissionFailure;
