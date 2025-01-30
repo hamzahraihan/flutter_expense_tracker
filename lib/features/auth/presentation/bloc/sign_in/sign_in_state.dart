@@ -3,6 +3,14 @@ import 'package:expense_tracker/features/auth/domain/value_object/email.dart';
 import 'package:expense_tracker/features/auth/domain/value_object/password.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/status.dart';
 
+extension FormStatusX on FormStatus {
+  bool get initial => this == FormStatus.initial;
+  bool get isLoading => this == FormStatus.submissionInProgress;
+  bool get isUnauthenticated => this == FormStatus.submissionFailure;
+  bool get isAuthenticated => this == FormStatus.submissionSuccess;
+  bool get isFailure => this == FormStatus.submissionFailure;
+}
+
 class SignInState extends Equatable {
   final Email? email;
   final Password? password;
