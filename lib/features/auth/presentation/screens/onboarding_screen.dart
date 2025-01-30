@@ -58,11 +58,8 @@ class OnboardingScreen extends StatelessWidget {
                             minimumSize:
                                 const Size(double.infinity, 50)),
                         onPressed: () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SignInScreen()))
+                              Navigator.pushNamed(
+                                  context, SignInScreen.routeName)
                             },
                         child: const Text(
                           'SIGN IN',
