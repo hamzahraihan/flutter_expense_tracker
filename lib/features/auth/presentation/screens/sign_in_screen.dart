@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
-import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_event.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_state.dart';
@@ -30,24 +28,31 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (BuildContext context, AuthState state) {
-        if (state.authStatus.isFailure) {
+    return BlocConsumer<SignInBloc, SignInState>(
+      listener: (BuildContext context, SignInState state) {
+        if (state.formStatus.invalid) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(const SnackBar(
-                content: Text('Authentication failure')));
+                content:
+                    Text('Invalid form: please fill in all fields')));
         }
+        if (state.formStatus.submissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(const SnackBar(
+                content: Text(
+                    'There was an error with the sign in process. Try again.')));
+        }
+      },
+      builder: (BuildContext context, SignInState state) {
         return _buildBody(context, state, debounce);
       },
     );
   }
 
   Scaffold _buildBody(
-      BuildContext context, AuthState state, debounce) {
-    SignInState signInState =
-        context.select((SignInBloc bloc) => bloc.state);
-
+      BuildContext context, SignInState state, debounce) {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -82,10 +87,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 },
                 decoration: InputDecoration(
                   hintText: 'Email',
-                  errorText:
-                      signInState.emailStatus == EmailStatus.invalid
-                          ? 'invalid email'
-                          : null,
+                  errorText: state.emailStatus == EmailStatus.invalid
+                      ? 'invalid email'
+                      : null,
                   border: OutlineInputBorder(
                       borderSide:
                           const BorderSide(color: Colors.black26),
@@ -112,10 +116,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 },
                 decoration: InputDecoration(
                   hintText: 'Password',
-                  errorText: signInState.passwordStatus ==
-                          PasswordStatus.invalid
-                      ? 'invalid password'
-                      : null,
+                  errorText:
+                      state.passwordStatus == PasswordStatus.invalid
+                          ? 'invalid password'
+                          : null,
                   border: OutlineInputBorder(
                       borderSide:
                           const BorderSide(color: Colors.black26),
@@ -154,7 +158,7 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               ElevatedButton.icon(
                 key: const Key('loginForm_googleLogin_raisedButton'),
-                label: signInState.formStatus.submissionInProgress
+                label: state.formStatus.submissionInProgress
                     ? const CircularProgressIndicator()
                     : const Text(
                         'SIGN IN WITH GOOGLE',
@@ -168,7 +172,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     minimumSize: const Size(double.infinity, 50)),
                 icon: const Icon(FontAwesomeIcons.google,
                     color: Colors.white),
-                onPressed: signInState.formStatus.submissionInProgress
+                onPressed: state.formStatus.submissionInProgress
                     ? null
                     : () => context
                         .read<SignInBloc>()
