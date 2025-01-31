@@ -8,7 +8,7 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueAccent.shade400,
+      backgroundColor: Colors.blueAccent,
       body: Container(
           margin: const EdgeInsets.all(16),
           child: Column(
@@ -19,7 +19,7 @@ class OnboardingScreen extends StatelessWidget {
               const Icon(
                 FontAwesomeIcons.wallet,
                 size: 500,
-                color: Colors.black87,
+                color: Colors.black,
               ),
               const SizedBox(
                 child: Column(
@@ -57,10 +57,9 @@ class OnboardingScreen extends StatelessWidget {
                             backgroundColor: Colors.white,
                             minimumSize:
                                 const Size(double.infinity, 50)),
-                        onPressed: () => {
-                              Navigator.pushNamed(
-                                  context, SignInScreen.routeName)
-                            },
+                        onPressed: () => Navigator.of(context)
+                            .pushReplacementNamed(
+                                SignInScreen.routeName),
                         child: const Text(
                           'SIGN IN',
                           style: TextStyle(
