@@ -5,11 +5,11 @@ import 'package:expense_tracker/features/auth/presentation/bloc/status.dart';
 
 extension FormStatusX on FormStatus {
   bool get initial => this == FormStatus.initial;
+  bool get invalid => this == FormStatus.invalid;
   bool get submissionInProgress =>
       this == FormStatus.submissionInProgress;
-  bool get isUnauthenticated => this == FormStatus.submissionFailure;
-  bool get isAuthenticated => this == FormStatus.submissionSuccess;
-  bool get isFailure => this == FormStatus.submissionFailure;
+  bool get submissionSuccess => this == FormStatus.submissionSuccess;
+  bool get submissionFailure => this == FormStatus.submissionFailure;
 }
 
 class SignInState extends Equatable {
