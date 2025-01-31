@@ -27,6 +27,12 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    super.deactivate();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<TransactionFirebaseBloc,
             TransactionFirebaseState>(
