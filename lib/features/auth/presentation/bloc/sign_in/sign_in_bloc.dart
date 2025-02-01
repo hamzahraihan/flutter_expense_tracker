@@ -54,7 +54,9 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
     try {
       await _signInUseCase.withCredential(SignInParams(
-          email: state.email!, password: state.password!));
+          name: state.name!,
+          email: state.email!,
+          password: state.password!));
 
       emit(state.copyWith(formStatus: FormStatus.submissionSuccess));
     } catch (e) {
