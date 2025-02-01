@@ -10,7 +10,9 @@ abstract class AuthRepository {
   Stream<AuthEntities?> get authUser;
 
   Future<AuthEntities> signUpWithEmailAndPassword(
-      {required String email, required String password});
+      {required String name,
+      required String email,
+      required String password});
 
   Future<AuthEntities> signInWithEmailAndPassword(
       {required String email, required String password});
