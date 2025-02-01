@@ -3,12 +3,13 @@ import 'dart:developer';
 import 'package:expense_tracker/features/auth/data/data_source/auth_api_service.dart';
 import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
-import 'package:expense_tracker/features/auth/domain/usecase/sign_in_credential.dart';
-import 'package:expense_tracker/features/auth/domain/usecase/sign_in_google.dart';
+import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
+import 'package:expense_tracker/features/auth/domain/usecase/sign_up.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_bloc.dart';
+import 'package:expense_tracker/features/auth/presentation/bloc/sign_up/sign_up_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/screens/onboarding_screen.dart';
 import 'package:expense_tracker/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:expense_tracker/features/auth/presentation/screens/sign_up_screen.dart';
@@ -49,19 +50,19 @@ void main() async {
   final AuthRepositoryImpl authRepositoryImpl =
       AuthRepositoryImpl(authApiService);
 
-  final SignInWithCredentialUseCase signInWithCredentialUseCase =
-      SignInWithCredentialUseCase(authRepositoryImpl);
+  final SignInUseCase signInUseCase =
+      SignInUseCase(authRepositoryImpl);
 
-  final SignInWithGoogleUseCase signInWithGoogle =
-      SignInWithGoogleUseCase(authRepositoryImpl);
+  final SignUpUseCase signUpUseCase =
+      SignUpUseCase(authRepositoryImpl);
 
   final GetTransactionsUseCase getTransactionsUseCase =
       GetTransactionsUseCase(transactionRepositoryImpl);
 
   runApp(MyApp(
     authRepositoryImpl: authRepositoryImpl,
-    signInWithCredentialUseCase: signInWithCredentialUseCase,
-    signInWithGoogleUseCase: signInWithGoogle,
+    signInUseCase: signInUseCase,
+    signUpUseCase: signUpUseCase,
     getTransactionsUseCase: getTransactionsUseCase,
     transactionRepositoryImpl: transactionRepositoryImpl,
     authUser: await authRepositoryImpl.authUser.first,
@@ -70,8 +71,9 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final AuthRepositoryImpl authRepositoryImpl;
-  final SignInWithCredentialUseCase signInWithCredentialUseCase;
-  final SignInWithGoogleUseCase signInWithGoogleUseCase;
+  final SignInUseCase signInUseCase;
+
+  final SignUpUseCase signUpUseCase;
   final GetTransactionsUseCase getTransactionsUseCase;
   final TransactionRepositoryImpl transactionRepositoryImpl;
   final AuthEntities? authUser;
@@ -81,8 +83,8 @@ class MyApp extends StatelessWidget {
       required this.authUser,
       required this.authRepositoryImpl,
       required this.getTransactionsUseCase,
-      required this.signInWithCredentialUseCase,
-      required this.signInWithGoogleUseCase,
+      required this.signInUseCase,
+      required this.signUpUseCase,
       required this.transactionRepositoryImpl});
 
   @override
@@ -94,8 +96,12 @@ class MyApp extends StatelessWidget {
                 ..add(Authenticated(authUser))),
           BlocProvider(
               create: (context) => SignInBloc(
-                  signInWithCredentialUseCase,
-                  signInWithGoogleUseCase)),
+                    signInUseCase,
+                  )),
+          BlocProvider(
+              create: (context) => SignUpBloc(
+                    signUpUseCase,
+                  )),
           BlocProvider(
             create: (context) =>
                 TransactionFirebaseBloc(transactionRepositoryImpl)
