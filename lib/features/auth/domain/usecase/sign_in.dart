@@ -22,8 +22,12 @@ class SignInUseCase {
 }
 
 class SignInParams {
+  final String name;
   final Email email;
   final Password password;
 
-  SignInParams({required this.email, required this.password});
+  SignInParams(
+      {required this.name,
+      required this.email,
+      required this.password});
 }
