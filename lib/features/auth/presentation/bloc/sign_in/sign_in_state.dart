@@ -13,6 +13,7 @@ extension FormStatusX on FormStatus {
 }
 
 class SignInState extends Equatable {
+  final String? name;
   final Email? email;
   final Password? password;
   final EmailStatus emailStatus;
@@ -20,6 +21,7 @@ class SignInState extends Equatable {
   final PasswordStatus passwordStatus;
 
   const SignInState({
+    this.name,
     this.email,
     this.password,
     this.emailStatus = EmailStatus.unknown,
@@ -28,6 +30,7 @@ class SignInState extends Equatable {
   });
 
   SignInState copyWith({
+    String? name,
     Email? email,
     Password? password,
     EmailStatus? emailStatus,
@@ -35,6 +38,7 @@ class SignInState extends Equatable {
     FormStatus? formStatus,
   }) {
     return SignInState(
+        name: name ?? this.name,
         email: email ?? this.email,
         password: password ?? this.password,
         emailStatus: emailStatus ?? this.emailStatus,
@@ -43,6 +47,12 @@ class SignInState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [email, password, emailStatus, passwordStatus, formStatus];
+  List<Object?> get props => [
+        name,
+        email,
+        password,
+        emailStatus,
+        passwordStatus,
+        formStatus
+      ];
 }
