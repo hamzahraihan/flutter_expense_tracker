@@ -16,10 +16,12 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<AuthEntities> signUpWithEmailAndPassword(
-      {required String email, required String password}) async {
+      {required String name,
+      required String email,
+      required String password}) async {
     try {
       return await _authApiService.signUpWithEmailAndPassword(
-          email: email, password: password);
+          name: name, email: email, password: password);
     } catch (e) {
       throw Exception(e);
     }
