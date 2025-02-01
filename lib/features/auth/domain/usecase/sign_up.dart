@@ -7,10 +7,18 @@ class SignUpUseCase {
   final AuthRepository _authRepository;
   SignUpUseCase(this._authRepository);
 
-  Future<AuthEntities> execute(SignUpParams params) async {
+  Future<AuthEntities> withCredential(SignUpParams params) async {
     try {
       return await _authRepository.signUpWithEmailAndPassword(
           email: params.email.value, password: params.password.value);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> withGoogle() async {
+    try {
+      return await _authRepository.signInWithGoogle();
     } catch (e) {
       throw Exception(e);
     }
