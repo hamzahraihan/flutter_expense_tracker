@@ -4,6 +4,7 @@ import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_event.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_state.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/status.dart';
+import 'package:expense_tracker/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -189,7 +190,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                   TextButton(
-                      onPressed: () => {},
+                      onPressed: () => Navigator.of(context)
+                        ..pushNamed(SignUpScreen.routeName),
                       child: const Text(
                         'Sign Up',
                         style: TextStyle(
