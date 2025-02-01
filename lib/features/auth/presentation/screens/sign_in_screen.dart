@@ -35,15 +35,14 @@ class _SignInScreenState extends State<SignInScreen> {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(const SnackBar(
-                content:
-                    Text('Invalid form: please fill in all fields')));
+                content: Text(
+                    'Invalid form: please fill in or correct the invalid all fields')));
         }
         if (state.formStatus.submissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(const SnackBar(
-                content: Text(
-                    'There was an error with the sign in process. Try again.')));
+                content: Text('invalid email or password!')));
         }
       },
       builder: (BuildContext context, SignInState state) {
@@ -82,7 +81,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter description';
+                    return 'Please enter a valid password';
                   }
                   return null;
                 },
