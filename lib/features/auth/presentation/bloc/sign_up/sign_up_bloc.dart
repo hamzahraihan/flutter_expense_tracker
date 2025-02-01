@@ -14,8 +14,23 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   ) : super(const SignUpState()) {
     on<SignUpWithEmailAndPassword>(_onSignUpWithCredential);
     on<SignUpWithGoogle>(_onSignUpWithGoogle);
+    on<UsernameChanged>(_onFormUsernameChanged);
     on<EmailChanged>(_onFormEmailChanged);
     on<PasswordChanged>(_onFormPasswordChanged);
+  }
+
+  void _onFormUsernameChanged(
+      UsernameChanged event, Emitter<SignUpState> emit) {
+    try {
+      if (event.name!.length < 8) {
+        emit(state.copyWith(usernameStatus: UsernameStatus.invalid));
+        return;
+      }
+      emit(state.copyWith(
+          name: event.name, usernameStatus: UsernameStatus.valid));
+    } catch (e) {
+      emit(state.copyWith(usernameStatus: UsernameStatus.invalid));
+    }
   }
 
   void _onFormEmailChanged(
@@ -44,7 +59,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   void _onSignUpWithCredential(SignUpWithEmailAndPassword event,
       Emitter<SignUpState> emit) async {
     if (!(state.emailStatus == EmailStatus.valid) ||
-        !(state.passwordStatus == PasswordStatus.valid)) {
+        !(state.passwordStatus == PasswordStatus.valid) ||
+        !(state.usernameStatus == UsernameStatus.valid)) {
       emit(state.copyWith(formStatus: FormStatus.invalid));
       emit(state.copyWith(formStatus: FormStatus.initial));
       return;
@@ -54,7 +70,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
     try {
       await _signUpUseCase.withCredential(SignUpParams(
-          email: state.email!, password: state.password!));
+          name: state.name!,
+          email: state.email!,
+          password: state.password!));
 
       emit(state.copyWith(formStatus: FormStatus.submissionSuccess));
     } catch (e) {
