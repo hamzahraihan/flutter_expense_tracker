@@ -34,15 +34,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(const SnackBar(
-              content:
-                  Text('Invalid form: please fill in all fields')));
-      }
-      if (state.formStatus.submissionFailure) {
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(const SnackBar(
               content: Text(
-                  'There was an error with the sign up process. Try again.')));
+                  'Invalid form: please fill in or correct the invalid all fields')));
       }
     }, builder: (context, state) {
       return _buildBody(context, state, debounce);
@@ -74,12 +67,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Timer(const Duration(milliseconds: 500), () {
                     context
                         .read<SignUpBloc>()
+                        .add(UsernameChanged(value));
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  if (value.length < 8) {
+                    return 'Username must be at least 8 characters';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  hintText: 'Name',
+                  errorText:
+                      state.usernameStatus == UsernameStatus.invalid
+                          ? 'Username must be at least 8 characters'
+                          : null,
+                  border: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.black26),
+                      borderRadius: BorderRadius.circular(16)),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.black26),
+                      borderRadius: BorderRadius.circular(16)),
+                ),
+              ),
+              TextFormField(
+                onChanged: (value) {
+                  if (debounce?.isActive ?? false) debounce?.cancel();
+                  debounce =
+                      Timer(const Duration(milliseconds: 500), () {
+                    context
+                        .read<SignUpBloc>()
                         .add(EmailChanged(value));
                   });
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter description';
+                    return 'Please enter a valid password';
                   }
                   return null;
                 },
@@ -99,7 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               TextFormField(
-                key: const Key('signIn_passwordInput_textField'),
+                key: const Key('signUp_passwordInput_textField'),
                 obscureText: true,
                 onChanged: (value) {
                   context
@@ -129,9 +157,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               ElevatedButton.icon(
-                key: const Key('loginWithCredential'),
+                key: const Key('signUpWithCredential'),
                 label: const Text(
-                  'SIGN IN',
+                  'SIGN UP',
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
@@ -155,7 +183,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     fontWeight: FontWeight.bold),
               ),
               ElevatedButton.icon(
-                key: const Key('loginForm_googleLogin_raisedButton'),
+                key: const Key('signUp_googleSignup_raisedButton'),
                 label: state.formStatus.submissionInProgress
                     ? const CircularProgressIndicator()
                     : const Text(
