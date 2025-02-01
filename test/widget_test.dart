@@ -7,8 +7,8 @@
 
 import 'package:expense_tracker/features/auth/data/data_source/auth_api_service.dart';
 import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
-import 'package:expense_tracker/features/auth/domain/usecase/sign_in_credential.dart';
-import 'package:expense_tracker/features/auth/domain/usecase/sign_in_google.dart';
+import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
+import 'package:expense_tracker/features/auth/domain/usecase/sign_up.dart';
 import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/get_transactions.dart';
@@ -28,11 +28,11 @@ void main() {
   final AuthRepositoryImpl authRepositoryImpl =
       AuthRepositoryImpl(authApiService);
 
-  final SignInWithCredentialUseCase signInWithCredentialUseCase =
-      SignInWithCredentialUseCase(authRepositoryImpl);
+  final SignInUseCase signInUseCase =
+      SignInUseCase(authRepositoryImpl);
 
-  final SignInWithGoogleUseCase signInWithSignInWithGoogle =
-      SignInWithGoogleUseCase(authRepositoryImpl);
+  final SignUpUseCase signUpUseCase =
+      SignUpUseCase(authRepositoryImpl);
 
   final GetTransactionsUseCase getTransactionsUseCase =
       GetTransactionsUseCase(transactionRepositoryImpl);
@@ -43,8 +43,8 @@ void main() {
         authUser: await authRepositoryImpl.authUser.first,
         authRepositoryImpl: authRepositoryImpl,
         getTransactionsUseCase: getTransactionsUseCase,
-        signInWithCredentialUseCase: signInWithCredentialUseCase,
-        signInWithGoogleUseCase: signInWithSignInWithGoogle,
+        signInUseCase: signInUseCase,
+        signUpUseCase: signUpUseCase,
         transactionRepositoryImpl: transactionRepositoryImpl));
 
     // Verify that our counter starts at 0.
