@@ -7,6 +7,14 @@ sealed class SignUpEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+final class UsernameChanged extends SignUpEvent {
+  final String? name;
+  const UsernameChanged(this.name);
+
+  @override
+  List<Object?> get props => [name];
+}
+
 final class EmailChanged extends SignUpEvent {
   final String? email;
   const EmailChanged(this.email);
