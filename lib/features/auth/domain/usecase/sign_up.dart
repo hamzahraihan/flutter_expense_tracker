@@ -10,7 +10,9 @@ class SignUpUseCase {
   Future<AuthEntities> withCredential(SignUpParams params) async {
     try {
       return await _authRepository.signUpWithEmailAndPassword(
-          email: params.email.value, password: params.password.value);
+          name: params.name,
+          email: params.email.value,
+          password: params.password.value);
     } catch (e) {
       throw Exception(e);
     }
@@ -26,7 +28,11 @@ class SignUpUseCase {
 }
 
 class SignUpParams {
+  final String name;
   final Email email;
   final Password password;
-  SignUpParams({required this.email, required this.password});
+  SignUpParams(
+      {required this.name,
+      required this.email,
+      required this.password});
 }
