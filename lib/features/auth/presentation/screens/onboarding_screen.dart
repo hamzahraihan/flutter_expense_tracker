@@ -1,4 +1,5 @@
 import 'package:expense_tracker/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:expense_tracker/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -75,7 +76,9 @@ class OnboardingScreen extends StatelessWidget {
                             backgroundColor: Colors.blue.shade900,
                             minimumSize:
                                 const Size(double.infinity, 50)),
-                        onPressed: () => {},
+                        onPressed: () => Navigator.of(context)
+                            .pushReplacementNamed(
+                                SignUpScreen.routeName),
                         child: const Text(
                           'SIGN UP',
                           style: TextStyle(
