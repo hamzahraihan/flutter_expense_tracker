@@ -7,6 +7,8 @@ enum FormStatus {
   submissionFailure,
 }
 
+enum UsernameStatus { unknown, valid, invalid }
+
 enum EmailStatus { unknown, valid, invalid }
 
 enum PasswordStatus { unknown, valid, invalid }
