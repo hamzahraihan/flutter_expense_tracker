@@ -14,7 +14,7 @@ class AuthModel extends AuthEntities {
     return AuthModel(
         uid: firebaseUser.uid,
         email: firebaseUser.email ?? '',
-        name: firebaseUser.displayName,
+        name: firebaseUser.displayName ?? firebaseUser.name,
         imageUrl: firebaseUser.photoURL);
   }
 
@@ -31,4 +31,8 @@ class AuthModel extends AuthEntities {
       'imageUrl': imageUrl
     };
   }
+}
+
+extension on firebase_auth.User {
+  get name => null;
 }
