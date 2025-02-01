@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/features/auth/data/model/auth_model.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
@@ -13,6 +14,7 @@ class AuthApiService {
 
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  final FirebaseFirestore db = FirebaseFirestore.instance;
 
   /// Stream of [User] which will emit the current user when
   /// the authentication state changes.
@@ -26,16 +28,29 @@ class AuthApiService {
   }
 
   Future<AuthModel> signUpWithEmailAndPassword(
-      {required String email, required String password}) async {
+      {required String name,
+      required String email,
+      required String password}) async {
     try {
       firebase_auth.UserCredential credential =
           await _firebaseAuth.createUserWithEmailAndPassword(
               email: email, password: password);
 
+      AuthModel user = AuthModel(
+        uid: credential.user!.uid.toString(),
+        name: name,
+        email: credential.user!.email.toString(),
+      );
+
       if (credential.user == null) {
         throw Exception(
             'Sign up failed: The user is null after sign up.');
       }
+      await db
+          .collection('users')
+          .doc(credential.user!.uid)
+          .set(user.toFirestore());
+
       return AuthModel.fromFirebaseAuthUser(credential.user!);
     } catch (e) {
       throw Exception('An exception has occurred: $e');
