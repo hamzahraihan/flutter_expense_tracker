@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/features/auth/data/model/auth_model.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -69,8 +71,16 @@ class AuthApiService {
             'Sign in failed: The user is null after sign in.');
       }
       return AuthModel.fromFirebaseAuthUser(credential.user!);
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        throw Exception('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        throw Exception('Wrong password provided for that user.');
+      }
+      log(e.code);
+      throw Exception(e);
     } catch (e) {
-      throw Exception('An exception has occurred: $e');
+      throw Exception(e);
     }
   }
 
