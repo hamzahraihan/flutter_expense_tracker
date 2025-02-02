@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
 import 'package:expense_tracker/features/auth/domain/value_object/email.dart';
 import 'package:expense_tracker/features/auth/domain/value_object/password.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_event.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_in/sign_in_state.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/status.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
@@ -54,13 +57,31 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
     try {
       await _signInUseCase.withCredential(SignInParams(
-          name: state.name!,
-          email: state.email!,
-          password: state.password!));
+          email: state.email!, password: state.password!));
 
       emit(state.copyWith(formStatus: FormStatus.submissionSuccess));
-    } catch (e) {
-      emit(state.copyWith(formStatus: FormStatus.submissionFailure));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        emit(
+          state.copyWith(
+            errorType: ErrorStatus.userNotFound,
+            formStatus: FormStatus.submissionFailure,
+          ),
+        );
+      }
+      if (e.code == 'wrong-password') {
+        emit(
+          state.copyWith(
+            errorType: ErrorStatus.wrongPassword,
+            formStatus: FormStatus.submissionFailure,
+          ),
+        );
+      }
+      log(e.code);
+    } catch (_) {
+      emit(state.copyWith(
+        formStatus: FormStatus.submissionFailure,
+      ));
     }
   }
 
