@@ -12,6 +12,12 @@ extension FormStatusX on FormStatus {
   bool get submissionFailure => this == FormStatus.submissionFailure;
 }
 
+extension ErrorStatusX on ErrorStatus {
+  bool get initial => this == ErrorStatus.initial;
+  bool get wrongPassword => this == ErrorStatus.wrongPassword;
+  bool get userNotFound => this == ErrorStatus.userNotFound;
+}
+
 class SignInState extends Equatable {
   final String? name;
   final Email? email;
@@ -19,31 +25,33 @@ class SignInState extends Equatable {
   final EmailStatus emailStatus;
   final FormStatus formStatus;
   final PasswordStatus passwordStatus;
+  final ErrorStatus errorType;
 
-  const SignInState({
-    this.name,
-    this.email,
-    this.password,
-    this.emailStatus = EmailStatus.unknown,
-    this.passwordStatus = PasswordStatus.unknown,
-    this.formStatus = FormStatus.initial,
-  });
+  const SignInState(
+      {this.name,
+      this.email,
+      this.password,
+      this.emailStatus = EmailStatus.unknown,
+      this.passwordStatus = PasswordStatus.unknown,
+      this.formStatus = FormStatus.initial,
+      this.errorType = ErrorStatus.initial});
 
-  SignInState copyWith({
-    String? name,
-    Email? email,
-    Password? password,
-    EmailStatus? emailStatus,
-    PasswordStatus? passwordStatus,
-    FormStatus? formStatus,
-  }) {
+  SignInState copyWith(
+      {String? name,
+      Email? email,
+      Password? password,
+      EmailStatus? emailStatus,
+      PasswordStatus? passwordStatus,
+      FormStatus? formStatus,
+      ErrorStatus? errorType}) {
     return SignInState(
         name: name ?? this.name,
         email: email ?? this.email,
         password: password ?? this.password,
         emailStatus: emailStatus ?? this.emailStatus,
         passwordStatus: passwordStatus ?? this.passwordStatus,
-        formStatus: formStatus ?? this.formStatus);
+        formStatus: formStatus ?? this.formStatus,
+        errorType: errorType ?? this.errorType);
   }
 
   @override
@@ -53,6 +61,7 @@ class SignInState extends Equatable {
         password,
         emailStatus,
         passwordStatus,
-        formStatus
+        formStatus,
+        errorType
       ];
 }
