@@ -38,11 +38,21 @@ class _SignInScreenState extends State<SignInScreen> {
                 content: Text(
                     'Invalid form: please fill in or correct the invalid all fields')));
         }
-        if (state.formStatus.submissionFailure) {
+
+        // give an error notification if user failed to sign in
+        if (state.formStatus.submissionFailure &&
+            state.errorType.userNotFound) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(const SnackBar(
-                content: Text('invalid email or password!')));
+                content: Text('No user found with this email')));
+        }
+        if (state.formStatus.submissionFailure &&
+            state.errorType.wrongPassword) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+                const SnackBar(content: Text('Wrong password!')));
         }
       },
       builder: (BuildContext context, SignInState state) {
