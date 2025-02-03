@@ -31,6 +31,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<SignInBloc, SignInState>(
       listener: (BuildContext context, SignInState state) {
+        print(state.errorMessage);
         if (state.formStatus.invalid) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -40,19 +41,11 @@ class _SignInScreenState extends State<SignInScreen> {
         }
 
         // give an error notification if user failed to sign in
-        if (state.formStatus.submissionFailure &&
-            state.errorType.userNotFound) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(const SnackBar(
-                content: Text('No user found with this email')));
-        }
-        if (state.formStatus.submissionFailure &&
-            state.errorType.wrongPassword) {
+        if (state.formStatus.submissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-                const SnackBar(content: Text('Wrong password!')));
+                SnackBar(content: Text(state.errorMessage)));
         }
       },
       builder: (BuildContext context, SignInState state) {
@@ -83,7 +76,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 onChanged: (value) {
                   if (debounce?.isActive ?? false) debounce?.cancel();
                   debounce =
-                      Timer(const Duration(milliseconds: 500), () {
+                      Timer(const Duration(milliseconds: 1000), () {
                     context
                         .read<SignInBloc>()
                         .add(EmailChanged(value));
@@ -91,7 +84,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a valid password';
+                    return 'Please enter a valid email';
                   }
                   return null;
                 },
@@ -114,13 +107,17 @@ class _SignInScreenState extends State<SignInScreen> {
                 key: const Key('signIn_passwordInput_textField'),
                 obscureText: true,
                 onChanged: (value) {
-                  context
-                      .read<SignInBloc>()
-                      .add(PasswordChanged(value));
+                  if (debounce?.isActive ?? false) debounce?.cancel();
+                  debounce =
+                      Timer(const Duration(milliseconds: 1000), () {
+                    context
+                        .read<SignInBloc>()
+                        .add(PasswordChanged(value));
+                  });
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter password';
+                    return 'Please enter a valid password';
                   }
                   return null;
                 },
@@ -153,11 +150,13 @@ class _SignInScreenState extends State<SignInScreen> {
                     backgroundColor: Colors.blueAccent,
                     minimumSize: const Size(double.infinity, 50)),
                 icon: const Icon(Icons.login, color: Colors.white),
-                onPressed: () {
-                  context
-                      .read<SignInBloc>()
-                      .add(const SignInWithEmailAndPassword());
-                },
+                onPressed: state.formStatus.submissionInProgress
+                    ? null
+                    : () {
+                        context
+                            .read<SignInBloc>()
+                            .add(const SignInWithEmailAndPassword());
+                      },
               ),
               const Divider(),
               const Text(
@@ -168,12 +167,10 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               ElevatedButton.icon(
                 key: const Key('loginForm_googleLogin_raisedButton'),
-                label: state.formStatus.submissionInProgress
-                    ? const CircularProgressIndicator()
-                    : const Text(
-                        'SIGN IN WITH GOOGLE',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                label: const Text(
+                  'SIGN IN WITH GOOGLE',
+                  style: TextStyle(color: Colors.white),
+                ),
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
