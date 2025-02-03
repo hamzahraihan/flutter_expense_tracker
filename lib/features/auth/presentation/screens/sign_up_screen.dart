@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_up/sign_up_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_up/sign_up_event.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/sign_up/sign_up_state.dart';
@@ -28,6 +30,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user =
+        context.select((AuthBloc bloc) => bloc.state.authStatus);
+
+    if (user.isAuthenticated) {
+      Navigator.pop(context);
+    } else if (user.isAuthenticated) {
+      null;
+    }
+
     return BlocConsumer<SignUpBloc, SignUpState>(
         listener: (BuildContext context, SignUpState state) {
       if (state.formStatus.invalid) {
@@ -169,11 +180,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     backgroundColor: Colors.blueAccent,
                     minimumSize: const Size(double.infinity, 50)),
                 icon: const Icon(Icons.login, color: Colors.white),
-                onPressed: () {
-                  context
-                      .read<SignUpBloc>()
-                      .add(const SignUpWithEmailAndPassword());
-                },
+                onPressed: state.formStatus.submissionInProgress
+                    ? null
+                    : () {
+                        context
+                            .read<SignUpBloc>()
+                            .add(const SignUpWithEmailAndPassword());
+                      },
               ),
               const Divider(),
               const Text(
@@ -184,12 +197,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               ElevatedButton.icon(
                 key: const Key('signUp_googleSignup_raisedButton'),
-                label: state.formStatus.submissionInProgress
-                    ? const CircularProgressIndicator()
-                    : const Text(
-                        'SIGN UP WITH GOOGLE',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                label: const Text(
+                  'SIGN UP WITH GOOGLE',
+                  style: TextStyle(color: Colors.white),
+                ),
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
