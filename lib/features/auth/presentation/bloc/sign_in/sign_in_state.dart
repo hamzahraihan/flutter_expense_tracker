@@ -12,12 +12,6 @@ extension FormStatusX on FormStatus {
   bool get submissionFailure => this == FormStatus.submissionFailure;
 }
 
-extension ErrorStatusX on ErrorStatus {
-  bool get initial => this == ErrorStatus.initial;
-  bool get wrongPassword => this == ErrorStatus.wrongPassword;
-  bool get userNotFound => this == ErrorStatus.userNotFound;
-}
-
 class SignInState extends Equatable {
   final String? name;
   final Email? email;
@@ -25,7 +19,7 @@ class SignInState extends Equatable {
   final EmailStatus emailStatus;
   final FormStatus formStatus;
   final PasswordStatus passwordStatus;
-  final ErrorStatus errorType;
+  final String errorMessage;
 
   const SignInState(
       {this.name,
@@ -34,7 +28,7 @@ class SignInState extends Equatable {
       this.emailStatus = EmailStatus.unknown,
       this.passwordStatus = PasswordStatus.unknown,
       this.formStatus = FormStatus.initial,
-      this.errorType = ErrorStatus.initial});
+      this.errorMessage = ''});
 
   SignInState copyWith(
       {String? name,
@@ -43,7 +37,7 @@ class SignInState extends Equatable {
       EmailStatus? emailStatus,
       PasswordStatus? passwordStatus,
       FormStatus? formStatus,
-      ErrorStatus? errorType}) {
+      String? errorMessage}) {
     return SignInState(
         name: name ?? this.name,
         email: email ?? this.email,
@@ -51,7 +45,7 @@ class SignInState extends Equatable {
         emailStatus: emailStatus ?? this.emailStatus,
         passwordStatus: passwordStatus ?? this.passwordStatus,
         formStatus: formStatus ?? this.formStatus,
-        errorType: errorType ?? this.errorType);
+        errorMessage: errorMessage ?? this.errorMessage);
   }
 
   @override
@@ -62,6 +56,6 @@ class SignInState extends Equatable {
         emailStatus,
         passwordStatus,
         formStatus,
-        errorType
+        errorMessage
       ];
 }
