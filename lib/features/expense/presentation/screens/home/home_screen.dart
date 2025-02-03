@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: 'Income',
                     amount: totalWeeklyExpense(ExpenseType.income),
                     icon: Icons.arrow_downward,
-                    color: const Color.fromRGBO(0, 168, 107, 100),
+                    color: Colors.green.shade400,
                   ),
                   IncomeExpensesCardWidget(
                     title: 'Expense',
