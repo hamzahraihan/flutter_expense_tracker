@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/features/auth/data/model/auth_model.dart';
+import 'package:expense_tracker/services/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -72,15 +71,10 @@ class AuthApiService {
       }
       return AuthModel.fromFirebaseAuthUser(credential.user!);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        throw Exception('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        throw Exception('Wrong password provided for that user.');
-      }
-      log(e.code);
-      throw Exception(e);
-    } catch (e) {
-      throw Exception(e);
+      print(e.code);
+      throw SignInWithEmailAndPasswordFailure.fromCode(e.code);
+    } catch (_) {
+      throw const SignInWithEmailAndPasswordFailure();
     }
   }
 
