@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BottomNavigationBarWidget extends StatefulWidget {
   const BottomNavigationBarWidget({super.key});
 
   @override
-  State<BottomNavigationBarWidget> createState() => _BottomNavigationState();
+  State<BottomNavigationBarWidget> createState() =>
+      _BottomNavigationState();
 }
 
-class _BottomNavigationState extends State<BottomNavigationBarWidget> {
+class _BottomNavigationState
+    extends State<BottomNavigationBarWidget> {
   int currentPageIndex = 0;
   final List<NavigationDestination> _navButton = [
     const NavigationDestination(
@@ -27,11 +30,11 @@ class _BottomNavigationState extends State<BottomNavigationBarWidget> {
     ),
     const NavigationDestination(
         selectedIcon: Icon(
-          Icons.pie_chart,
+          FontAwesomeIcons.chartPie,
           color: Colors.blueAccent,
         ),
         icon: Icon(
-          Icons.pie_chart_outline,
+          FontAwesomeIcons.chartPie,
         ),
         label: 'Budget')
   ];
