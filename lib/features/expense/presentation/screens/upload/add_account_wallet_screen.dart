@@ -1,7 +1,6 @@
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
-import 'package:expense_tracker/features/expense/presentation/widgets/dropdown_button_widget.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/form_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -180,14 +179,14 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
                       topLeft: Radius.circular(42),
                       topRight: Radius.circular(42))),
               child: Column(children: [
-                DropdownButtonWidget(
-                  initialValue: intialCategoryValue,
-                  onSelected: (value) {
-                    context
-                        .read<AddTransactionBloc>()
-                        .add(AddTransactionCategoryChanged(value));
-                  },
-                ),
+                // DropdownButtonWidget(
+                //   initialValue: intialCategoryValue,
+                //   onSelected: (value) {
+                //     context
+                //         .read<AddTransactionBloc>()
+                //         .add(AddTransactionCategoryChanged(value));
+                //   },
+                // ),
                 const SizedBox(
                   height: 20,
                 ),
