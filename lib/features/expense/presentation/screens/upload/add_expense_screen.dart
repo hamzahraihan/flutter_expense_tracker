@@ -8,6 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
+const List<String> list = <String>[
+  'Subscription',
+  'Food',
+  'Transportation',
+  'Shopping'
+];
+
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
   static const String routeName = '/add-expense';
@@ -179,6 +186,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       topRight: Radius.circular(42))),
               child: Column(children: [
                 DropdownButtonWidget(
+                  dropdownList: list,
                   initialValue: intialCategoryValue,
                   onSelected: (value) {
                     context
