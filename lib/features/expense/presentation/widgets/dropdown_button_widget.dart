@@ -2,20 +2,15 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
-const List<String> list = <String>[
-  'Subscription',
-  'Food',
-  'Transportation',
-  'Shopping'
-];
-
 class DropdownButtonWidget extends StatefulWidget {
+  final List<String> dropdownList;
   final String initialValue;
   final ValueChanged<String> onSelected;
   const DropdownButtonWidget(
       {super.key,
       required this.initialValue,
-      required this.onSelected});
+      required this.onSelected,
+      required this.dropdownList});
 
   @override
   State<DropdownButtonWidget> createState() =>
@@ -25,9 +20,7 @@ class DropdownButtonWidget extends StatefulWidget {
 typedef MenuEntry = DropdownMenuEntry<String>;
 
 class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
-  static final List<MenuEntry> menuEntries =
-      UnmodifiableListView<MenuEntry>(list.map<MenuEntry>(
-          (String name) => MenuEntry(value: name, label: name)));
+  List<String> get list => widget.dropdownList;
 
   late String dropdownValue;
 
@@ -39,6 +32,10 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final List<MenuEntry> menuEntries =
+        UnmodifiableListView<MenuEntry>(list.map<MenuEntry>(
+            (String name) => MenuEntry(value: name, label: name)));
+
     return DropdownMenu(
       inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(
