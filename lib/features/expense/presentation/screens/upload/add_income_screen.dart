@@ -8,6 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
+const List<String> list = <String>[
+  'Work',
+  'Side hustle',
+  'Freelance',
+  'Other',
+];
+
 class AddIncomeScreen extends StatefulWidget {
   const AddIncomeScreen({super.key});
   static const String routeName = '/add-income';
@@ -18,7 +25,7 @@ class AddIncomeScreen extends StatefulWidget {
 class _AddIncomeScreenState extends State<AddIncomeScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final String intialCategoryValue = 'Subscription';
+  final String intialCategoryValue = 'Work';
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +84,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Saving data failed!')));
           }
-        throw Exception('error: $e');
+          throw Exception('error: $e');
         }
       }
     }
@@ -169,6 +176,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                       topRight: Radius.circular(42))),
               child: Column(children: [
                 DropdownButtonWidget(
+                  dropdownList: list,
                   initialValue: intialCategoryValue,
                   onSelected: (value) {
                     context
