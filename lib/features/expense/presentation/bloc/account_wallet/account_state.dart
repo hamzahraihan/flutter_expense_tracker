@@ -1,30 +1,30 @@
 import 'package:equatable/equatable.dart';
 import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 
-enum AddAccountWalletStatus { initial, loading, success, failure }
+enum AccountWalletStatus { initial, loading, success, failure }
 
-extension AddAccountWalletStatusX on AddAccountWalletStatus {
-  bool get isInitial => this == AddAccountWalletStatus.initial;
-  bool get isLoading => this == AddAccountWalletStatus.loading;
-  bool get isSuccess => this == AddAccountWalletStatus.success;
-  bool get isFailure => this == AddAccountWalletStatus.failure;
+extension AccountWalletStatusX on AccountWalletStatus {
+  bool get isInitial => this == AccountWalletStatus.initial;
+  bool get isLoading => this == AccountWalletStatus.loading;
+  bool get isSuccess => this == AccountWalletStatus.success;
+  bool get isFailure => this == AccountWalletStatus.failure;
 }
 
 class AccountState extends Equatable {
-  final AddAccountWalletStatus? status;
+  final AccountWalletStatus? status;
   final int? balance;
   final String? walletType;
   final List<AccountWalletModel>? accountWallet;
 
   const AccountState(
-      {this.status = AddAccountWalletStatus.initial,
+      {this.status = AccountWalletStatus.initial,
       this.balance,
       this.walletType,
       List<AccountWalletModel>? accountWallet})
       : accountWallet = accountWallet ?? const [];
 
   AccountState copyWith({
-    AddAccountWalletStatus? status,
+    AccountWalletStatus? status,
     final int? balance,
     final String? walletType,
     final List<AccountWalletModel>? accountWallet,
