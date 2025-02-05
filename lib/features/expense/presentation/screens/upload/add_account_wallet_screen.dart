@@ -1,6 +1,7 @@
-import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
-import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
-import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_event.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_state.dart';
+
 import 'package:expense_tracker/features/expense/presentation/widgets/form_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,18 +18,14 @@ class AddAccountWalletScreen extends StatefulWidget {
 }
 
 class _AddAccountWalletState extends State<AddAccountWalletScreen> {
-  final String intialCategoryValue = 'Subscription';
+  final String intialWalletType = 'Wallet type';
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<AddTransactionBloc>()
-        .add(const AddTransactionExpenseTypeChanged('expense'));
-
-    return BlocBuilder<AddTransactionBloc, AddTransactionState>(
-        builder: (BuildContext context, AddTransactionState state) {
+    return BlocBuilder<AccountBloc, AccountState>(
+        builder: (BuildContext context, AccountState state) {
       final Orientation orientation =
           MediaQuery.of(context).orientation;
       return Scaffold(
@@ -76,12 +73,12 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
         // );
         try {
           context
-              .read<AddTransactionBloc>()
-              .add(const AddTransactionSubmitted());
+              .read<AccountBloc>()
+              .add(const AddAccountWalletSubmitted());
 
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Transaction added')));
+                const SnackBar(content: Text('Account added')));
           }
         } catch (e) {
           if (context.mounted) {
@@ -122,8 +119,8 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
               onChanged: (value) {
                 final int amount = int.tryParse(value) ?? 0;
                 context
-                    .read<AddTransactionBloc>()
-                    .add(AddTransactionAmountChanged(amount));
+                    .read<AccountBloc>()
+                    .add(AccountBalanceChanged(amount));
               },
               validator: (value) {
                 if (value == null || value.isEmpty || value == '0') {
@@ -193,19 +190,17 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
                 TextFormField(
                   onChanged: (value) {
                     context
-                        .read<AddTransactionBloc>()
-                        .add(AddTransactionDescriptionChanged(value));
+                        .read<AccountBloc>()
+                        .add(AccountNameChanged(value));
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter description';
+                      return 'Please enter wallet name';
                     }
                     return null;
                   },
-                  maxLines: 2,
-                  maxLength: 64,
                   decoration: InputDecoration(
-                    hintText: 'Description',
+                    hintText: 'Shopping wallet etc.',
                     border: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.black26),
