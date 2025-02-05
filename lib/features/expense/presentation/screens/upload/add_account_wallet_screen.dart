@@ -1,6 +1,7 @@
 import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_state.dart';
+import 'package:expense_tracker/features/expense/presentation/screens/account/account_screen.dart';
 
 import 'package:expense_tracker/features/expense/presentation/widgets/form_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -200,7 +201,7 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
                     return null;
                   },
                   decoration: InputDecoration(
-                    hintText: 'Shopping wallet etc.',
+                    hintText: 'Ex: Shopping wallet etc.',
                     border: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.black26),
@@ -214,6 +215,7 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
                 const SizedBox(
                   height: 10,
                 ),
+                const SelectedWallet(),
                 FormButtonWidget(
                   title: 'Submit',
                   onclick: handleSubmitExpense,
@@ -226,5 +228,32 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
 
   _buildBodyLandscape() {
     return SingleChildScrollView(primary: true, child: _buildBody());
+  }
+}
+
+class SelectedWallet extends StatefulWidget {
+  const SelectedWallet({super.key});
+
+  @override
+  State<SelectedWallet> createState() => _SelectedWalletState();
+}
+
+class _SelectedWalletState extends State<SelectedWallet> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        height: 100,
+        child: GridView.count(
+            // Create a grid with 2 columns. If you change the scrollDirection to
+            // horizontal, this produces 2 rows.
+            crossAxisCount: 4,
+            mainAxisSpacing: 10,
+            // Generate 100 widgets that display their index in the List.
+            children: wallets
+                .map((wallet) => (Container(
+                      height: 40,
+                      child: Text(wallet),
+                    )))
+                .toList()));
   }
 }
