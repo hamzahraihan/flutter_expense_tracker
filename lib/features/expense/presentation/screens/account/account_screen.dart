@@ -7,10 +7,10 @@ final List<String> wallets = [
   'Jago',
   'Mandiri',
   'BCA',
-  // 'Cypher',
-  // 'Bitcoin',
-  // 'Gopay',
-  // 'ShopeePay',
+  'Citilink',
+  'Bitcoin',
+  'Gopay',
+  'ShopeePay',
   // 'Other'
 ];
 
