@@ -12,6 +12,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
       this._addAccountWalletUseCase, this._getAccountWalletUseCase)
       : super(const AccountState()) {
     on<GetAccountWallet>(_onFetchAccountWallets);
+    on<AccountNameChanged>(_onAccountWalletNameChanged);
     on<AccountBalanceChanged>(_onAddAccountBalanceChanged);
     on<AddAccountWalletSubmitted>(_onAddAccountWallet);
   }
@@ -28,10 +29,18 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     }
   }
 
+  void _onAccountWalletNameChanged(
+      AccountNameChanged event, Emitter<AccountState> emit) async {
+    emit(state.copyWith(
+      walletName: event.walletName,
+    ));
+  }
+
   void _onAddAccountBalanceChanged(
       AccountBalanceChanged event, Emitter<AccountState> emit) {
     emit(state.copyWith(
-        balance: event.balance, status: AccountWalletStatus.success));
+      balance: event.balance,
+    ));
   }
 
   Future<void> _onAddAccountWallet(AddAccountWalletSubmitted event,
@@ -39,13 +48,14 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     emit(state.copyWith(status: AccountWalletStatus.loading));
     try {
       final Map<String, dynamic> accountWallet = {
+        'walletName': state.walletName,
         'balance': state.balance,
         'walletType': state.walletType
       };
 
-      // Execute expense use case add transaction data
       await _addAccountWalletUseCase.execute(accountWallet);
-      // Notify another bloc to fetch updated transactions
+
+      add(const GetAccountWallet());
 
       emit(state.copyWith(status: AccountWalletStatus.success));
     } catch (e) {
