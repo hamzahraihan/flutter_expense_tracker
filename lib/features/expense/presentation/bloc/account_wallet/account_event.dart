@@ -10,6 +10,10 @@ final class GetAccountWallet extends AccountEvent {
   const GetAccountWallet();
 }
 
+final class AddAccountWalletSubmitted extends AccountEvent {
+  const AddAccountWalletSubmitted();
+}
+
 final class AccountBalanceChanged extends AccountEvent {
   final int balance;
   const AccountBalanceChanged(this.balance);
