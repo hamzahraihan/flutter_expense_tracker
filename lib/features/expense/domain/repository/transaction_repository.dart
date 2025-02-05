@@ -1,7 +1,10 @@
+import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 
 abstract class TransactionRepository {
   Future<List<TransactionsModel>> getTransactions();
+
+  Future<List<AccountWalletModel>> getAccountWallet();
 
   // Future<void> savedTransaction(String id);
 
