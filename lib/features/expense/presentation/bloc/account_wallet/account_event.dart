@@ -14,6 +14,14 @@ final class AddAccountWalletSubmitted extends AccountEvent {
   const AddAccountWalletSubmitted();
 }
 
+final class AccountNameChanged extends AccountEvent {
+  final String walletName;
+  const AccountNameChanged(this.walletName);
+
+  @override
+  List<Object?> get props => [walletName];
+}
+
 final class AccountBalanceChanged extends AccountEvent {
   final int balance;
   const AccountBalanceChanged(this.balance);
