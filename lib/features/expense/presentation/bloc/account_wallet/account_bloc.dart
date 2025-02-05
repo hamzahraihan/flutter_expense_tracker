@@ -1,3 +1,4 @@
+import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/add_account_wallet.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/get_account_wallet.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_event.dart';
@@ -19,7 +20,8 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
       GetAccountWallet event, Emitter<AccountState> emit) async {
     emit(state.copyWith(status: AccountWalletStatus.loading));
     try {
-      final accountWallet = await _getAccountWalletUseCase.execute();
+      final List<AccountWalletModel> accountWallet =
+          await _getAccountWalletUseCase.execute();
       emit(state.copyWith(accountWallet: accountWallet));
     } catch (e) {
       emit(state.copyWith(status: AccountWalletStatus.failure));
