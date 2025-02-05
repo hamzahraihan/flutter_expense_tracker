@@ -60,4 +60,16 @@ class TransactionsApiService {
       throw Exception('Error fetching transaction: $e');
     }
   }
+
+  Future<void> addAccountWallet(
+      Map<String, dynamic> accountWallet) async {
+    try {
+      await db
+          .collection(accountWalletCollectionPath)
+          .doc()
+          .set(accountWallet);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }
