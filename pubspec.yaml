@@ -82,7 +82,10 @@ flutter:
     - assets/svg/mandiri.svg
     - assets/svg/bca.svg
     - assets/svg/jago.svg
-    - assets/svg/paypal.svg
+    - assets/svg/gopay.svg
+    - assets/svg/citilink.svg
+    - assets/svg/bitcoin.svg
+    - assets/svg/shopeepay.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
