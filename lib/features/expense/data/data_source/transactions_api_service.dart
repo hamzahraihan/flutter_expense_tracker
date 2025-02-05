@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/core/constants/constants.dart';
+import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 import 'package:expense_tracker/services/firebase.dart';
 
@@ -13,6 +14,18 @@ class TransactionsApiService {
           .toList();
     } catch (e) {
       throw Exception('Error fetching transaction: $e');
+    }
+  }
+
+  Future<List<AccountWalletModel>> getAccountWallet() async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> snapshot =
+          await db.collection(accountWalletCollectionPath).get();
+      return snapshot.docs
+          .map((doc) => AccountWalletModel.fromFirestore(doc, null))
+          .toList();
+    } catch (e) {
+      throw Exception('Error fetching user account wallet: $e');
     }
   }
 
