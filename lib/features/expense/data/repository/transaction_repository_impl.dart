@@ -19,6 +19,16 @@ class TransactionRepositoryImpl extends TransactionRepository {
   }
 
   @override
+  Future<void> addAccountWallet(
+      Map<String, dynamic> accountWallet) async {
+    try {
+      await _transactionsApiService.addAccountWallet(accountWallet);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
   Future<void> deleteTransaction(String id) async {
     try {
       await _transactionsApiService.deleteTransctions(id);
