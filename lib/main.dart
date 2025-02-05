@@ -16,7 +16,11 @@ import 'package:expense_tracker/features/auth/presentation/screens/sign_up_scree
 import 'package:expense_tracker/features/expense/app.dart';
 import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
+import 'package:expense_tracker/features/expense/domain/usecase/add_account_wallet.dart';
+import 'package:expense_tracker/features/expense/domain/usecase/get_account_wallet.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/get_transactions.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
@@ -56,6 +60,12 @@ void main() async {
   final SignUpUseCase signUpUseCase =
       SignUpUseCase(authRepositoryImpl);
 
+  final AddAccountWalletUseCase addAccountWalletUseCase =
+      AddAccountWalletUseCase(transactionRepositoryImpl);
+
+  final GetAccountWalletUseCase getAccountWalletUseCase =
+      GetAccountWalletUseCase(transactionRepositoryImpl);
+
   final GetTransactionsUseCase getTransactionsUseCase =
       GetTransactionsUseCase(transactionRepositoryImpl);
 
@@ -64,6 +74,8 @@ void main() async {
     signInUseCase: signInUseCase,
     signUpUseCase: signUpUseCase,
     getTransactionsUseCase: getTransactionsUseCase,
+    addAccountWalletUseCase: addAccountWalletUseCase,
+    getAccountWalletUseCase: getAccountWalletUseCase,
     transactionRepositoryImpl: transactionRepositoryImpl,
     authUser: await authRepositoryImpl.authUser.first,
   ));
@@ -72,10 +84,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   final AuthRepositoryImpl authRepositoryImpl;
   final SignInUseCase signInUseCase;
-
   final SignUpUseCase signUpUseCase;
   final GetTransactionsUseCase getTransactionsUseCase;
   final TransactionRepositoryImpl transactionRepositoryImpl;
+  final AddAccountWalletUseCase addAccountWalletUseCase;
+  final GetAccountWalletUseCase getAccountWalletUseCase;
   final AuthEntities? authUser;
 
   const MyApp(
@@ -83,6 +96,8 @@ class MyApp extends StatelessWidget {
       required this.authUser,
       required this.authRepositoryImpl,
       required this.getTransactionsUseCase,
+      required this.getAccountWalletUseCase,
+      required this.addAccountWalletUseCase,
       required this.signInUseCase,
       required this.signUpUseCase,
       required this.transactionRepositoryImpl});
@@ -110,7 +125,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               create: (context) => AddTransactionBloc(
                   context.read<TransactionFirebaseBloc>(),
-                  transactionRepositoryImpl))
+                  transactionRepositoryImpl)),
+          BlocProvider(
+              create: (context) => AccountBloc(
+                  addAccountWalletUseCase, getAccountWalletUseCase)
+                ..add(const GetAccountWallet()))
         ],
         child: MaterialApp(
           title: 'My Expense',
