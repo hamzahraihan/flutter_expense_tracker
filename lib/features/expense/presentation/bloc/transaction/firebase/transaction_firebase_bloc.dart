@@ -8,16 +8,16 @@ import 'package:expense_tracker/features/expense/presentation/bloc/transaction/f
 
 class TransactionFirebaseBloc
     extends Bloc<TransactionFirebaseEvent, TransactionFirebaseState> {
-  final TransactionRepositoryImpl _transactionRepository;
+  final TransactionRepositoryImpl _transactionRepositoryImpl;
 
   late final GetTransactionsUseCase _getTransactionsUseCase =
-      GetTransactionsUseCase(_transactionRepository);
+      GetTransactionsUseCase(_transactionRepositoryImpl);
 
   late final AddExpenseUseCase _addExpenseUseCase =
-      AddExpenseUseCase(_transactionRepository);
+      AddExpenseUseCase(_transactionRepositoryImpl);
 
   TransactionFirebaseBloc(
-    this._transactionRepository,
+    this._transactionRepositoryImpl,
   ) : super(const TransactionFirebaseState()) {
     on<GetTransaction>(_onFetchTransactions);
     on<AddExpenseTransaction>(_onAddExpenseTransaction);
