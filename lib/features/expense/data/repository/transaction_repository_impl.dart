@@ -1,4 +1,5 @@
 import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
+import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 import 'package:expense_tracker/features/expense/domain/repository/transaction_repository.dart';
 
@@ -37,5 +38,10 @@ class TransactionRepositoryImpl extends TransactionRepository {
   @override
   Future<List<TransactionsModel>> getTransactions() async {
     return await _transactionsApiService.getTransactions();
+  }
+
+  @override
+  Future<List<AccountWalletModel>> getAccountWallet() async {
+    return await _transactionsApiService.getAccountWallet();
   }
 }
