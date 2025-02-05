@@ -12,12 +12,14 @@ extension AccountWalletStatusX on AccountWalletStatus {
 
 class AccountState extends Equatable {
   final AccountWalletStatus? status;
+  final String? walletName;
   final int? balance;
   final String? walletType;
   final List<AccountWalletModel>? accountWallet;
 
   const AccountState(
-      {this.status = AccountWalletStatus.initial,
+      {this.walletName,
+      this.status = AccountWalletStatus.initial,
       this.balance,
       this.walletType,
       List<AccountWalletModel>? accountWallet})
@@ -25,11 +27,13 @@ class AccountState extends Equatable {
 
   AccountState copyWith({
     AccountWalletStatus? status,
+    final String? walletName,
     final int? balance,
     final String? walletType,
     final List<AccountWalletModel>? accountWallet,
   }) {
     return AccountState(
+        walletName: walletName ?? this.walletName,
         status: status ?? status,
         balance: balance ?? this.balance,
         walletType: walletType ?? this.walletType,
@@ -38,5 +42,5 @@ class AccountState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [status, balance, walletType, accountWallet];
+      [status, walletName, balance, walletType, accountWallet];
 }
