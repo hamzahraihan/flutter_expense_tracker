@@ -1,11 +1,11 @@
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
-import 'package:expense_tracker/features/expense/domain/repository/transaction_repository.dart';
+import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
 
 class GetTransactionsUseCase {
-  final TransactionRepository _transactionRepository;
-  GetTransactionsUseCase(this._transactionRepository);
+  final TransactionRepositoryImpl _transactionRepositoryImpl;
+  GetTransactionsUseCase(this._transactionRepositoryImpl);
 
   Future<List<TransactionsModel>> execute() {
-    return _transactionRepository.getTransactions();
+    return _transactionRepositoryImpl.getTransactions();
   }
 }
