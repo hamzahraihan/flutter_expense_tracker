@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expense_tracker/core/constants/constants.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
-import 'package:expense_tracker/features/expense/domain/entity/transaction_entities.dart';
-
-FirebaseFirestore db = FirebaseFirestore.instance;
+import 'package:expense_tracker/services/firebase.dart';
 
 class TransactionsApiService {
   Future<List<TransactionsModel>> getTransactions() async {
     try {
       final QuerySnapshot<Map<String, dynamic>> snapshot =
-          await db.collection('transactions').get();
+          await db.collection(transactionCollectionPath).get();
       return snapshot.docs
           .map((doc) => TransactionsModel.fromFirestore(doc, null))
           .toList();
@@ -17,15 +16,15 @@ class TransactionsApiService {
     }
   }
 
-  Iterable<TransactionsModel> filteredThisWeekExpenses(
-      ExpenseType expenseType,
-      List<TransactionsModel> thisWeekTransactions) {
-    if (thisWeekTransactions.isNotEmpty) {
-      return thisWeekTransactions.where((TransactionsModel element) =>
-          element.expenseType == expenseType);
-    }
-    return <TransactionsModel>[];
-  }
+  // Iterable<TransactionsModel> filteredThisWeekExpenses(
+  //     ExpenseType expenseType,
+  //     List<TransactionsModel> thisWeekTransactions) {
+  //   if (thisWeekTransactions.isNotEmpty) {
+  //     return thisWeekTransactions.where((TransactionsModel element) =>
+  //         element.expenseType == expenseType);
+  //   }
+  //   return <TransactionsModel>[];
+  // }
 
   Future<void> deleteTransctions(String id) {
     // TODO: implement deleteTransctions
@@ -40,7 +39,10 @@ class TransactionsApiService {
   Future<void> addExpenseTransaction(
       Map<String, dynamic> transaction) async {
     try {
-      await db.collection("transactions").doc().set(transaction);
+      await db
+          .collection(transactionCollectionPath)
+          .doc()
+          .set(transaction);
     } catch (e) {
       throw Exception('Error fetching transaction: $e');
     }
