@@ -84,6 +84,7 @@ flutter:
     - assets/svg/jago.svg
     - assets/svg/gopay.svg
     - assets/svg/citilink.svg
+    - assets/svg/paypal.svg
     - assets/svg/bitcoin.svg
     - assets/svg/shopeepay.svg
 
