@@ -76,7 +76,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 onChanged: (value) {
                   if (debounce?.isActive ?? false) debounce?.cancel();
                   debounce =
-                      Timer(const Duration(milliseconds: 1000), () {
+                      Timer(const Duration(milliseconds: 500), () {
                     context
                         .read<SignInBloc>()
                         .add(EmailChanged(value));
@@ -109,7 +109,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 onChanged: (value) {
                   if (debounce?.isActive ?? false) debounce?.cancel();
                   debounce =
-                      Timer(const Duration(milliseconds: 1000), () {
+                      Timer(const Duration(milliseconds: 500), () {
                     context
                         .read<SignInBloc>()
                         .add(PasswordChanged(value));
