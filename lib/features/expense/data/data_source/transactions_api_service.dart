@@ -1,14 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/core/constants/constants.dart';
+import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
 import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 import 'package:expense_tracker/services/firebase.dart';
 
 class TransactionsApiService {
-  Future<List<TransactionsModel>> getTransactions() async {
+  Future<List<TransactionsModel>> getTransactions(
+      AuthEntities authUser) async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> snapshot =
-          await db.collection(transactionCollectionPath).get();
+      final QuerySnapshot<Map<String, dynamic>> snapshot = await db
+          .collection(transactionCollectionPath)
+          .where('uid', isEqualTo: authUser.uid)
+          .get();
       return snapshot.docs
           .map((doc) => TransactionsModel.fromFirestore(doc, null))
           .toList();
