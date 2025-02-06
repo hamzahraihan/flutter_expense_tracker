@@ -14,6 +14,7 @@ extension ExpenseTypeExtension on ExpenseType {
 }
 
 class TransactionEntities extends Equatable {
+  final String uid;
   final String title;
   final int amount;
   final DateTime date;
@@ -22,7 +23,8 @@ class TransactionEntities extends Equatable {
   final String category;
 
   const TransactionEntities(
-      {required this.title,
+      {required this.uid,
+      required this.title,
       required this.amount,
       required this.date,
       required this.description,
@@ -31,5 +33,5 @@ class TransactionEntities extends Equatable {
 
   @override
   List<Object?> get props =>
-      [title, amount, date, description, expenseType, category];
+      [uid, title, amount, date, description, expenseType, category];
 }
