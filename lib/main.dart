@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
   final TransactionRepositoryImpl transactionRepositoryImpl;
   final AddAccountWalletUseCase addAccountWalletUseCase;
   final GetAccountWalletUseCase getAccountWalletUseCase;
-  final AuthEntities? authUser;
+  final AuthEntities authUser;
 
   const MyApp(
       {super.key,
@@ -104,6 +104,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('user data  ${authUser.toString()}');
     return MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -118,14 +119,15 @@ class MyApp extends StatelessWidget {
                     signUpUseCase,
                   )),
           BlocProvider(
-            create: (context) =>
-                TransactionFirebaseBloc(transactionRepositoryImpl)
-                  ..add(const GetTransaction()),
+            create: (context) => TransactionFirebaseBloc(
+                transactionRepositoryImpl, authUser)
+              ..add(GetTransaction(authUser)),
           ),
           BlocProvider(
               create: (context) => AddTransactionBloc(
                   context.read<TransactionFirebaseBloc>(),
-                  transactionRepositoryImpl)),
+                  transactionRepositoryImpl,
+                  authUser)),
           BlocProvider(
               create: (context) => AccountBloc(
                   addAccountWalletUseCase, getAccountWalletUseCase)
@@ -149,8 +151,8 @@ class MyApp extends StatelessWidget {
                 builder: (BuildContext context) {
                   return BlocBuilder<AuthBloc, AuthState>(builder:
                       (BuildContext context, AuthState state) {
-                    log("${state.authStatus}");
-                    log("${state.user}");
+                    log("from auth state staus ${state.authStatus}");
+                    log("from auth state ${state.user}");
                     switch (state.authStatus) {
                       case AuthStatus.loading:
                         return const Loading();
@@ -181,7 +183,7 @@ class MyApp extends StatelessWidget {
                         }
 
                         return ExpenseTrackerApp(
-                            authUser: authUser,
+                            authUser: state.user,
                             initialIndex: initialIndex);
                       default:
                         return const SignInScreen();
