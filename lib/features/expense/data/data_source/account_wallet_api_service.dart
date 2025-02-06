@@ -7,7 +7,7 @@ class AccountWalletApiService {
   Future<List<AccountWalletModel>> getAccountWallet() async {
     try {
       final QuerySnapshot<Map<String, dynamic>> snapshot =
-          await db.collection('accounts').get();
+          await db.collection(accountWalletCollectionPath).get();
       return snapshot.docs
           .map((doc) => AccountWalletModel.fromFirestore(doc, null))
           .toList();
