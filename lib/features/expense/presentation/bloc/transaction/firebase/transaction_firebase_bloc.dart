@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
+import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
@@ -9,6 +12,7 @@ import 'package:expense_tracker/features/expense/presentation/bloc/transaction/f
 class TransactionFirebaseBloc
     extends Bloc<TransactionFirebaseEvent, TransactionFirebaseState> {
   final TransactionRepositoryImpl _transactionRepositoryImpl;
+  final AuthEntities _authUser;
 
   late final GetTransactionsUseCase _getTransactionsUseCase =
       GetTransactionsUseCase(_transactionRepositoryImpl);
@@ -17,16 +21,20 @@ class TransactionFirebaseBloc
       AddExpenseUseCase(_transactionRepositoryImpl);
 
   TransactionFirebaseBloc(
-    this._transactionRepositoryImpl,
-  ) : super(const TransactionFirebaseState()) {
+      this._transactionRepositoryImpl, this._authUser)
+      : super(const TransactionFirebaseState()) {
     on<GetTransaction>(_onFetchTransactions);
     on<AddExpenseTransaction>(_onAddExpenseTransaction);
   }
 
   void _onFetchTransactions(GetTransaction event,
       Emitter<TransactionFirebaseState> emit) async {
+    log('from fetch transaction bloc ${_authUser.toString()}');
+
     emit(state.copyWith(status: TransactionStatus.loading));
-    final transactions = await _getTransactionsUseCase.execute();
+
+    final transactions =
+        await _getTransactionsUseCase.execute(_authUser);
     final GroupedTransactions groupedTransactions =
         Transactions.filterTransactionsByDate(transactions);
 
@@ -57,7 +65,7 @@ class TransactionFirebaseBloc
     try {
       await _addExpenseUseCase.execute(event.transaction);
 
-      add(const GetTransaction());
+      add(GetTransaction(_authUser));
 
       emit(state.copyWith(status: TransactionStatus.success));
     } catch (e) {
