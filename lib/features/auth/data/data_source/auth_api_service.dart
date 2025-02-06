@@ -21,10 +21,11 @@ class AuthApiService {
   /// the authentication state changes.
   Stream<AuthModel?> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      if (firebaseUser == null) {
-        return null;
-      }
-      return AuthModel.fromFirebaseAuthUser(firebaseUser);
+      final AuthModel? user = firebaseUser == null
+          ? null
+          : AuthModel.fromFirebaseAuthUser(firebaseUser);
+
+      return user;
     });
   }
 
@@ -69,6 +70,7 @@ class AuthApiService {
         throw Exception(
             'Sign in failed: The user is null after sign in.');
       }
+
       return AuthModel.fromFirebaseAuthUser(credential.user!);
     } on firebase_auth.FirebaseAuthException catch (e) {
       print(e.code);
@@ -110,6 +112,7 @@ class AuthApiService {
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
+      await _googleSignIn.signOut();
     } catch (e) {
       throw Exception('An exception has occurred: $e');
     }
