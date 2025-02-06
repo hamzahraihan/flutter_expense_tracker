@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:expense_tracker/features/expense/domain/entity/transaction_entities.dart';
@@ -16,9 +19,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    super.key,
-  });
+  final AuthEntities authUser;
+  const HomeScreen({super.key, required this.authUser});
   static const String routeName = '/';
 
   @override
@@ -35,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log('from home screen ${widget.authUser.toString()}');
     return BlocBuilder<TransactionFirebaseBloc,
             TransactionFirebaseState>(
         builder:
@@ -115,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: () async {
           context
               .read<TransactionFirebaseBloc>()
-              .add(const GetTransaction());
+              .add(GetTransaction(widget.authUser));
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -191,7 +194,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const TransactionsScreen()));
+                                        TransactionsScreen(
+                                            authUser:
+                                                widget.authUser)));
                           });
                         },
                       )
