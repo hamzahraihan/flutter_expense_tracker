@@ -14,7 +14,8 @@ extension ExpenseTypeExtension on ExpenseType {
 
 class TransactionsModel extends TransactionEntities {
   const TransactionsModel(
-      {required super.title,
+      {required super.uid,
+      required super.title,
       required super.amount,
       required super.date,
       required super.description,
@@ -27,6 +28,7 @@ class TransactionsModel extends TransactionEntities {
   ) {
     final data = snapshot.data();
     return TransactionsModel(
+        uid: data?['uid'],
         title: data?['title'],
         amount: data?['amount'],
         date: (data?['date'] as Timestamp).toDate(),
@@ -38,6 +40,7 @@ class TransactionsModel extends TransactionEntities {
 
   Map<String, dynamic> toFirestore() {
     return {
+      "uid": uid,
       "title": title,
       "amount": amount,
       "date": date,
@@ -123,7 +126,6 @@ class Transactions {
         older: olderTransactions);
   }
 }
-
 
 // List<TransactionsModel> transactionsDataList = [
 //   TransactionsModel(
