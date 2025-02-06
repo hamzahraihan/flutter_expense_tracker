@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:expense_tracker/features/auth/data/data_source/auth_api_service.dart';
+import 'package:expense_tracker/features/auth/data/model/auth_model.dart';
 import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
 
 import 'package:expense_tracker/features/auth/domain/repository/auth_repository.dart';
@@ -9,9 +12,12 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Stream<AuthEntities> get authUser {
-    return _authApiService.user.map((userModel) => userModel == null
-        ? AuthEntities.empty
-        : userModel.toEntity());
+    return _authApiService.user.map((AuthModel? userModel) {
+      log("Auth Repository: User Changed -> ${userModel?.email}");
+      return userModel == null
+          ? AuthEntities.empty
+          : userModel.toEntity();
+    });
   }
 
   @override
