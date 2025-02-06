@@ -5,7 +5,7 @@ class GetTransactionsUseCase {
   final TransactionRepositoryImpl _transactionRepositoryImpl;
   GetTransactionsUseCase(this._transactionRepositoryImpl);
 
-  Future<List<TransactionsModel>> execute() {
-    return _transactionRepositoryImpl.getTransactions();
+  Future<List<TransactionsModel>> execute(authUser) {
+    return _transactionRepositoryImpl.getTransactions(authUser);
   }
 }
