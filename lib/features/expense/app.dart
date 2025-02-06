@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/account/account_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/home/home_screen.dart';
@@ -9,7 +11,7 @@ class ExpenseTrackerApp extends StatefulWidget {
       {super.key,
       required this.initialIndex,
       required this.authUser});
-  final AuthEntities? authUser;
+  final AuthEntities authUser;
   final int initialIndex;
   @override
   State<ExpenseTrackerApp> createState() => _ExpenseTrackerAppState();
@@ -36,6 +38,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
 
   @override
   Widget build(BuildContext context) {
+    log('from main screen ${widget.authUser.toString()}');
     final List<NavigationDestination> navButton = [
       const NavigationDestination(
           selectedIcon: Icon(
@@ -67,10 +70,12 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
       body: SafeArea(
           child: IndexedStack(
         index: currentPageIndex,
-        children: const [
-          HomeScreen(),
-          TransactionsScreen(),
-          AccountScreen(),
+        children: [
+          HomeScreen(authUser: widget.authUser),
+          TransactionsScreen(
+            authUser: widget.authUser,
+          ),
+          const AccountScreen(),
         ],
       )),
 
