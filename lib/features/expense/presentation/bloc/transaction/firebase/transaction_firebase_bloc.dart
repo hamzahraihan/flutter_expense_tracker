@@ -1,7 +1,8 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
+import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 import 'package:expense_tracker/features/expense/data/model/transactions_model.dart';
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
@@ -12,7 +13,12 @@ import 'package:expense_tracker/features/expense/presentation/bloc/transaction/f
 class TransactionFirebaseBloc
     extends Bloc<TransactionFirebaseEvent, TransactionFirebaseState> {
   final TransactionRepositoryImpl _transactionRepositoryImpl;
-  final AuthEntities _authUser;
+
+  // get user id
+  final Stream<AuthUserEntities> authUser;
+  late AuthUserEntities _currentUser;
+  late final StreamSubscription<AuthUserEntities>
+      _authUserSubscription;
 
   late final GetTransactionsUseCase _getTransactionsUseCase =
       GetTransactionsUseCase(_transactionRepositoryImpl);
@@ -21,20 +27,30 @@ class TransactionFirebaseBloc
       AddExpenseUseCase(_transactionRepositoryImpl);
 
   TransactionFirebaseBloc(
-      this._transactionRepositoryImpl, this._authUser)
+      this._transactionRepositoryImpl, this.authUser)
       : super(const TransactionFirebaseState()) {
+    // handle the Stream of AuthUserEntities authUser
+    _authUserSubscription = authUser.listen((user) {
+      _currentUser = user;
+    });
     on<GetTransaction>(_onFetchTransactions);
     on<AddExpenseTransaction>(_onAddExpenseTransaction);
   }
 
+  @override
+  Future<void> close() {
+    _authUserSubscription.cancel();
+    return super.close();
+  }
+
   void _onFetchTransactions(GetTransaction event,
       Emitter<TransactionFirebaseState> emit) async {
-    log('from fetch transaction bloc ${_authUser.toString()}');
+    log('from fetch transaction bloc ${_currentUser.toString()}');
 
     emit(state.copyWith(status: TransactionStatus.loading));
 
     final transactions =
-        await _getTransactionsUseCase.execute(_authUser);
+        await _getTransactionsUseCase.execute(_currentUser);
     final GroupedTransactions groupedTransactions =
         Transactions.filterTransactionsByDate(transactions);
 
@@ -65,7 +81,7 @@ class TransactionFirebaseBloc
     try {
       await _addExpenseUseCase.execute(event.transaction);
 
-      add(GetTransaction(_authUser));
+      add(const GetTransaction());
 
       emit(state.copyWith(status: TransactionStatus.success));
     } catch (e) {
