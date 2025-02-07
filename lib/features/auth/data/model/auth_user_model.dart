@@ -1,25 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
+import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 
-class AuthModel extends AuthEntities {
-  const AuthModel({
+class AuthUserModel extends AuthUserEntities {
+  const AuthUserModel({
     required super.uid,
     required super.email,
     super.name,
     super.imageUrl,
   });
 
-  factory AuthModel.fromFirebaseAuthUser(
+  factory AuthUserModel.fromFirebaseAuthUser(
       firebase_auth.User firebaseUser) {
-    return AuthModel(
+    return AuthUserModel(
         uid: firebaseUser.uid,
         email: firebaseUser.email ?? '',
-        name: firebaseUser.displayName ?? firebaseUser.name,
+        name: firebaseUser.displayName ?? '',
         imageUrl: firebaseUser.photoURL);
   }
 
-  AuthModel toEntity() {
-    return AuthModel(
+  AuthUserEntities toEntity() {
+    return AuthUserEntities(
         uid: uid, email: email, name: name, imageUrl: imageUrl);
   }
 
@@ -31,8 +31,4 @@ class AuthModel extends AuthEntities {
       'imageUrl': imageUrl
     };
   }
-}
-
-extension on firebase_auth.User {
-  get name => null;
 }
