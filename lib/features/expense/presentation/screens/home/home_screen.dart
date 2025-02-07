@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
+import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:expense_tracker/features/expense/domain/entity/transaction_entities.dart';
@@ -19,7 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
-  final AuthEntities authUser;
+  final AuthUserEntities authUser;
   const HomeScreen({super.key, required this.authUser});
   static const String routeName = '/';
 
@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: () async {
           context
               .read<TransactionFirebaseBloc>()
-              .add(GetTransaction(widget.authUser));
+              .add(const GetTransaction());
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
