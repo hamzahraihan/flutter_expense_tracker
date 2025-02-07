@@ -1,4 +1,4 @@
-import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
+import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_state.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
 class TransactionsScreen extends StatefulWidget {
-  final AuthEntities authUser;
+  final AuthUserEntities authUser;
   const TransactionsScreen({super.key, required this.authUser});
   static const String routeName = '/expense';
 
@@ -68,7 +68,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
           onRefresh: () async {
             context
                 .read<TransactionFirebaseBloc>()
-                .add(GetTransaction(widget.authUser));
+                .add(const GetTransaction());
           },
           child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
