@@ -4,17 +4,17 @@
 // data is actually stored or retrieved, they just define
 // what you can do with the data.
 
-import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
+import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 
 abstract class AuthRepository {
-  Stream<AuthEntities?> get authUser;
+  Stream<AuthUserEntities?> get authUser;
 
-  Future<AuthEntities> signUpWithEmailAndPassword(
+  Future<AuthUserEntities> signUpWithEmailAndPassword(
       {required String name,
       required String email,
       required String password});
 
-  Future<AuthEntities> signInWithEmailAndPassword(
+  Future<AuthUserEntities> signInWithEmailAndPassword(
       {required String email, required String password});
 
   Future<void> signInWithGoogle();
