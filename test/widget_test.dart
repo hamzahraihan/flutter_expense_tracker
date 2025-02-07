@@ -48,7 +48,7 @@ void main() {
       (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp(
-        authUser: await authRepositoryImpl.authUser.first,
+        authUser: authRepositoryImpl.authUser,
         authRepositoryImpl: authRepositoryImpl,
         getTransactionsUseCase: getTransactionsUseCase,
         signInUseCase: signInUseCase,
