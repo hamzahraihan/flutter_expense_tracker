@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:expense_tracker/features/auth/data/data_source/auth_api_service.dart';
 import 'package:expense_tracker/features/auth/data/repository/auth_repository_impl.dart';
-import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
+import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 import 'package:expense_tracker/features/auth/domain/usecase/sign_in.dart';
 import 'package:expense_tracker/features/auth/domain/usecase/sign_up.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
@@ -70,15 +70,14 @@ void main() async {
       GetTransactionsUseCase(transactionRepositoryImpl);
 
   runApp(MyApp(
-    authRepositoryImpl: authRepositoryImpl,
-    signInUseCase: signInUseCase,
-    signUpUseCase: signUpUseCase,
-    getTransactionsUseCase: getTransactionsUseCase,
-    addAccountWalletUseCase: addAccountWalletUseCase,
-    getAccountWalletUseCase: getAccountWalletUseCase,
-    transactionRepositoryImpl: transactionRepositoryImpl,
-    authUser: await authRepositoryImpl.authUser.first,
-  ));
+      authRepositoryImpl: authRepositoryImpl,
+      signInUseCase: signInUseCase,
+      signUpUseCase: signUpUseCase,
+      getTransactionsUseCase: getTransactionsUseCase,
+      addAccountWalletUseCase: addAccountWalletUseCase,
+      getAccountWalletUseCase: getAccountWalletUseCase,
+      transactionRepositoryImpl: transactionRepositoryImpl,
+      authUser: authRepositoryImpl.authUser));
 }
 
 class MyApp extends StatelessWidget {
@@ -89,7 +88,7 @@ class MyApp extends StatelessWidget {
   final TransactionRepositoryImpl transactionRepositoryImpl;
   final AddAccountWalletUseCase addAccountWalletUseCase;
   final GetAccountWalletUseCase getAccountWalletUseCase;
-  final AuthEntities authUser;
+  final Stream<AuthUserEntities> authUser;
 
   const MyApp(
       {super.key,
@@ -104,7 +103,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('user data  ${authUser.toString()}');
     return MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -121,7 +119,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => TransactionFirebaseBloc(
                 transactionRepositoryImpl, authUser)
-              ..add(GetTransaction(authUser)),
+              ..add(const GetTransaction()),
           ),
           BlocProvider(
               create: (context) => AddTransactionBloc(
