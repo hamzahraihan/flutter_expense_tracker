@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
+import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 
 enum AuthStatus { authenticated, unauthenticated, loading, failure }
 
@@ -11,18 +11,18 @@ extension AuthStatusX on AuthStatus {
 }
 
 class AuthState extends Equatable {
-  const AuthState({AuthEntities user = AuthEntities.empty})
+  const AuthState({AuthUserEntities user = AuthUserEntities.empty})
       : this._(
-          authStatus: user == AuthEntities.empty
+          authStatus: user == AuthUserEntities.empty
               ? AuthStatus.unauthenticated
               : AuthStatus.authenticated,
           user: user,
         );
 
   const AuthState._(
-      {this.user = AuthEntities.empty, required this.authStatus});
+      {this.user = AuthUserEntities.empty, required this.authStatus});
 
-  final AuthEntities user;
+  final AuthUserEntities user;
   final AuthStatus authStatus;
 
   @override
