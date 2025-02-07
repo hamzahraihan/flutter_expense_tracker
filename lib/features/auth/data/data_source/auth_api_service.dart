@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expense_tracker/features/auth/data/model/auth_model.dart';
+import 'package:expense_tracker/features/auth/data/model/auth_user_model.dart';
 import 'package:expense_tracker/services/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
@@ -19,17 +19,16 @@ class AuthApiService {
 
   /// Stream of [User] which will emit the current user when
   /// the authentication state changes.
-  Stream<AuthModel?> get user {
+  Stream<AuthUserModel?> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      final AuthModel? user = firebaseUser == null
-          ? null
-          : AuthModel.fromFirebaseAuthUser(firebaseUser);
-
-      return user;
+      if (firebaseUser == null) {
+        return null;
+      }
+      return AuthUserModel.fromFirebaseAuthUser(firebaseUser);
     });
   }
 
-  Future<AuthModel> signUpWithEmailAndPassword(
+  Future<AuthUserModel> signUpWithEmailAndPassword(
       {required String name,
       required String email,
       required String password}) async {
@@ -38,7 +37,7 @@ class AuthApiService {
           await _firebaseAuth.createUserWithEmailAndPassword(
               email: email, password: password);
 
-      AuthModel user = AuthModel(
+      AuthUserModel user = AuthUserModel(
         uid: credential.user!.uid.toString(),
         name: name,
         email: credential.user!.email.toString(),
@@ -53,13 +52,13 @@ class AuthApiService {
           .doc(credential.user!.uid)
           .set(user.toFirestore());
 
-      return AuthModel.fromFirebaseAuthUser(credential.user!);
+      return AuthUserModel.fromFirebaseAuthUser(credential.user!);
     } catch (e) {
       throw Exception('An exception has occurred: $e');
     }
   }
 
-  Future<AuthModel> signInWithEmailAndPassword(
+  Future<AuthUserModel> signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
       firebase_auth.UserCredential credential =
@@ -71,7 +70,7 @@ class AuthApiService {
             'Sign in failed: The user is null after sign in.');
       }
 
-      return AuthModel.fromFirebaseAuthUser(credential.user!);
+      return AuthUserModel.fromFirebaseAuthUser(credential.user!);
     } on firebase_auth.FirebaseAuthException catch (e) {
       print(e.code);
       throw SignInWithEmailAndPasswordFailure.fromCode(e.code);
