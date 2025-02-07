@@ -1,4 +1,6 @@
-import 'package:expense_tracker/features/auth/domain/entity/auth_entities.dart';
+import 'dart:async';
+
+import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 import 'package:expense_tracker/features/expense/domain/repository/transaction_repository.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
@@ -12,13 +14,21 @@ class AddTransactionBloc
     extends Bloc<AddTransactionEvent, AddTransactionState> {
   final TransactionRepository _transactionRepository;
   final TransactionFirebaseBloc _transactionBloc;
-  final AuthEntities _authUser;
+  final Stream<AuthUserEntities> authUser;
+  late AuthUserEntities _currentUser;
+
+  late final StreamSubscription<AuthUserEntities>
+      _authUserSubscription;
+
   late final AddExpenseUseCase _addExpenseUseCase =
       AddExpenseUseCase(_transactionRepository);
 
   AddTransactionBloc(this._transactionBloc,
-      this._transactionRepository, this._authUser)
+      this._transactionRepository, this.authUser)
       : super(const AddTransactionState()) {
+    _authUserSubscription = authUser.listen((user) {
+      _currentUser = user;
+    });
     on<AddTransactionDescriptionChanged>(
         _onAddTransactionDescriptionChanged);
     on<AddTransactionCategoryChanged>(
@@ -27,6 +37,12 @@ class AddTransactionBloc
     on<AddTransactionExpenseTypeChanged>(
         _onAddTransactionExpenseTypeChanged);
     on<AddTransactionSubmitted>(_onAddExpenseTransaction);
+  }
+
+  @override
+  Future<void> close() {
+    _authUserSubscription.cancel();
+    return super.close();
   }
 
   void _onAddTransactionDescriptionChanged(
@@ -60,7 +76,7 @@ class AddTransactionBloc
     emit(state.copyWith(status: AddTransactionStatus.loading));
     try {
       final Map<String, dynamic> transaction = {
-        'uid': _authUser.uid,
+        'uid': _currentUser.uid,
         'title': state.categoryValue,
         'category': state.categoryValue,
         'description': state.descriptionValue,
@@ -72,7 +88,7 @@ class AddTransactionBloc
       // Execute expense use case add transaction data
       await _addExpenseUseCase.execute(transaction);
       // Notify another bloc to fetch updated transactions
-      _transactionBloc.add(GetTransaction(_authUser));
+      _transactionBloc.add(const GetTransaction());
 
       emit(state.copyWith(status: AddTransactionStatus.success));
     } catch (e) {
