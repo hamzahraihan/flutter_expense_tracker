@@ -11,6 +11,10 @@ final class GetTransaction extends TransactionFirebaseEvent {
   const GetTransaction();
 }
 
+class ClearTransactions extends TransactionFirebaseEvent {
+  const ClearTransactions();
+}
+
 final class AddExpenseTransaction extends TransactionFirebaseEvent {
   final Map<String, dynamic> transaction;
   const AddExpenseTransaction(this.transaction);
