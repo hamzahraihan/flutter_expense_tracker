@@ -25,11 +25,10 @@ class TransactionsApiService {
       if (snapshot.docs.isEmpty) {
         log('No documents found for user ${authUser.uid}');
         return [];
-      } else {
-        return snapshot.docs
-            .map((doc) => TransactionsModel.fromFirestore(doc, null))
-            .toList();
       }
+      return snapshot.docs
+          .map((doc) => TransactionsModel.fromFirestore(doc, null))
+          .toList();
     } catch (e) {
       log('Error: $e');
       throw Exception('Error fetching transaction: $e');
