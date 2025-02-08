@@ -53,7 +53,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     });
   }
 
-  _buildBody(state) {
+  _buildBody(TransactionFirebaseState state) {
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
@@ -70,30 +70,38 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 .read<TransactionFirebaseBloc>()
                 .add(const GetTransaction());
           },
-          child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              children: [
-                TransactionsList(
-                  transactionData: state.todayTransactions,
-                  dateTitle: 'Today',
-                ),
-                TransactionsList(
-                  transactionData: state.yesterdayTransactions,
-                  dateTitle: 'Yesterdays',
-                ),
-                TransactionsList(
-                  transactionData: state.thisWeekTransactions,
-                  dateTitle: 'This Week',
-                ),
-                TransactionsList(
-                  transactionData: state.thisMonthTransaction,
-                  dateTitle: 'This Month',
-                ),
-                TransactionsList(
-                  transactionData: state.olderTransactions,
-                  dateTitle: 'Older',
-                ),
-              ])),
+          child: state.transactions.isEmpty
+              ? const Center(
+                  child: Icon(
+                  Icons.remove_shopping_cart,
+                  size: 100,
+                  color: Colors.black38,
+                ))
+              : ListView(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16.0),
+                  children: [
+                      TransactionsList(
+                        transactionData: state.todayTransactions,
+                        dateTitle: 'Today',
+                      ),
+                      TransactionsList(
+                        transactionData: state.yesterdayTransactions,
+                        dateTitle: 'Yesterdays',
+                      ),
+                      TransactionsList(
+                        transactionData: state.thisWeekTransactions,
+                        dateTitle: 'This Week',
+                      ),
+                      TransactionsList(
+                        transactionData: state.thisMonthTransaction,
+                        dateTitle: 'This Month',
+                      ),
+                      TransactionsList(
+                        transactionData: state.olderTransactions,
+                        dateTitle: 'Older',
+                      ),
+                    ])),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
           type: ExpandableFabType.up,
