@@ -30,11 +30,14 @@ class TransactionFirebaseBloc
       this._transactionRepositoryImpl, this.authUser)
       : super(const TransactionFirebaseState()) {
     // handle the Stream of AuthUserEntities authUser
-    _authUserSubscription = authUser.listen((user) {
+    _authUserSubscription = authUser.listen((AuthUserEntities user) {
+      log('listening to user stream $user');
       _currentUser = user;
+      add(const GetTransaction()); // refresh data when user changes
     });
     on<GetTransaction>(_onFetchTransactions);
     on<AddExpenseTransaction>(_onAddExpenseTransaction);
+    on<ClearTransactions>(_onClearTransactionData);
   }
 
   @override
@@ -49,30 +52,63 @@ class TransactionFirebaseBloc
 
     emit(state.copyWith(status: TransactionStatus.loading));
 
-    final transactions =
-        await _getTransactionsUseCase.execute(_currentUser);
-    final GroupedTransactions groupedTransactions =
-        Transactions.filterTransactionsByDate(transactions);
+// First check if we have a valid user
+    if (_currentUser.isEmpty) {
+      emit(state.copyWith(
+          status: TransactionStatus.success,
+          transactions: [],
+          todayTransactions: [],
+          yesterdayTransactions: [],
+          thisWeekTransactions: [],
+          thisMonthTransaction: [],
+          olderTransactions: []));
+      return;
+    }
 
+    emit(state.copyWith(status: TransactionStatus.loading));
     try {
-      if (transactions.isNotEmpty) {
+      final List<TransactionsModel> transactions =
+          await _getTransactionsUseCase.execute(_currentUser);
+      final GroupedTransactions groupedTransactions =
+          Transactions.filterTransactionsByDate(transactions);
+
+      if (transactions.isEmpty) {
         emit(state.copyWith(
             status: TransactionStatus.success,
-            transactions: transactions,
-            todayTransactions: groupedTransactions.today,
-            yesterdayTransactions: groupedTransactions.yesterady,
-            thisWeekTransactions: groupedTransactions.thisWeek,
-            thisMonthTransaction: groupedTransactions.thisMonth,
-            olderTransactions: groupedTransactions.older));
-      } else {
-        emit(state.copyWith(
-            status: TransactionStatus.success, transactions: []));
+            transactions: [],
+            todayTransactions: [],
+            yesterdayTransactions: [],
+            thisWeekTransactions: [],
+            thisMonthTransaction: [],
+            olderTransactions: []));
+        return;
       }
-    } catch (e) {
+
       emit(state.copyWith(
-        status: TransactionStatus.failure,
-      ));
+          status: TransactionStatus.success,
+          transactions: transactions,
+          todayTransactions: groupedTransactions.today,
+          yesterdayTransactions: groupedTransactions.yesterady,
+          thisWeekTransactions: groupedTransactions.thisWeek,
+          thisMonthTransaction: groupedTransactions.thisMonth,
+          olderTransactions: groupedTransactions.older));
+    } catch (e) {
+      log('Error fetching transactions: $e');
+      emit(state.copyWith(
+          status: TransactionStatus.failure,
+          transactions: [],
+          todayTransactions: [],
+          yesterdayTransactions: [],
+          thisWeekTransactions: [],
+          thisMonthTransaction: [],
+          olderTransactions: []));
     }
+  }
+
+  void _onClearTransactionData(ClearTransactions event,
+      Emitter<TransactionFirebaseState> emit) {
+    log('transaction cleared');
+    emit(state.copyWith(transactions: []));
   }
 
   void _onAddExpenseTransaction(AddExpenseTransaction event,
