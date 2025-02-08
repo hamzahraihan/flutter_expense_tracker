@@ -1,10 +1,11 @@
-import 'package:expense_tracker/features/expense/domain/repository/transaction_repository.dart';
+import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
 
 class AddExpenseUseCase {
-  final TransactionRepository _transactionRepository;
-  AddExpenseUseCase(this._transactionRepository);
+  final TransactionRepositoryImpl _transactionRepositoryImpl;
+  AddExpenseUseCase(this._transactionRepositoryImpl);
 
   Future<void> execute(Map<String, dynamic> transaction) {
-    return _transactionRepository.addExpenseTransaction(transaction);
+    return _transactionRepositoryImpl
+        .addExpenseTransaction(transaction);
   }
 }
