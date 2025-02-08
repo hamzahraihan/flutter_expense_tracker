@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
-import 'package:expense_tracker/features/expense/domain/repository/transaction_repository.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
@@ -12,19 +11,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddTransactionBloc
     extends Bloc<AddTransactionEvent, AddTransactionState> {
-  final TransactionRepository _transactionRepository;
   final TransactionFirebaseBloc _transactionBloc;
   final Stream<AuthUserEntities> authUser;
   late AuthUserEntities _currentUser;
-
+  final AddExpenseUseCase _addExpenseUseCase;
   late final StreamSubscription<AuthUserEntities>
       _authUserSubscription;
 
-  late final AddExpenseUseCase _addExpenseUseCase =
-      AddExpenseUseCase(_transactionRepository);
-
-  AddTransactionBloc(this._transactionBloc,
-      this._transactionRepository, this.authUser)
+  AddTransactionBloc(
+      this._transactionBloc, this._addExpenseUseCase, this.authUser)
       : super(const AddTransactionState()) {
     _authUserSubscription = authUser.listen((user) {
       _currentUser = user;
