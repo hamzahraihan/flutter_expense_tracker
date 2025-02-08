@@ -38,6 +38,16 @@ class IconSelection {
         colorIcon = Colors.greenAccent.shade700;
         colorBackground = Colors.greenAccent.shade100;
         break;
+      case 'Salary':
+        icon = Icons.monetization_on;
+        colorIcon = Colors.green;
+        colorBackground = Colors.greenAccent.shade100;
+        break;
+      case 'Passive income':
+        icon = Icons.shopping_basket;
+        colorIcon = Colors.black;
+        colorBackground = Colors.black12;
+        break;
     }
     return IconSelection(
         category: category,
