@@ -17,6 +17,7 @@ import 'package:expense_tracker/features/expense/app.dart';
 import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/add_account_wallet.dart';
+import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/get_account_wallet.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/get_transactions.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_bloc.dart';
@@ -51,6 +52,9 @@ void main() async {
   final TransactionRepositoryImpl transactionRepositoryImpl =
       TransactionRepositoryImpl(transactionsApiService);
 
+  late final AddExpenseUseCase addExpenseUseCase =
+      AddExpenseUseCase(transactionRepositoryImpl);
+
   final AuthRepositoryImpl authRepositoryImpl =
       AuthRepositoryImpl(authApiService);
 
@@ -77,6 +81,7 @@ void main() async {
       addAccountWalletUseCase: addAccountWalletUseCase,
       getAccountWalletUseCase: getAccountWalletUseCase,
       transactionRepositoryImpl: transactionRepositoryImpl,
+      addExpenseUseCase: addExpenseUseCase,
       authUser: authRepositoryImpl.authUser));
 }
 
@@ -84,6 +89,7 @@ class MyApp extends StatelessWidget {
   final AuthRepositoryImpl authRepositoryImpl;
   final SignInUseCase signInUseCase;
   final SignUpUseCase signUpUseCase;
+  final AddExpenseUseCase addExpenseUseCase;
   final GetTransactionsUseCase getTransactionsUseCase;
   final TransactionRepositoryImpl transactionRepositoryImpl;
   final AddAccountWalletUseCase addAccountWalletUseCase;
@@ -99,6 +105,7 @@ class MyApp extends StatelessWidget {
       required this.addAccountWalletUseCase,
       required this.signInUseCase,
       required this.signUpUseCase,
+      required this.addExpenseUseCase,
       required this.transactionRepositoryImpl});
 
   @override
@@ -124,7 +131,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               create: (context) => AddTransactionBloc(
                   context.read<TransactionFirebaseBloc>(),
-                  transactionRepositoryImpl,
+                  addExpenseUseCase,
                   authUser)),
           BlocProvider(
               create: (context) => AccountBloc(
