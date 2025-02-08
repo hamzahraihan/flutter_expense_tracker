@@ -9,9 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 const List<String> list = <String>[
-  'Work',
-  'Side hustle',
-  'Freelance',
+  'Salary',
+  'Passive income',
   'Other',
 ];
 
@@ -25,7 +24,7 @@ class AddIncomeScreen extends StatefulWidget {
 class _AddIncomeScreenState extends State<AddIncomeScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final String intialCategoryValue = 'Work';
+  final String intialCategoryValue = 'Salary';
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +76,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
               .add(const AddTransactionSubmitted());
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Transaction added')));
+                const SnackBar(content: Text('Income added')));
           }
         } catch (e) {
           if (context.mounted) {
