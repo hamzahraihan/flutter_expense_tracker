@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-FirebaseFirestore db = FirebaseFirestore.instance;
+final FirebaseFirestore db = FirebaseFirestore.instance;
 // Future<List<TransactionsModel>> retrieveTransactionData() async {
 //   final snapshot = await db.collection('transactions').get();
 //   return snapshot.docs
