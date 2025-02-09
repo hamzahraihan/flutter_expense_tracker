@@ -15,16 +15,17 @@ const List<String> list = <String>[
 ];
 
 class AddIncomeScreen extends StatefulWidget {
-  const AddIncomeScreen({super.key});
+  const AddIncomeScreen({
+    super.key,
+  });
   static const String routeName = '/add-income';
   @override
   State<AddIncomeScreen> createState() => _AddIncomeScreenState();
 }
 
 class _AddIncomeScreenState extends State<AddIncomeScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final String intialCategoryValue = 'Salary';
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
 
     return BlocBuilder<AddTransactionBloc, AddTransactionState>(
         builder: (BuildContext context, AddTransactionState state) {
+      print(state.categoryValue);
       return Scaffold(
           // resizeToAvoidBottomInset: false,
           appBar: AppBar(
@@ -60,7 +62,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
-    Future<void> handleSubmitIncome() async {
+    void handleSubmitIncome() {
       // Validate returns true if the form is valid, or false otherwise.
       if (_formKey.currentState!.validate()) {
         // If the form is valid, display a snackbar. In the real world,
@@ -177,11 +179,6 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                 DropdownButtonWidget(
                   dropdownList: list,
                   initialValue: intialCategoryValue,
-                  onSelected: (value) {
-                    context
-                        .read<AddTransactionBloc>()
-                        .add(AddTransactionCategoryChanged(value));
-                  },
                 ),
                 const SizedBox(
                   height: 20,
