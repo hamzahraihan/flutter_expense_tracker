@@ -241,24 +241,27 @@ class SelectedWallet extends StatefulWidget {
 class _SelectedWalletState extends State<SelectedWallet> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 50,
+    final Orientation orientation =
+        MediaQuery.of(context).orientation;
+
+    return Container(
+        margin: const EdgeInsets.symmetric(vertical: 20),
         child: GridView.count(
+
             // Create a grid with 2 columns. If you change the scrollDirection to
             // horizontal, this produces 2 rows.
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 4,
-            mainAxisSpacing: 10,
+            mainAxisSpacing:
+                orientation == Orientation.portrait ? 30 : 40,
+            crossAxisSpacing: 10,
+            shrinkWrap: true,
+            childAspectRatio:
+                orientation == Orientation.portrait ? 3 : 8,
             // Generate 100 widgets that display their index in the List.
             children: wallets
-                .map((wallet) => (SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: Container(
-                          margin: const EdgeInsets.all(20),
-                          height: 20,
-                          width: 20,
-                          child: SvgSelection(svgName: wallet)),
+                .map((wallet) => (GridTile(
+                      child: SvgSelection(svgName: wallet),
                     )))
                 .toList()));
   }
