@@ -1,15 +1,17 @@
 import 'dart:collection';
 
+import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DropdownButtonWidget extends StatefulWidget {
   final List<String> dropdownList;
   final String initialValue;
-  final ValueChanged<String> onSelected;
+
   const DropdownButtonWidget(
       {super.key,
       required this.initialValue,
-      required this.onSelected,
       required this.dropdownList});
 
   @override
@@ -26,12 +28,16 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
 
   @override
   void initState() {
-    super.initState();
     dropdownValue = widget.initialValue;
+    super.initState();
+    context
+        .read<AddTransactionBloc>()
+        .add(AddTransactionCategoryChanged(widget.initialValue));
   }
 
   @override
   Widget build(BuildContext context) {
+    print(dropdownValue);
     final List<MenuEntry> menuEntries =
         UnmodifiableListView<MenuEntry>(list.map<MenuEntry>(
             (String name) => MenuEntry(value: name, label: name)));
@@ -49,12 +55,12 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
       dropdownMenuEntries: menuEntries,
       enableSearch: false,
       onSelected: (value) {
-        if (value != null) {
-          setState(() {
-            dropdownValue = value;
-          });
-        }
-        widget.onSelected(value!);
+        setState(() {
+          dropdownValue = value ?? dropdownValue;
+        });
+        context
+            .read<AddTransactionBloc>()
+            .add(AddTransactionCategoryChanged(dropdownValue));
       },
     );
   }
