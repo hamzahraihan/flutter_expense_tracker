@@ -14,6 +14,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
     try {
       await _transactionsApiService
           .addExpenseTransaction(transaction);
+      print('5. Repository: API service call completed');
     } catch (e) {
       throw Exception(e);
     }
