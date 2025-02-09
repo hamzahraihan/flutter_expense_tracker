@@ -28,6 +28,7 @@ import 'package:expense_tracker/features/expense/presentation/bloc/transaction/f
 import 'package:expense_tracker/features/expense/presentation/screens/account/account_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/upload/add_expense_screen.dart';
+import 'package:expense_tracker/features/expense/presentation/screens/upload/add_income_screen.dart';
 import 'package:expense_tracker/firebase_options.dart';
 import 'package:expense_tracker/widgets/loading.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -52,7 +53,7 @@ void main() async {
   final TransactionRepositoryImpl transactionRepositoryImpl =
       TransactionRepositoryImpl(transactionsApiService);
 
-  late final AddExpenseUseCase addExpenseUseCase =
+  final AddExpenseUseCase addExpenseUseCase =
       AddExpenseUseCase(transactionRepositoryImpl);
 
   final AuthRepositoryImpl authRepositoryImpl =
@@ -129,10 +130,17 @@ class MyApp extends StatelessWidget {
               ..add(const GetTransaction()),
           ),
           BlocProvider(
-              create: (context) => AddTransactionBloc(
-                  context.read<TransactionFirebaseBloc>(),
-                  addExpenseUseCase,
-                  authUser)),
+            create: (context) {
+              // create authStream variable to addTransactionBloc because somehow passing authUser doesn't work.
+              final authStream = authRepositoryImpl.authUser;
+
+              return AddTransactionBloc(
+                context.read<TransactionFirebaseBloc>(),
+                addExpenseUseCase,
+                authStream,
+              );
+            },
+          ),
           BlocProvider(
               create: (context) => AccountBloc(
                   addAccountWalletUseCase, getAccountWalletUseCase)
@@ -176,12 +184,13 @@ class MyApp extends StatelessWidget {
                           case TransactionsScreen.routeName:
                             initialIndex = 1;
                             break;
-                          case AddExpenseScreen.routeName:
+                          case AccountScreen.routeName:
                             initialIndex = 2;
                             break;
-                          case AccountScreen.routeName:
-                            initialIndex = 3;
-                            break;
+                          case AddExpenseScreen.routeName:
+                            return const AddExpenseScreen();
+                          case AddIncomeScreen.routeName:
+                            return const AddIncomeScreen();
                           default:
                             initialIndex = 0;
                             break;
