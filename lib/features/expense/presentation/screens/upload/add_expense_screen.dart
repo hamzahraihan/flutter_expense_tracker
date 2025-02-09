@@ -16,7 +16,9 @@ const List<String> list = <String>[
 ];
 
 class AddExpenseScreen extends StatefulWidget {
-  const AddExpenseScreen({super.key});
+  const AddExpenseScreen({
+    super.key,
+  });
   static const String routeName = '/add-expense';
   @override
   State<AddExpenseScreen> createState() => _AddExpenseScreenState();
@@ -24,8 +26,8 @@ class AddExpenseScreen extends StatefulWidget {
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final String intialCategoryValue = 'Subscription';
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     context
@@ -60,7 +62,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
-    Future<void> handleSubmitExpense() async {
+    void handleSubmitExpense() {
       // Validate returns true if the form is valid, or false otherwise.
       if (_formKey.currentState!.validate()) {
         // Map<String, dynamic> transactionUserInput = {
@@ -188,11 +190,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 DropdownButtonWidget(
                   dropdownList: list,
                   initialValue: intialCategoryValue,
-                  onSelected: (value) {
-                    context
-                        .read<AddTransactionBloc>()
-                        .add(AddTransactionCategoryChanged(value));
-                  },
                 ),
                 const SizedBox(
                   height: 20,
