@@ -12,18 +12,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AddTransactionBloc
     extends Bloc<AddTransactionEvent, AddTransactionState> {
   final TransactionFirebaseBloc _transactionBloc;
-  final Stream<AuthUserEntities> authUser;
+
   late AuthUserEntities _currentUser;
   final AddExpenseUseCase _addExpenseUseCase;
   late final StreamSubscription<AuthUserEntities>
       _authUserSubscription;
 
-  AddTransactionBloc(
-      this._transactionBloc, this._addExpenseUseCase, this.authUser)
+  AddTransactionBloc(this._transactionBloc, this._addExpenseUseCase,
+      Stream<AuthUserEntities> authUser)
       : super(const AddTransactionState()) {
-    _authUserSubscription = authUser.listen((user) {
-      _currentUser = user;
-    });
+    _authUserSubscription = authUser.listen(
+      (user) {
+        _currentUser = user;
+      },
+    );
+
     on<AddTransactionDescriptionChanged>(
         _onAddTransactionDescriptionChanged);
     on<AddTransactionCategoryChanged>(
@@ -69,7 +72,9 @@ class AddTransactionBloc
   void _onAddExpenseTransaction(AddTransactionSubmitted event,
       Emitter<AddTransactionState> emit) async {
     emit(state.copyWith(status: AddTransactionStatus.loading));
+
     try {
+      print('Event received'); // Add this
       final Map<String, dynamic> transaction = {
         'uid': _currentUser.uid,
         'title': state.categoryValue,
@@ -79,14 +84,15 @@ class AddTransactionBloc
         'date': DateTime.now(),
         'expenseType': state.expenseType
       };
-
+      print('Transaction data: $transaction'); // Debug print
       // Execute expense use case add transaction data
       await _addExpenseUseCase.execute(transaction);
       // Notify another bloc to fetch updated transactions
       _transactionBloc.add(const GetTransaction());
-
+      print('3. Transaction executed through use case');
       emit(state.copyWith(status: AddTransactionStatus.success));
     } catch (e) {
+      print('Error adding transaction: $e');
       emit(state.copyWith(status: AddTransactionStatus.failure));
     }
   }
