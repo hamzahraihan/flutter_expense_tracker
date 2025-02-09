@@ -70,12 +70,23 @@ class TransactionsApiService {
   Future<void> addExpenseTransaction(
       Map<String, dynamic> transaction) async {
     try {
-      await db
+      log('Starting Firebase upload. Transaction data: $transaction');
+      log('Collection path: $transactionCollectionPath');
+
+      final docRef = db
           .collection(transactionCollectionPath)
-          .doc()
-          .set(transaction);
+          .doc(); // Generate new doc ID
+
+      log('Generated document ID: ${docRef.id}');
+
+      await docRef
+          .set(transaction)
+          .onError((e, _) => print("Error writing document: $e"));
+
+      log('Transaction successfully uploaded to Firebase');
     } catch (e) {
-      throw Exception('Error fetching transaction: $e');
+      log('Firebase upload error: $e');
+      throw Exception('Failed to add transaction: $e');
     }
   }
 
