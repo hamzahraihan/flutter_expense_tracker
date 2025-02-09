@@ -12,6 +12,7 @@ import 'package:expense_tracker/features/auth/domain/usecase/sign_up.dart';
 import 'package:expense_tracker/features/expense/data/data_source/transactions_api_service.dart';
 import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/add_account_wallet.dart';
+import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/get_account_wallet.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/get_transactions.dart';
 import 'package:expense_tracker/main.dart';
@@ -35,6 +36,8 @@ void main() {
 
   final SignUpUseCase signUpUseCase =
       SignUpUseCase(authRepositoryImpl);
+  final AddExpenseUseCase addExpenseUseCase =
+      AddExpenseUseCase(transactionRepositoryImpl);
 
   final GetTransactionsUseCase getTransactionsUseCase =
       GetTransactionsUseCase(transactionRepositoryImpl);
@@ -55,6 +58,7 @@ void main() {
         signUpUseCase: signUpUseCase,
         getAccountWalletUseCase: getAccountWalletUseCase,
         addAccountWalletUseCase: addAccountWalletUseCase,
+        addExpenseUseCase: addExpenseUseCase,
         transactionRepositoryImpl: transactionRepositoryImpl));
 
     // Verify that our counter starts at 0.
