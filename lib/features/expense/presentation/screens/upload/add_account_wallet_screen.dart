@@ -239,6 +239,7 @@ class SelectedWallet extends StatefulWidget {
 }
 
 class _SelectedWalletState extends State<SelectedWallet> {
+  int? activateButtonIndex = 0;
   @override
   Widget build(BuildContext context) {
     final Orientation orientation =
@@ -267,13 +268,16 @@ class _SelectedWalletState extends State<SelectedWallet> {
   }
 
   Widget _selectWalletWidget(int index, String wallet) {
-    int? activateButtonIndex = 0;
-
     final bool isActive = activateButtonIndex == index;
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        backgroundColor: isActive ? Colors.black : null,
-      ),
+    return TextButton(
+      style: TextButton.styleFrom(
+          backgroundColor: Colors.deepPurple.shade100,
+          shape: RoundedRectangleBorder(
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(10)),
+              side: isActive
+                  ? const BorderSide(color: Colors.deepPurple)
+                  : BorderSide.none)),
       onPressed: () {
         setState(() {
           activateButtonIndex = index;
