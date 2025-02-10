@@ -254,11 +254,11 @@ class _SelectedWalletState extends State<SelectedWallet> {
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 4,
             mainAxisSpacing:
-                orientation == Orientation.portrait ? 30 : 40,
+                orientation == Orientation.portrait ? 10 : 20,
             crossAxisSpacing: 10,
             shrinkWrap: true,
             childAspectRatio:
-                orientation == Orientation.portrait ? 3 : 8,
+                orientation == Orientation.portrait ? 2 : 6,
             // Generate 100 widgets that display their index in the List.
             children: wallets.asMap().entries.map((entry) {
               int index = entry.key;
