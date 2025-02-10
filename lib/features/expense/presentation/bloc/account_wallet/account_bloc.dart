@@ -14,6 +14,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     on<GetAccountWallet>(_onFetchAccountWallets);
     on<AccountNameChanged>(_onAccountWalletNameChanged);
     on<AccountBalanceChanged>(_onAddAccountBalanceChanged);
+    on<AccountTypeChanged>(_onAddAccountTypeChanged);
     on<AddAccountWalletSubmitted>(_onAddAccountWallet);
   }
 
@@ -41,6 +42,11 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     emit(state.copyWith(
       balance: event.balance,
     ));
+  }
+
+  void _onAddAccountTypeChanged(
+      AccountTypeChanged event, Emitter<AccountState> emit) {
+    emit(state.copyWith(walletType: event.accountWalletType));
   }
 
   Future<void> _onAddAccountWallet(AddAccountWalletSubmitted event,
