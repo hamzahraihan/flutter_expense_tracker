@@ -259,10 +259,27 @@ class _SelectedWalletState extends State<SelectedWallet> {
             childAspectRatio:
                 orientation == Orientation.portrait ? 3 : 8,
             // Generate 100 widgets that display their index in the List.
-            children: wallets
-                .map((wallet) => (GridTile(
-                      child: SvgSelection(svgName: wallet),
-                    )))
-                .toList()));
+            children: wallets.asMap().entries.map((entry) {
+              int index = entry.key;
+              String wallet = entry.value;
+              return _selectWalletWidget(index, wallet);
+            }).toList()));
+  }
+
+  Widget _selectWalletWidget(int index, String wallet) {
+    int? activateButtonIndex = 0;
+
+    final bool isActive = activateButtonIndex == index;
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        backgroundColor: isActive ? Colors.black : null,
+      ),
+      onPressed: () {
+        setState(() {
+          activateButtonIndex = index;
+        });
+      },
+      child: SvgSelection(svgName: wallet),
+    );
   }
 }
