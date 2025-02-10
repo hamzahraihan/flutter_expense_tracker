@@ -1,10 +1,9 @@
 import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_state.dart';
-import 'package:expense_tracker/features/expense/presentation/screens/account/account_screen.dart';
-import 'package:expense_tracker/features/expense/presentation/util/svg_selection.dart';
 
 import 'package:expense_tracker/features/expense/presentation/widgets/form_button_widget.dart';
+import 'package:expense_tracker/features/expense/presentation/widgets/select_wallet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +27,7 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(
         builder: (BuildContext context, AccountState state) {
+      print(state.props);
       final Orientation orientation =
           MediaQuery.of(context).orientation;
       return Scaffold(
@@ -228,62 +228,5 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
 
   _buildBodyLandscape() {
     return SingleChildScrollView(primary: true, child: _buildBody());
-  }
-}
-
-class SelectedWallet extends StatefulWidget {
-  const SelectedWallet({super.key});
-
-  @override
-  State<SelectedWallet> createState() => _SelectedWalletState();
-}
-
-class _SelectedWalletState extends State<SelectedWallet> {
-  int? activateButtonIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    final Orientation orientation =
-        MediaQuery.of(context).orientation;
-
-    return Container(
-        margin: const EdgeInsets.symmetric(vertical: 20),
-        child: GridView.count(
-
-            // Create a grid with 2 columns. If you change the scrollDirection to
-            // horizontal, this produces 2 rows.
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 4,
-            mainAxisSpacing:
-                orientation == Orientation.portrait ? 10 : 20,
-            crossAxisSpacing: 10,
-            shrinkWrap: true,
-            childAspectRatio:
-                orientation == Orientation.portrait ? 2 : 6,
-            // Generate 100 widgets that display their index in the List.
-            children: wallets.asMap().entries.map((entry) {
-              int index = entry.key;
-              String wallet = entry.value;
-              return _selectWalletWidget(index, wallet);
-            }).toList()));
-  }
-
-  Widget _selectWalletWidget(int index, String wallet) {
-    final bool isActive = activateButtonIndex == index;
-    return TextButton(
-      style: TextButton.styleFrom(
-          backgroundColor: Colors.deepPurple.shade100,
-          shape: RoundedRectangleBorder(
-              borderRadius:
-                  const BorderRadius.all(Radius.circular(10)),
-              side: isActive
-                  ? const BorderSide(color: Colors.deepPurple)
-                  : BorderSide.none)),
-      onPressed: () {
-        setState(() {
-          activateButtonIndex = index;
-        });
-      },
-      child: SvgSelection(svgName: wallet),
-    );
   }
 }
