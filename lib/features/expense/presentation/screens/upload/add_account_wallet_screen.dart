@@ -167,7 +167,6 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
             ),
           ),
           Container(
-              height: 300,
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 26,
@@ -179,17 +178,10 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
                       topLeft: Radius.circular(42),
                       topRight: Radius.circular(42))),
               child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  spacing: 10.0,
                   children: [
-                    // DropdownButtonWidget(
-                    //   initialValue: intialCategoryValue,
-                    //   onSelected: (value) {
-                    //     context
-                    //         .read<AddTransactionBloc>()
-                    //         .add(AddTransactionCategoryChanged(value));
-                    //   },
-                    // ),
-
                     TextFormField(
                       onChanged: (value) {
                         context
@@ -214,7 +206,11 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
                             borderRadius: BorderRadius.circular(16)),
                       ),
                     ),
-
+                    const Text(
+                      'Bank',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     const SelectedWallet(),
                     FormButtonWidget(
                       title: 'Submit',
