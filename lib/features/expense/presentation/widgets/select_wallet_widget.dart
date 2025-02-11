@@ -16,30 +16,34 @@ class SelectedWallet extends StatefulWidget {
 
 class _SelectedWalletState extends State<SelectedWallet> {
   int? activateButtonIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<AccountBloc>().add(const AccountTypeChanged(''));
+  }
+
   @override
   Widget build(BuildContext context) {
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
-    return Container(
-        child: GridView.count(
+    return GridView.count(
 
-            // Create a grid with 2 columns. If you change the scrollDirection to
-            // horizontal, this produces 2 rows.
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 4,
-            mainAxisSpacing:
-                orientation == Orientation.portrait ? 5 : 10,
-            crossAxisSpacing: 5,
-            shrinkWrap: true,
-            childAspectRatio:
-                orientation == Orientation.portrait ? 2 : 6,
-            // Generate 100 widgets that display their index in the List.
-            children: wallets.asMap().entries.map((entry) {
-              int index = entry.key;
-              String wallet = entry.value;
-              return _selectWalletWidget(context, index, wallet);
-            }).toList()));
+        // Create a grid with 2 columns. If you change the scrollDirection to
+        // horizontal, this produces 2 rows.
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: 4,
+        mainAxisSpacing: orientation == Orientation.portrait ? 5 : 10,
+        crossAxisSpacing: 5,
+        shrinkWrap: true,
+        childAspectRatio: orientation == Orientation.portrait ? 2 : 6,
+        // Generate 100 widgets that display their index in the List.
+        children: wallets.asMap().entries.map((entry) {
+          int index = entry.key + 1;
+          String wallet = entry.value;
+          return _selectWalletWidget(context, index, wallet);
+        }).toList());
   }
 
   Widget _selectWalletWidget(
