@@ -22,7 +22,6 @@ class _SelectedWalletState extends State<SelectedWallet> {
         MediaQuery.of(context).orientation;
 
     return Container(
-        margin: const EdgeInsets.symmetric(vertical: 20),
         child: GridView.count(
 
             // Create a grid with 2 columns. If you change the scrollDirection to
@@ -30,8 +29,8 @@ class _SelectedWalletState extends State<SelectedWallet> {
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 4,
             mainAxisSpacing:
-                orientation == Orientation.portrait ? 10 : 20,
-            crossAxisSpacing: 10,
+                orientation == Orientation.portrait ? 5 : 10,
+            crossAxisSpacing: 5,
             shrinkWrap: true,
             childAspectRatio:
                 orientation == Orientation.portrait ? 2 : 6,
@@ -48,12 +47,12 @@ class _SelectedWalletState extends State<SelectedWallet> {
     final bool isActive = activateButtonIndex == index;
     return TextButton(
       style: TextButton.styleFrom(
-          backgroundColor: Colors.deepPurple.shade100,
+          backgroundColor: Colors.deepPurple.shade50,
           shape: RoundedRectangleBorder(
               borderRadius:
                   const BorderRadius.all(Radius.circular(10)),
               side: isActive
-                  ? const BorderSide(color: Colors.deepPurple)
+                  ? const BorderSide(color: Colors.deepPurpleAccent)
                   : BorderSide.none)),
       onPressed: () {
         setState(() {
