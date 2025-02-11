@@ -19,21 +19,12 @@ class AddAccountWalletScreen extends StatefulWidget {
 }
 
 class _AddAccountWalletState extends State<AddAccountWalletScreen> {
-  final String intialWalletType = 'Wallet type';
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AccountBloc, AccountState>(
-        listener: (BuildContext context, AccountState state) {
-      if (state.walletTypeStatus.isFailure) {
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(const SnackBar(
-              content: Text('Pick atleast one type of bank')));
-      }
-    }, builder: (BuildContext context, AccountState state) {
+    return BlocBuilder<AccountBloc, AccountState>(
+        builder: (BuildContext context, AccountState state) {
       print(state.props);
 
       final Orientation orientation =
@@ -53,12 +44,12 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
           ),
           backgroundColor: Colors.deepPurple,
           body: orientation == Orientation.portrait
-              ? _buildBody()
-              : _buildBodyLandscape());
+              ? _buildBody(state)
+              : _buildBodyLandscape(state));
     });
   }
 
-  _buildBody() {
+  _buildBody(AccountState state) {
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
@@ -221,6 +212,12 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SelectedWallet(),
+                    Text(
+                      state.status.isFailure
+                          ? 'Pick atleast one wallet type'
+                          : '',
+                      style: const TextStyle(color: Colors.red),
+                    ),
                     FormButtonWidget(
                       title: 'Submit',
                       onclick: handleSubmitAccount,
@@ -231,7 +228,8 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
     );
   }
 
-  _buildBodyLandscape() {
-    return SingleChildScrollView(primary: true, child: _buildBody());
+  _buildBodyLandscape(state) {
+    return SingleChildScrollView(
+        primary: true, child: _buildBody(state));
   }
 }
