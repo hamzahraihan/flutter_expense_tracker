@@ -22,14 +22,14 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
       Stream<AuthUserEntities> authUser)
       : super(const AccountState()) {
     _authUserSubscription = authUser.listen(
-      (user) {
+      (AuthUserEntities user) {
         _currentUser = user;
       },
     );
     on<GetAccountWallet>(_onFetchAccountWallets);
     on<AccountNameChanged>(_onAccountWalletNameChanged);
     on<AccountBalanceChanged>(_onAddAccountBalanceChanged);
-    on<AccountTypeChanged>(_onAddAccountTypeChanged);
+    on<AccountTypeChanged>(_onAddAccountWalletTypeChanged);
     on<AddAccountWalletSubmitted>(_onAddAccountWallet);
   }
 
@@ -65,20 +65,19 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     ));
   }
 
-  void _onAddAccountTypeChanged(
+  void _onAddAccountWalletTypeChanged(
       AccountTypeChanged event, Emitter<AccountState> emit) {
-    emit(state.copyWith(
-        walletType: event.accountWalletType,
-        status: AccountWalletStatus.success));
+    if (event.walletType.isNotEmpty) {
+      emit(state.copyWith(
+          walletType: event.walletType,
+          status: AccountWalletStatus.success));
+    } else {
+      emit(state.copyWith(status: AccountWalletStatus.failure));
+    }
   }
 
   Future<void> _onAddAccountWallet(AddAccountWalletSubmitted event,
       Emitter<AccountState> emit) async {
-    if (!(state.walletTypeStatus == AccountWalletStatus.success)) {
-      emit(state.copyWith(status: AccountWalletStatus.failure));
-      emit(state.copyWith(status: AccountWalletStatus.initial));
-      return;
-    }
     emit(state.copyWith(status: AccountWalletStatus.loading));
     try {
       final Map<String, dynamic> accountWallet = {
