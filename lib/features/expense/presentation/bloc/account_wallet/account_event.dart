@@ -30,9 +30,9 @@ final class AccountBalanceChanged extends AccountEvent {
 }
 
 final class AccountTypeChanged extends AccountEvent {
-  final String accountWalletType;
-  const AccountTypeChanged(this.accountWalletType);
+  final String walletType;
+  const AccountTypeChanged(this.walletType);
 
   @override
-  List<Object?> get props => [accountWalletType];
+  List<Object?> get props => [walletType];
 }
