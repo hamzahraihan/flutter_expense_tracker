@@ -132,7 +132,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) {
               // create authStream variable to addTransactionBloc because somehow passing authUser doesn't work.
-              final authStream = authRepositoryImpl.authUser;
+              final Stream<AuthUserEntities> authStream =
+                  authRepositoryImpl.authUser;
 
               return AddTransactionBloc(
                 context.read<TransactionFirebaseBloc>(),
@@ -141,12 +142,13 @@ class MyApp extends StatelessWidget {
               );
             },
           ),
-          BlocProvider(
-              create: (context) => AccountBloc(
-                  addAccountWalletUseCase,
-                  getAccountWalletUseCase,
-                  authUser)
-                ..add(const GetAccountWallet()))
+          BlocProvider(create: (context) {
+            final Stream<AuthUserEntities> authStream =
+                authRepositoryImpl.authUser;
+            return AccountBloc(addAccountWalletUseCase,
+                getAccountWalletUseCase, authStream)
+              ..add(const GetAccountWallet());
+          })
         ],
         child: MaterialApp(
           title: 'My Expense',
