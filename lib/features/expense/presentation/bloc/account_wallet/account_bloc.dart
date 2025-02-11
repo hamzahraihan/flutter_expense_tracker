@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/add_account_wallet.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/get_account_wallet.dart';
@@ -8,14 +11,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
   final AddAccountWalletUseCase _addAccountWalletUseCase;
   final GetAccountWalletUseCase _getAccountWalletUseCase;
+
+  late AuthUserEntities _currentUser;
+  late final StreamSubscription<AuthUserEntities>
+      _authUserSubscription;
+
   AccountBloc(
-      this._addAccountWalletUseCase, this._getAccountWalletUseCase)
+      this._addAccountWalletUseCase,
+      this._getAccountWalletUseCase,
+      Stream<AuthUserEntities> authUser)
       : super(const AccountState()) {
+    _authUserSubscription = authUser.listen(
+      (user) {
+        _currentUser = user;
+      },
+    );
     on<GetAccountWallet>(_onFetchAccountWallets);
     on<AccountNameChanged>(_onAccountWalletNameChanged);
     on<AccountBalanceChanged>(_onAddAccountBalanceChanged);
     on<AccountTypeChanged>(_onAddAccountTypeChanged);
     on<AddAccountWalletSubmitted>(_onAddAccountWallet);
+  }
+
+  @override
+  Future<void> close() {
+    _authUserSubscription.cancel();
+    return super.close();
   }
 
   Future<void> _onFetchAccountWallets(
@@ -46,14 +67,22 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
   void _onAddAccountTypeChanged(
       AccountTypeChanged event, Emitter<AccountState> emit) {
-    emit(state.copyWith(walletType: event.accountWalletType));
+    emit(state.copyWith(
+        walletType: event.accountWalletType,
+        status: AccountWalletStatus.success));
   }
 
   Future<void> _onAddAccountWallet(AddAccountWalletSubmitted event,
       Emitter<AccountState> emit) async {
+    if (!(state.walletTypeStatus == AccountWalletStatus.success)) {
+      emit(state.copyWith(status: AccountWalletStatus.failure));
+      emit(state.copyWith(status: AccountWalletStatus.initial));
+      return;
+    }
     emit(state.copyWith(status: AccountWalletStatus.loading));
     try {
       final Map<String, dynamic> accountWallet = {
+        'uid': _currentUser.uid,
         'walletName': state.walletName,
         'balance': state.balance,
         'walletType': state.walletType
