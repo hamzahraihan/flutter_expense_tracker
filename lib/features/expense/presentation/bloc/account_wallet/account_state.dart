@@ -15,7 +15,7 @@ class AccountState extends Equatable {
   final String? walletName;
   final int? balance;
   final String? walletType;
-  final AccountWalletStatus walletTypeStatus;
+
   final List<AccountWalletModel>? accountWallet;
 
   const AccountState(
@@ -23,7 +23,6 @@ class AccountState extends Equatable {
       this.status = AccountWalletStatus.initial,
       this.balance,
       this.walletType,
-      this.walletTypeStatus = AccountWalletStatus.initial,
       List<AccountWalletModel>? accountWallet})
       : accountWallet = accountWallet ?? const [];
 
@@ -32,16 +31,15 @@ class AccountState extends Equatable {
     String? walletName,
     int? balance,
     String? walletType,
-    AccountWalletStatus? walletTypeStatus,
     List<AccountWalletModel>? accountWallet,
   }) {
     return AccountState(
-        walletName: walletName ?? this.walletName,
-        status: status ?? this.status,
-        balance: balance ?? this.balance,
-        walletType: walletType ?? this.walletType,
-        accountWallet: accountWallet ?? this.accountWallet,
-        walletTypeStatus: walletTypeStatus ?? this.walletTypeStatus);
+      walletName: walletName ?? this.walletName,
+      status: status ?? this.status,
+      balance: balance ?? this.balance,
+      walletType: walletType ?? this.walletType,
+      accountWallet: accountWallet ?? this.accountWallet,
+    );
   }
 
   @override
@@ -51,6 +49,5 @@ class AccountState extends Equatable {
         balance,
         walletType,
         accountWallet,
-        walletTypeStatus
       ];
 }
