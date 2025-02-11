@@ -143,7 +143,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
               create: (context) => AccountBloc(
-                  addAccountWalletUseCase, getAccountWalletUseCase)
+                  addAccountWalletUseCase,
+                  getAccountWalletUseCase,
+                  authUser)
                 ..add(const GetAccountWallet()))
         ],
         child: MaterialApp(
