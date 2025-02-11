@@ -25,11 +25,20 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AccountBloc, AccountState>(
-        builder: (BuildContext context, AccountState state) {
+    return BlocConsumer<AccountBloc, AccountState>(
+        listener: (BuildContext context, AccountState state) {
+      if (state.walletTypeStatus.isFailure) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(const SnackBar(
+              content: Text('Pick atleast one type of bank')));
+      }
+    }, builder: (BuildContext context, AccountState state) {
       print(state.props);
+
       final Orientation orientation =
           MediaQuery.of(context).orientation;
+
       return Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
@@ -53,7 +62,7 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
-    Future<void> handleSubmitExpense() async {
+    Future<void> handleSubmitAccount() async {
       // Validate returns true if the form is valid, or false otherwise.
       if (_formKey.currentState!.validate()) {
         // Map<String, dynamic> transactionUserInput = {
@@ -214,7 +223,7 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
                     const SelectedWallet(),
                     FormButtonWidget(
                       title: 'Submit',
-                      onclick: handleSubmitExpense,
+                      onclick: handleSubmitAccount,
                     )
                   ]))
         ],
