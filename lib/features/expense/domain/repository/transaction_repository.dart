@@ -6,7 +6,8 @@ abstract class TransactionRepository {
   Future<List<TransactionsModel>> getTransactions(
       AuthUserEntities authUser);
 
-  Future<List<AccountWalletModel>> getAccountWallet();
+  Future<List<AccountWalletModel>> getAccountWallet(
+      AuthUserEntities authUser);
 
   // Future<void> savedTransaction(String id);
 
