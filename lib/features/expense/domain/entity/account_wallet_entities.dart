@@ -14,16 +14,19 @@ extension WalletTypeExtension on WalletType {
 }
 
 class AccountWalletEntities extends Equatable {
+  final String uid;
   final String balance;
   final WalletType walletType;
 
   const AccountWalletEntities({
+    required this.uid,
     required this.balance,
     required this.walletType,
   });
 
   @override
   List<Object?> get props => [
+        uid,
         balance,
         walletType,
       ];
