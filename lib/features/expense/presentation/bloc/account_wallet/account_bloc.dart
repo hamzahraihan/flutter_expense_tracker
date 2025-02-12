@@ -24,6 +24,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     _authUserSubscription = authUser.listen(
       (AuthUserEntities user) {
         _currentUser = user;
+        add(const GetAccountWallet());
       },
     );
     on<GetAccountWallet>(_onFetchAccountWallets);
@@ -42,10 +43,24 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   Future<void> _onFetchAccountWallets(
       GetAccountWallet event, Emitter<AccountState> emit) async {
     emit(state.copyWith(status: AccountWalletStatus.loading));
+    if (_currentUser.isEmpty) {
+      emit(state.copyWith(
+          status: AccountWalletStatus.success, accountWallet: []));
+      return;
+    }
     try {
       final List<AccountWalletModel> accountWallet =
-          await _getAccountWalletUseCase.execute();
-      emit(state.copyWith(accountWallet: accountWallet));
+          await _getAccountWalletUseCase.execute(_currentUser);
+
+      if (accountWallet.isEmpty) {
+        emit(state.copyWith(
+            status: AccountWalletStatus.success, accountWallet: []));
+        return;
+      }
+
+      emit(state.copyWith(
+          accountWallet: accountWallet,
+          status: AccountWalletStatus.success));
     } catch (e) {
       emit(state.copyWith(status: AccountWalletStatus.failure));
     }
