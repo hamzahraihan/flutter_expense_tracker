@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_event.dart';
@@ -37,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log('from home screen ${widget.authUser.toString()}');
     return BlocBuilder<TransactionFirebaseBloc,
             TransactionFirebaseState>(
         builder:
