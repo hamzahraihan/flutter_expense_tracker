@@ -14,7 +14,6 @@ class TransactionRepositoryImpl extends TransactionRepository {
     try {
       await _transactionsApiService
           .addExpenseTransaction(transaction);
-      print('5. Repository: API service call completed');
     } catch (e) {
       throw Exception(e);
     }
@@ -54,7 +53,8 @@ class TransactionRepositoryImpl extends TransactionRepository {
   }
 
   @override
-  Future<List<AccountWalletModel>> getAccountWallet() async {
-    return await _transactionsApiService.getAccountWallet();
+  Future<List<AccountWalletModel>> getAccountWallet(
+      AuthUserEntities authUser) async {
+    return await _transactionsApiService.getAccountWallet(authUser);
   }
 }
