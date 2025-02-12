@@ -35,10 +35,21 @@ class TransactionsApiService {
     }
   }
 
-  Future<List<AccountWalletModel>> getAccountWallet() async {
+  Future<List<AccountWalletModel>> getAccountWallet(
+      AuthUserEntities authUser) async {
     try {
+      final Query<Map<String, dynamic>> query = db
+          .collection(accountWalletCollectionPath)
+          .where('uid', isEqualTo: authUser.uid);
+
       final QuerySnapshot<Map<String, dynamic>> snapshot =
-          await db.collection(accountWalletCollectionPath).get();
+          await query.get();
+
+      if (snapshot.docs.isEmpty) {
+        log('No documents found for user ${authUser.uid}');
+        return [];
+      }
+
       return snapshot.docs
           .map((doc) => AccountWalletModel.fromFirestore(doc, null))
           .toList();
