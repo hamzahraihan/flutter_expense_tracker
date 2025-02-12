@@ -4,6 +4,7 @@ import 'package:expense_tracker/features/expense/domain/entity/account_wallet_en
 class AccountWalletModel extends AccountWalletEntities {
   const AccountWalletModel({
     required super.uid,
+    required super.walletName,
     required super.balance,
     required super.walletType,
   });
@@ -14,18 +15,18 @@ class AccountWalletModel extends AccountWalletEntities {
   ) {
     final Map<String, dynamic>? data = snapshot.data();
     return AccountWalletModel(
-      uid: data?['uid'],
-      balance: data?['balance'],
-      walletType:
-          WalletTypeExtension.fromString(data?['expenseType']),
-    );
+        uid: data?['uid'],
+        walletName: data?['walletName'],
+        balance: data?['balance'],
+        walletType: data?['walletType']);
   }
 
   Map<String, dynamic> toFirestore() {
     return {
       "uid": uid,
+      "walletName": walletName,
       "balance": balance,
-      "walletType": WalletTypeExtension(walletType).toShortString(),
+      "walletType": walletType
     };
   }
 }
