@@ -1,8 +1,9 @@
+import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/presentation/util/svg_selection.dart';
 import 'package:flutter/material.dart';
 
 class AccountWalletWidget extends StatefulWidget {
-  final String wallet;
+  final AccountWalletModel wallet;
   const AccountWalletWidget({super.key, required this.wallet});
 
   @override
@@ -34,12 +35,12 @@ class _AccountWalletWidgetState extends State<AccountWalletWidget> {
                 color: Colors.white,
               ),
               padding: const EdgeInsets.all(10),
-              child: SvgSelection(svgName: widget.wallet),
+              child: SvgSelection(svgName: widget.wallet.walletType),
             ),
             const SizedBox(
               width: 10,
             ),
-            Text(widget.wallet)
+            Text(widget.wallet.walletName)
           ]),
           const Text('Rp.20.000')
         ],
