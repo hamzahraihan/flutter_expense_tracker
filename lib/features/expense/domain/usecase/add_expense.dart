@@ -5,7 +5,6 @@ class AddExpenseUseCase {
   AddExpenseUseCase(this._transactionRepositoryImpl);
 
   Future<void> execute(Map<String, dynamic> transaction) async {
-    print('usecase initialized');
     return await _transactionRepositoryImpl
         .addExpenseTransaction(transaction);
   }
