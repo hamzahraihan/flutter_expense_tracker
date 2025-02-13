@@ -14,6 +14,7 @@ class AddTransactionState extends Equatable {
   final String descriptionValue;
   final String categoryValue;
   final int amountValue;
+  final String walletType;
   final String expenseType;
 
   const AddTransactionState(
@@ -21,7 +22,8 @@ class AddTransactionState extends Equatable {
       this.descriptionValue = '',
       this.amountValue = 0,
       this.categoryValue = '',
-      this.expenseType = ''});
+      this.expenseType = '',
+      this.walletType = ''});
 
   AddTransactionState copyWith(
       {AddTransactionStatus? status,
@@ -29,13 +31,15 @@ class AddTransactionState extends Equatable {
       String? descriptionValue,
       String? categoryValue,
       int? amountValue,
-      String? expenseType}) {
+      String? expenseType,
+      String? walletType}) {
     return AddTransactionState(
         status: status ?? this.status,
         descriptionValue: descriptionValue ?? this.descriptionValue,
         categoryValue: categoryValue ?? this.categoryValue,
         amountValue: amountValue ?? this.amountValue,
-        expenseType: expenseType ?? this.expenseType);
+        expenseType: expenseType ?? this.expenseType,
+        walletType: walletType ?? this.walletType);
   }
 
   @override
@@ -44,6 +48,7 @@ class AddTransactionState extends Equatable {
         descriptionValue,
         categoryValue,
         amountValue,
-        expenseType
+        expenseType,
+        walletType
       ];
 }
