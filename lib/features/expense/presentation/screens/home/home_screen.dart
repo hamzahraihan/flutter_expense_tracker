@@ -126,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     context
                                         .read<AuthBloc>()
                                         .add(const SignOutPressed());
+                                    Navigator.pop(context);
                                   },
                                   child: const Text(
                                     'Logout',
