@@ -219,7 +219,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     const Text('Pick your wallet'),
                     DropdownButtonWidget(
                       dropdownList: getAccountWalletType,
-                      initialValue: 'Paypal',
+                      initialValue: getAccountWalletType[0],
                     ),
                     TextFormField(
                       onChanged: (value) {
