@@ -233,10 +233,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       onSelected: (value) {
                         setState(() {
                           dropdownValue =
-                              value ?? intialCategoryValue;
+                              value ?? getAccountWalletType[0];
                         });
                         context.read<AddTransactionBloc>().add(
-                            AddTransactionCategoryChanged(
+                            AddTransactionWalletChanged(
                                 dropdownValue));
                       },
                     ),
