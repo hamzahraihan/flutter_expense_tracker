@@ -1,3 +1,6 @@
+import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_bloc.dart';
+
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
@@ -39,6 +42,17 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
     return BlocBuilder<AddTransactionBloc, AddTransactionState>(
         builder: (BuildContext context, AddTransactionState state) {
+      final List<AccountWalletModel>? accountWallet = context
+          .select((AccountBloc bloc) => bloc.state.accountWallet);
+      if (accountWallet!.isEmpty) {
+        return Scaffold(
+          appBar: AppBar(),
+          body: const Center(
+            child:
+                Text('Create a wallet first before adding expenses'),
+          ),
+        );
+      }
       return Scaffold(
           // resizeToAvoidBottomInset: false,
           appBar: AppBar(
@@ -53,12 +67,20 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           ),
           backgroundColor: Colors.red.shade400,
           body: orientation == Orientation.portrait
-              ? _buildBody()
-              : _buildBodyLandscape());
+              ? _buildBody(context)
+              : _buildBodyLandscape(context));
     });
   }
 
-  _buildBody() {
+  _buildBody(BuildContext context) {
+    final List<AccountWalletModel>? accountWallet = context
+        .select((AccountBloc bloc) => bloc.state.accountWallet);
+
+    final List<String> getAccountWalletType = accountWallet!
+        .map((item) => item.walletName)
+        .cast<String>()
+        .toList();
+
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
@@ -186,54 +208,56 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(42),
                       topRight: Radius.circular(42))),
-              child: Column(children: [
-                DropdownButtonWidget(
-                  dropdownList: list,
-                  initialValue: intialCategoryValue,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  onChanged: (value) {
-                    context
-                        .read<AddTransactionBloc>()
-                        .add(AddTransactionDescriptionChanged(value));
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter description';
-                    }
-                    return null;
-                  },
-                  maxLines: 2,
-                  maxLength: 64,
-                  decoration: InputDecoration(
-                    hintText: 'Description',
-                    border: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.black26),
-                        borderRadius: BorderRadius.circular(16)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.black26),
-                        borderRadius: BorderRadius.circular(16)),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                FormButtonWidget(
-                  title: 'Submit',
-                  onclick: handleSubmitExpense,
-                )
-              ]))
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 10,
+                  children: [
+                    DropdownButtonWidget(
+                      dropdownList: list,
+                      initialValue: intialCategoryValue,
+                    ),
+                    const Text('Pick your wallet'),
+                    DropdownButtonWidget(
+                      dropdownList: getAccountWalletType,
+                      initialValue: 'Paypal',
+                    ),
+                    TextFormField(
+                      onChanged: (value) {
+                        context.read<AddTransactionBloc>().add(
+                            AddTransactionDescriptionChanged(value));
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter description';
+                        }
+                        return null;
+                      },
+                      maxLines: 2,
+                      maxLength: 64,
+                      decoration: InputDecoration(
+                        hintText: 'Description',
+                        border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16)),
+                      ),
+                    ),
+                    FormButtonWidget(
+                      title: 'Submit',
+                      onclick: handleSubmitExpense,
+                    )
+                  ]))
         ],
       ),
     );
   }
 
-  _buildBodyLandscape() {
-    return SingleChildScrollView(primary: true, child: _buildBody());
+  _buildBodyLandscape(BuildContext context) {
+    return SingleChildScrollView(
+        primary: true, child: _buildBody(context));
   }
 }
