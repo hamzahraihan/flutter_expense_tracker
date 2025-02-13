@@ -24,8 +24,9 @@ class AddIncomeScreen extends StatefulWidget {
 }
 
 class _AddIncomeScreenState extends State<AddIncomeScreen> {
-  final String intialCategoryValue = 'Salary';
+  final String initialCategoryValue = 'Salary';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late String dropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +179,14 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
               child: Column(children: [
                 DropdownButtonWidget(
                   dropdownList: list,
-                  initialValue: intialCategoryValue,
+                  initialValue: initialCategoryValue,
+                  onSelected: (value) {
+                    setState(() {
+                      dropdownValue = value ?? initialCategoryValue;
+                    });
+                    context.read<AddTransactionBloc>().add(
+                        AddTransactionCategoryChanged(dropdownValue));
+                  },
                 ),
                 const SizedBox(
                   height: 20,
