@@ -30,6 +30,7 @@ class AddExpenseScreen extends StatefulWidget {
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final String intialCategoryValue = 'Subscription';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late String dropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -215,11 +216,29 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     DropdownButtonWidget(
                       dropdownList: list,
                       initialValue: intialCategoryValue,
+                      onSelected: (value) {
+                        setState(() {
+                          dropdownValue =
+                              value ?? intialCategoryValue;
+                        });
+                        context.read<AddTransactionBloc>().add(
+                            AddTransactionCategoryChanged(
+                                dropdownValue));
+                      },
                     ),
                     const Text('Pick your wallet'),
                     DropdownButtonWidget(
                       dropdownList: getAccountWalletType,
                       initialValue: getAccountWalletType[0],
+                      onSelected: (value) {
+                        setState(() {
+                          dropdownValue =
+                              value ?? intialCategoryValue;
+                        });
+                        context.read<AddTransactionBloc>().add(
+                            AddTransactionCategoryChanged(
+                                dropdownValue));
+                      },
                     ),
                     TextFormField(
                       onChanged: (value) {
