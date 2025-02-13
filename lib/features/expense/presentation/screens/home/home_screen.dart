@@ -1,7 +1,9 @@
 import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth/auth_event.dart';
+import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/domain/entity/transaction_entities.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_state.dart';
@@ -67,12 +69,79 @@ class _HomeScreenState extends State<HomeScreen> {
         child:
             const Text('Expense', style: TextStyle(fontSize: 14.0)),
       ),
-      leading: IconButton(
+      leading: TextButton(
           onPressed: () {
-            context.read<AuthBloc>().add(const SignOutPressed());
+            showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return SizedBox(
+                    height: 200,
+                    child: Container(
+                      margin:
+                          const EdgeInsets.symmetric(vertical: 20),
+                      child: Column(
+                        mainAxisAlignment:
+                            MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Are you sure?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceEvenly,
+                            children: [
+                              TextButton(
+                                  style: TextButton.styleFrom(
+                                      padding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 30),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(
+                                                  12)),
+                                      backgroundColor:
+                                          Colors.blue.shade50),
+                                  onPressed: () =>
+                                      Navigator.pop(context),
+                                  child: const Text(
+                                    'Cancel',
+                                    style: TextStyle(fontSize: 16),
+                                  )),
+                              TextButton(
+                                  style: TextButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(
+                                                  12)),
+                                      backgroundColor:
+                                          Colors.blueAccent),
+                                  onPressed: () {
+                                    context
+                                        .read<AuthBloc>()
+                                        .add(const SignOutPressed());
+                                  },
+                                  child: const Text(
+                                    'Logout',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16),
+                                  ))
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                });
           },
-          icon: const Icon(
-            Icons.logout,
+          child: CircleAvatar(
+            backgroundImage: widget.authUser.imageUrl != null
+                ? NetworkImage(widget.authUser.imageUrl!)
+                : null,
           )),
       actions: [
         IconButton(
@@ -84,7 +153,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _buildTransactions(BuildContext context, state) {
+  Widget _buildTransactions(
+      BuildContext context, TransactionFirebaseState state) {
+    // Get user account balances from AccountBloc
+    final List<AccountWalletModel>? accountWallet = context
+        .select((AccountBloc bloc) => bloc.state.accountWallet);
+
+    // get a total of user account balances
+    int accountBalance = accountWallet!.fold(
+        0, (int sum, AccountWalletModel item) => sum + item.balance);
+
     // filteredThisWeekExpenses will filter weekly transaction and can be only get expense transaction
     Iterable<TransactionsModel> filteredThisWeekExpenses(
         ExpenseType expenseType) {
@@ -99,9 +177,6 @@ class _HomeScreenState extends State<HomeScreen> {
       return filteredThisWeekExpenses(expenseType).fold(
           0, (int sum, TransactionsModel item) => sum + item.amount);
     }
-
-    int totalAmount = state.olderTransactions
-        .fold(0, (sum, TransactionsModel item) => sum + item.amount);
 
     String convertToIdr(int totalAmount) {
       return NumberFormat.currency(
@@ -129,9 +204,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Center(
                 child: Text(
-                  convertToIdr(totalAmount),
+                  convertToIdr(accountBalance),
                   style: TextStyle(
-                      fontSize: totalAmount > 1000000 ? 26 : 32,
+                      fontSize: accountBalance > 1000000 ? 26 : 32,
                       fontWeight: FontWeight.w700),
                 ),
               ),
