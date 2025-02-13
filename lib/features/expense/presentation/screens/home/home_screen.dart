@@ -113,6 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   )),
                               TextButton(
                                   style: TextButton.styleFrom(
+                                      padding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 30),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(
