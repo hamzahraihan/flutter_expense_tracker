@@ -8,11 +8,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class DropdownButtonWidget extends StatefulWidget {
   final List<String> dropdownList;
   final String initialValue;
+  final ValueChanged<String?>? onSelected;
 
   const DropdownButtonWidget(
       {super.key,
       required this.initialValue,
-      required this.dropdownList});
+      required this.dropdownList,
+      required this.onSelected});
 
   @override
   State<DropdownButtonWidget> createState() =>
@@ -37,7 +39,6 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(dropdownValue);
     final List<MenuEntry> menuEntries =
         UnmodifiableListView<MenuEntry>(list.map<MenuEntry>(
             (String name) => MenuEntry(value: name, label: name)));
@@ -54,14 +55,7 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
       initialSelection: dropdownValue,
       dropdownMenuEntries: menuEntries,
       enableSearch: false,
-      onSelected: (value) {
-        setState(() {
-          dropdownValue = value ?? dropdownValue;
-        });
-        context
-            .read<AddTransactionBloc>()
-            .add(AddTransactionCategoryChanged(dropdownValue));
-      },
+      onSelected: widget.onSelected,
     );
   }
 }
