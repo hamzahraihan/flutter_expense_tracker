@@ -1,6 +1,7 @@
 import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/presentation/util/svg_selection.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AccountWalletWidget extends StatefulWidget {
   final AccountWalletModel wallet;
@@ -12,6 +13,12 @@ class AccountWalletWidget extends StatefulWidget {
 }
 
 class _AccountWalletWidgetState extends State<AccountWalletWidget> {
+  String convertToIdr(int balance) {
+    return NumberFormat.currency(
+            locale: 'id', symbol: 'Rp', decimalDigits: 2)
+        .format(balance);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +49,7 @@ class _AccountWalletWidgetState extends State<AccountWalletWidget> {
             ),
             Text(widget.wallet.walletName)
           ]),
-          const Text('Rp.20.000')
+          Text(convertToIdr(widget.wallet.balance))
         ],
       ),
     );
