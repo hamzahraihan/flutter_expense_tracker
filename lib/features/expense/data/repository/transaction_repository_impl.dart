@@ -10,10 +10,12 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
   @override
   Future<void> addExpenseTransaction(
+      String walletId,
+      AuthUserEntities authUser,
       Map<String, dynamic> transaction) async {
     try {
-      await _transactionsApiService
-          .addExpenseTransaction(transaction);
+      await _transactionsApiService.addExpenseTransaction(
+          walletId, authUser, transaction);
     } catch (e) {
       throw Exception(e);
     }
@@ -54,7 +56,17 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
   @override
   Future<List<AccountWalletModel>> getAccountWallet(
-      AuthUserEntities authUser) async {
-    return await _transactionsApiService.getAccountWallet(authUser);
+      String? walletId, AuthUserEntities authUser) async {
+    return await _transactionsApiService.getAccountWallet(
+      walletId,
+      authUser,
+    );
+  }
+
+  @override
+  Future<void> editAccountWallet(
+      String id, dynamic accountWallet) async {
+    return await _transactionsApiService.editAccountWallet(
+        id, accountWallet);
   }
 }
