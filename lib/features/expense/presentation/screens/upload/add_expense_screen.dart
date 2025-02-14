@@ -68,12 +68,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           ),
           backgroundColor: Colors.red.shade400,
           body: orientation == Orientation.portrait
-              ? _buildBody(context)
-              : _buildBodyLandscape(context));
+              ? _buildBody(context, state)
+              : _buildBodyLandscape(context, state));
     });
   }
 
-  _buildBody(BuildContext context) {
+  _buildBody(BuildContext context, AddTransactionState state) {
     final List<AccountWalletModel>? accountWallet = context
         .select((AccountBloc bloc) => bloc.state.accountWallet);
 
@@ -236,8 +236,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                               value ?? getAccountWalletType[0];
                         });
                         context.read<AddTransactionBloc>().add(
-                            AddTransactionWalletChanged(
-                                dropdownValue));
+                            AddTransactionWalletIdChanged(
+                                state.getWalletId));
                       },
                     ),
                     TextFormField(
@@ -275,8 +275,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     );
   }
 
-  _buildBodyLandscape(BuildContext context) {
+  _buildBodyLandscape(
+      BuildContext context, AddTransactionState state) {
     return SingleChildScrollView(
-        primary: true, child: _buildBody(context));
+        primary: true, child: _buildBody(context, state));
   }
 }
