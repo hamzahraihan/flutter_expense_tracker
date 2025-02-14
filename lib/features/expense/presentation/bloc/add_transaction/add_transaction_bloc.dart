@@ -1,25 +1,28 @@
 import 'dart:async';
 
 import 'package:expense_tracker/features/auth/domain/entity/auth_user_entities.dart';
-import 'package:expense_tracker/features/expense/data/repository/transaction_repository_impl.dart';
 import 'package:expense_tracker/features/expense/domain/usecase/add_expense.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/transaction/firebase/transaction_firebase_event.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddTransactionBloc
     extends Bloc<AddTransactionEvent, AddTransactionState> {
-  final TransactionRepositoryImpl _transactionRepositoryImpl;
-
+  final TransactionFirebaseBloc _transactionBloc;
   late AuthUserEntities _currentUser;
   final AddExpenseUseCase _addExpenseUseCase;
+
   late final StreamSubscription<AuthUserEntities>
       _authUserSubscription;
 
-  AddTransactionBloc(this._transactionRepositoryImpl,
-      this._addExpenseUseCase, Stream<AuthUserEntities> authUser)
-      : super(const AddTransactionState()) {
+  AddTransactionBloc(
+    this._transactionBloc,
+    this._addExpenseUseCase,
+    Stream<AuthUserEntities> authUser,
+  ) : super(const AddTransactionState()) {
     _authUserSubscription = authUser.listen(
       (user) {
         _currentUser = user;
@@ -33,8 +36,8 @@ class AddTransactionBloc
     on<AddTransactionAmountChanged>(_onAddTransactionAmountChanged);
     on<AddTransactionExpenseTypeChanged>(
         _onAddTransactionExpenseTypeChanged);
-    on<AddTransactionWalletChanged>(
-        _onAddTransactionWalletTypeChanged);
+    on<AddTransactionWalletIdChanged>(
+        _onAddTransactionWalletIdTypeChanged);
     on<AddTransactionSubmitted>(_onAddExpenseTransaction);
   }
 
@@ -70,10 +73,10 @@ class AddTransactionBloc
     emit(state.copyWith(expenseType: event.expenseType));
   }
 
-  void _onAddTransactionWalletTypeChanged(
-      AddTransactionWalletChanged event,
+  void _onAddTransactionWalletIdTypeChanged(
+      AddTransactionWalletIdChanged event,
       Emitter<AddTransactionState> emit) {
-    emit(state.copyWith(walletType: event.walletType));
+    emit(state.copyWith(getWalletId: event.walletId));
   }
 
   void _onAddExpenseTransaction(AddTransactionSubmitted event,
@@ -92,9 +95,11 @@ class AddTransactionBloc
       };
 
       // Execute expense use case add transaction data
-      await _addExpenseUseCase.execute(transaction);
+      await _addExpenseUseCase.execute(
+          state.getWalletId, _currentUser, transaction);
+
       // Notify another bloc to fetch updated transactions
-      _transactionRepositoryImpl.getTransactions(_currentUser);
+      _transactionBloc.add(const GetTransaction());
 
       emit(state.copyWith(status: AddTransactionStatus.success));
     } catch (e) {
