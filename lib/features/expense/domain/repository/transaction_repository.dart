@@ -7,14 +7,15 @@ abstract class TransactionRepository {
       AuthUserEntities authUser);
 
   Future<List<AccountWalletModel>> getAccountWallet(
-      AuthUserEntities authUser);
+      String walletId, AuthUserEntities authUser);
 
   // Future<void> savedTransaction(String id);
 
   Future<void> deleteTransaction(String id);
 
-  Future<void> addExpenseTransaction(
-      Map<String, dynamic> transaction);
+  Future<void> addExpenseTransaction(String walletId,
+      AuthUserEntities authUser, Map<String, dynamic> transaction);
 
   Future<void> addAccountWallet(Map<String, dynamic> accountWallet);
+  Future<void> editAccountWallet(String id, dynamic accountWallet);
 }
