@@ -7,7 +7,8 @@ class GetAccountWalletUseCase {
   GetAccountWalletUseCase(this._transactionRepositoryImpl);
 
   Future<List<AccountWalletModel>> execute(
-      AuthUserEntities authUser) {
-    return _transactionRepositoryImpl.getAccountWallet(authUser);
+      String? walletId, AuthUserEntities authUser) {
+    return _transactionRepositoryImpl.getAccountWallet(
+        walletId, authUser);
   }
 }
