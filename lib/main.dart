@@ -136,7 +136,7 @@ class MyApp extends StatelessWidget {
                   authRepositoryImpl.authUser;
 
               return AddTransactionBloc(
-                transactionRepositoryImpl,
+                context.read<TransactionFirebaseBloc>(),
                 addExpenseUseCase,
                 authStream,
               );
