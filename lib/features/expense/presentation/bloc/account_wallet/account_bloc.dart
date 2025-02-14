@@ -50,7 +50,8 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     }
     try {
       final List<AccountWalletModel> accountWallet =
-          await _getAccountWalletUseCase.execute(_currentUser);
+          await _getAccountWalletUseCase.execute(
+              state.id, _currentUser);
 
       if (accountWallet.isEmpty) {
         emit(state.copyWith(
