@@ -36,11 +36,13 @@ class TransactionsApiService {
   }
 
   Future<List<AccountWalletModel>> getAccountWallet(
-      AuthUserEntities authUser) async {
+      String? walletId, AuthUserEntities authUser) async {
     try {
-      final Query<Map<String, dynamic>> query = db
-          .collection(accountWalletCollectionPath)
-          .where('uid', isEqualTo: authUser.uid);
+      final collection = db.collection(accountWalletCollectionPath);
+
+      final Query<Map<String, dynamic>> query = walletId!.isNotEmpty
+          ? collection.where('id', isEqualTo: walletId)
+          : collection.where('uid', isEqualTo: authUser.uid);
 
       final QuerySnapshot<Map<String, dynamic>> snapshot =
           await query.get();
@@ -79,10 +81,24 @@ class TransactionsApiService {
   }
 
   Future<void> addExpenseTransaction(
+      String walletId,
+      AuthUserEntities authUser,
       Map<String, dynamic> transaction) async {
     try {
-      log('Starting Firebase upload. Transaction data: $transaction');
-      log('Collection path: $transactionCollectionPath');
+      final List<AccountWalletModel> accountDoc =
+          await getAccountWallet(walletId, authUser);
+
+      if (accountDoc.isEmpty) {
+        throw Exception("No account wallet found for this user.");
+      }
+
+      final currentBalance = accountDoc.first.balance as num;
+      final expenseAmount = transaction['amount'] as num;
+      final newBalance = currentBalance - expenseAmount;
+
+      if (newBalance < 0) {
+        throw Exception("Insufficient balance.");
+      }
 
       final docRef = db
           .collection(transactionCollectionPath)
@@ -93,6 +109,10 @@ class TransactionsApiService {
       await docRef
           .set(transaction)
           .onError((e, _) => print("Error writing document: $e"));
+
+      await editAccountWallet(walletId, {
+        'balance': newBalance,
+      });
 
       log('Transaction successfully uploaded to Firebase');
     } catch (e) {
@@ -108,6 +128,27 @@ class TransactionsApiService {
           .collection(accountWalletCollectionPath)
           .doc()
           .set(accountWallet);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> editAccountWallet(
+      String walletId, dynamic accountWallet) async {
+    try {
+      final snapshot = await db
+          .collection(accountWalletCollectionPath)
+          .where('id', isEqualTo: walletId)
+          .get();
+
+      if (snapshot.docs.isEmpty) {
+        throw Exception("No account wallet found for the given UID");
+      }
+
+      return await db
+          .collection(accountWalletCollectionPath)
+          .doc()
+          .update(accountWallet);
     } catch (e) {
       throw Exception(e);
     }
