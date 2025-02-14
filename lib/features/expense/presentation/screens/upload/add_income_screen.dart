@@ -39,7 +39,6 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
 
     return BlocBuilder<AddTransactionBloc, AddTransactionState>(
         builder: (BuildContext context, AddTransactionState state) {
-      print(state.categoryValue);
       return Scaffold(
           // resizeToAvoidBottomInset: false,
           appBar: AppBar(
@@ -54,12 +53,12 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
           ),
           backgroundColor: Colors.green.shade400,
           body: orientation == Orientation.portrait
-              ? _buildBody()
-              : _buildBodyLandscape());
+              ? _buildBody(state)
+              : _buildBodyLandscape(state));
     });
   }
 
-  _buildBody() {
+  _buildBody(AddTransactionState state) {
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
@@ -230,7 +229,8 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     );
   }
 
-  _buildBodyLandscape() {
-    return SingleChildScrollView(primary: true, child: _buildBody());
+  _buildBodyLandscape(AddTransactionState state) {
+    return SingleChildScrollView(
+        primary: true, child: _buildBody(state));
   }
 }
