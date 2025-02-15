@@ -48,11 +48,11 @@ final class AddTransactionExpenseTypeChanged
 
 final class AddTransactionWalletIdChanged
     extends AddTransactionEvent {
-  final String walletId;
-  const AddTransactionWalletIdChanged(this.walletId);
+  final String docId;
+  const AddTransactionWalletIdChanged(this.docId);
 
   @override
-  List<Object?> get props => [walletId];
+  List<Object?> get props => [docId];
 }
 
 final class AddTransactionSubmitted extends AddTransactionEvent {
