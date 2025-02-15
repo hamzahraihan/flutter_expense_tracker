@@ -1,16 +1,15 @@
-import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
-import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FormButtonWidget extends StatefulWidget {
   final String title;
   final VoidCallback? onclick;
+  final bool isLoading;
 
   const FormButtonWidget({
     super.key,
     required this.title,
     this.onclick,
+    required this.isLoading,
   });
 
   @override
@@ -34,13 +33,10 @@ class _FormButtonWidgetState extends State<FormButtonWidget> {
       disabledForegroundColor: Colors.grey,
     );
 
-    final status = context
-        .select((AddTransactionBloc bloc) => bloc.state.status);
-
     return TextButton(
         style: textButtonStyle,
-        onPressed: status.isLoading ? null : widget.onclick,
-        child: status.isLoading
+        onPressed: widget.isLoading ? null : widget.onclick,
+        child: widget.isLoading
             ? const CircularProgressIndicator(
                 color: Colors.white,
               )
