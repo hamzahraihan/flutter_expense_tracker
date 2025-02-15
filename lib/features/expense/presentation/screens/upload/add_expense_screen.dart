@@ -1,6 +1,5 @@
 import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_bloc.dart';
-
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
@@ -231,13 +230,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       dropdownList: getAccountWalletType,
                       initialValue: getAccountWalletType[0],
                       onSelected: (value) {
-                        setState(() {
-                          dropdownValue =
-                              value ?? getAccountWalletType[0];
-                        });
+                        final selectedWallet =
+                            accountWallet.firstWhere(
+                                (item) => item.walletName == value);
+
                         context.read<AddTransactionBloc>().add(
                             AddTransactionWalletIdChanged(
-                                state.getWalletId));
+                                selectedWallet.docId));
+                        print(selectedWallet.docId);
                       },
                     ),
                     TextFormField(
