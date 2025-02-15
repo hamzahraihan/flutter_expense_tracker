@@ -76,7 +76,8 @@ class AddTransactionBloc
   void _onAddTransactionWalletIdTypeChanged(
       AddTransactionWalletIdChanged event,
       Emitter<AddTransactionState> emit) {
-    emit(state.copyWith(getWalletId: event.walletId));
+    print('get event wallet id ${event.docId}');
+    emit(state.copyWith(docId: event.docId));
   }
 
   void _onAddExpenseTransaction(AddTransactionSubmitted event,
@@ -96,7 +97,7 @@ class AddTransactionBloc
 
       // Execute expense use case add transaction data
       await _addExpenseUseCase.execute(
-          state.getWalletId, _currentUser, transaction);
+          state.docId, _currentUser, transaction);
 
       // Notify another bloc to fetch updated transactions
       _transactionBloc.add(const GetTransaction());
