@@ -221,6 +221,7 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
                     FormButtonWidget(
                       title: 'Submit',
                       onclick: handleSubmitAccount,
+                      isLoading: state.status.isLoading,
                     )
                   ]))
         ],
