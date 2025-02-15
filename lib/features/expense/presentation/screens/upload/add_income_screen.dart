@@ -222,6 +222,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                 FormButtonWidget(
                   title: 'Submit',
                   onclick: handleSubmitIncome,
+                  isLoading: state.status.isLoading,
                 )
               ]))
         ],
