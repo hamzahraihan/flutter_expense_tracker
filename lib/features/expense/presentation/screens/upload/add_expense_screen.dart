@@ -237,7 +237,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         context.read<AddTransactionBloc>().add(
                             AddTransactionWalletIdChanged(
                                 selectedWallet.docId));
-                        print(selectedWallet.docId);
                       },
                     ),
                     TextFormField(
@@ -268,6 +267,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     FormButtonWidget(
                       title: 'Submit',
                       onclick: handleSubmitExpense,
+                      isLoading: state.status.isLoading,
                     )
                   ]))
         ],
