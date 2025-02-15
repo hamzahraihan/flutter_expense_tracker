@@ -11,7 +11,7 @@ extension AddTransactionStatusX on AddTransactionStatus {
 
 class AddTransactionState extends Equatable {
   final AddTransactionStatus status;
-  final String getWalletId;
+  final String docId;
   final String descriptionValue;
   final String categoryValue;
   final int amountValue;
@@ -20,7 +20,7 @@ class AddTransactionState extends Equatable {
 
   const AddTransactionState(
       {this.status = AddTransactionStatus.initial,
-      this.getWalletId = '',
+      this.docId = '',
       this.descriptionValue = '',
       this.amountValue = 0,
       this.categoryValue = '',
@@ -29,7 +29,7 @@ class AddTransactionState extends Equatable {
 
   AddTransactionState copyWith(
       {AddTransactionStatus? status,
-      String? getWalletId,
+      String? docId,
       String? titleValue,
       String? descriptionValue,
       String? categoryValue,
@@ -38,7 +38,7 @@ class AddTransactionState extends Equatable {
       String? walletType}) {
     return AddTransactionState(
         status: status ?? this.status,
-        getWalletId: getWalletId ?? this.getWalletId,
+        docId: docId ?? this.docId,
         descriptionValue: descriptionValue ?? this.descriptionValue,
         categoryValue: categoryValue ?? this.categoryValue,
         amountValue: amountValue ?? this.amountValue,
@@ -49,7 +49,7 @@ class AddTransactionState extends Equatable {
   @override
   List<Object?> get props => [
         status,
-        getWalletId,
+        docId,
         descriptionValue,
         categoryValue,
         amountValue,
