@@ -36,12 +36,13 @@ class TransactionsApiService {
   }
 
   Future<List<AccountWalletModel>> getAccountWallet(
-      String? walletId, AuthUserEntities authUser) async {
+      String? docId, AuthUserEntities authUser) async {
     try {
       final collection = db.collection(accountWalletCollectionPath);
 
-      final Query<Map<String, dynamic>> query = walletId!.isNotEmpty
-          ? collection.where('id', isEqualTo: walletId)
+      final Query<Map<String, dynamic>> query = (docId != null &&
+              docId.isNotEmpty)
+          ? collection.where(FieldPath.documentId, isEqualTo: docId)
           : collection.where('uid', isEqualTo: authUser.uid);
 
       final QuerySnapshot<Map<String, dynamic>> snapshot =
@@ -81,12 +82,12 @@ class TransactionsApiService {
   }
 
   Future<void> addExpenseTransaction(
-      String walletId,
+      String docId,
       AuthUserEntities authUser,
       Map<String, dynamic> transaction) async {
     try {
       final List<AccountWalletModel> accountDoc =
-          await getAccountWallet(walletId, authUser);
+          await getAccountWallet(docId, authUser);
 
       if (accountDoc.isEmpty) {
         throw Exception("No account wallet found for this user.");
@@ -95,10 +96,6 @@ class TransactionsApiService {
       final currentBalance = accountDoc.first.balance as num;
       final expenseAmount = transaction['amount'] as num;
       final newBalance = currentBalance - expenseAmount;
-
-      if (newBalance < 0) {
-        throw Exception("Insufficient balance.");
-      }
 
       final docRef = db
           .collection(transactionCollectionPath)
@@ -110,7 +107,7 @@ class TransactionsApiService {
           .set(transaction)
           .onError((e, _) => print("Error writing document: $e"));
 
-      await editAccountWallet(walletId, {
+      await editAccountWallet(docId, {
         'balance': newBalance,
       });
 
@@ -134,20 +131,20 @@ class TransactionsApiService {
   }
 
   Future<void> editAccountWallet(
-      String walletId, dynamic accountWallet) async {
+      String docId, dynamic accountWallet) async {
     try {
-      final snapshot = await db
-          .collection(accountWalletCollectionPath)
-          .where('id', isEqualTo: walletId)
-          .get();
-
-      if (snapshot.docs.isEmpty) {
-        throw Exception("No account wallet found for the given UID");
+      if (docId.isEmpty) {
+        throw ArgumentError('Document ID cannot be empty');
       }
 
-      return await db
+      if (accountWallet.isEmpty) {
+        throw ArgumentError('accountWallet data cannot be empty');
+      }
+
+      log('Updating account wallet: docId=$docId');
+      await db
           .collection(accountWalletCollectionPath)
-          .doc()
+          .doc(docId)
           .update(accountWallet);
     } catch (e) {
       throw Exception(e);
