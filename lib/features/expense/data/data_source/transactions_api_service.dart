@@ -95,7 +95,9 @@ class TransactionsApiService {
 
       final currentBalance = accountDoc.first.balance as num;
       final expenseAmount = transaction['amount'] as num;
-      final newBalance = currentBalance - expenseAmount;
+      final num newBalance = transaction['expenseType'] == 'expense'
+          ? currentBalance - expenseAmount
+          : currentBalance + expenseAmount;
 
       final docRef = db
           .collection(transactionCollectionPath)
