@@ -1,3 +1,4 @@
+import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_state.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 const List<String> list = <String>[
   'Salary',
   'Passive income',
+  'Investment',
+  'Sales',
   'Other',
 ];
 
@@ -53,25 +56,26 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
           ),
           backgroundColor: Colors.green.shade400,
           body: orientation == Orientation.portrait
-              ? _buildBody(state)
-              : _buildBodyLandscape(state));
+              ? _buildBody(context, state)
+              : _buildBodyLandscape(context, state));
     });
   }
 
-  _buildBody(AddTransactionState state) {
+  _buildBody(BuildContext context, AddTransactionState state) {
+    final accountWallet = context
+        .select((AccountBloc bloc) => bloc.state.accountWallet);
+
+    final getAccountWalletType = accountWallet!
+        .map((item) => item.walletName)
+        .cast<String>()
+        .toList();
+
     final Orientation orientation =
         MediaQuery.of(context).orientation;
 
     void handleSubmitIncome() {
       // Validate returns true if the form is valid, or false otherwise.
       if (_formKey.currentState!.validate()) {
-        // If the form is valid, display a snackbar. In the real world,
-        // you'd often call a server or save the information in a database.
-        // ScaffoldMessenger.of(context)
-        //     .showSnackBar(
-        //   const SnackBar(
-        //       content: Text('Processing Data')),
-        // );
         try {
           context
               .read<AddTransactionBloc>()
@@ -175,63 +179,77 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(42),
                       topRight: Radius.circular(42))),
-              child: Column(children: [
-                DropdownButtonWidget(
-                  dropdownList: list,
-                  initialValue: initialCategoryValue,
-                  onSelected: (value) {
-                    setState(() {
-                      dropdownValue = value ?? initialCategoryValue;
-                    });
-                    context.read<AddTransactionBloc>().add(
-                        AddTransactionCategoryChanged(dropdownValue));
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  onChanged: (value) {
-                    context
-                        .read<AddTransactionBloc>()
-                        .add(AddTransactionDescriptionChanged(value));
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter description';
-                    }
-                    return null;
-                  },
-                  maxLines: 2,
-                  maxLength: 64,
-                  decoration: InputDecoration(
-                    hintText: 'Description',
-                    border: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.black26),
-                        borderRadius: BorderRadius.circular(16)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.black26),
-                        borderRadius: BorderRadius.circular(16)),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                FormButtonWidget(
-                  title: 'Submit',
-                  onclick: handleSubmitIncome,
-                  isLoading: state.status.isLoading,
-                )
-              ]))
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 10,
+                  children: [
+                    DropdownButtonWidget(
+                      dropdownList: list,
+                      initialValue: initialCategoryValue,
+                      onSelected: (value) {
+                        setState(() {
+                          dropdownValue =
+                              value ?? initialCategoryValue;
+                        });
+                        context.read<AddTransactionBloc>().add(
+                            AddTransactionCategoryChanged(
+                                dropdownValue));
+                      },
+                    ),
+                    const Text('Pick your wallet'),
+                    DropdownButtonWidget(
+                      dropdownList: getAccountWalletType,
+                      initialValue: getAccountWalletType[0],
+                      onSelected: (value) {
+                        final selectedWallet =
+                            accountWallet.firstWhere(
+                                (item) => item.walletName == value);
+
+                        context.read<AddTransactionBloc>().add(
+                            AddTransactionWalletIdChanged(
+                                selectedWallet.docId));
+                      },
+                    ),
+                    TextFormField(
+                      onChanged: (value) {
+                        context.read<AddTransactionBloc>().add(
+                            AddTransactionDescriptionChanged(value));
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter description';
+                        }
+                        return null;
+                      },
+                      maxLines: 2,
+                      maxLength: 64,
+                      decoration: InputDecoration(
+                        hintText: 'Description',
+                        border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16)),
+                      ),
+                    ),
+                    FormButtonWidget(
+                      title: 'Submit',
+                      onclick: handleSubmitIncome,
+                      isLoading: state.status.isLoading,
+                    )
+                  ]))
         ],
       ),
     );
   }
 
-  _buildBodyLandscape(AddTransactionState state) {
+  _buildBodyLandscape(
+      BuildContext context, AddTransactionState state) {
     return SingleChildScrollView(
-        primary: true, child: _buildBody(state));
+        primary: true, child: _buildBody(context, state));
   }
 }
