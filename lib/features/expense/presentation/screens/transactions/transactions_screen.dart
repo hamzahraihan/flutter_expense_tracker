@@ -53,7 +53,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     });
   }
 
-  _buildBody(TransactionFirebaseState state) {
+  Widget _buildBody(TransactionFirebaseState state) {
+    String filterDate;
+
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
@@ -77,31 +79,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   size: 100,
                   color: Colors.black38,
                 ))
-              : ListView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0),
-                  children: [
-                      TransactionsList(
-                        transactionData: state.todayTransactions,
-                        dateTitle: 'Today',
-                      ),
-                      TransactionsList(
-                        transactionData: state.yesterdayTransactions,
-                        dateTitle: 'Yesterdays',
-                      ),
-                      TransactionsList(
-                        transactionData: state.thisWeekTransactions,
-                        dateTitle: 'This Week',
-                      ),
-                      TransactionsList(
-                        transactionData: state.thisMonthTransaction,
-                        dateTitle: 'This Month',
-                      ),
-                      TransactionsList(
-                        transactionData: state.olderTransactions,
-                        dateTitle: 'Older',
-                      ),
-                    ])),
+              : Container(
+                  child: _showFilteredData(state),
+                )),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
           type: ExpandableFabType.up,
@@ -142,5 +122,32 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             ),
           ]),
     );
+  }
+
+  _showFilteredData(state) {
+    return ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        children: [
+          TransactionsList(
+            transactionData: state.todayTransactions,
+            dateTitle: 'Today',
+          ),
+          TransactionsList(
+            transactionData: state.yesterdayTransactions,
+            dateTitle: 'Yesterdays',
+          ),
+          TransactionsList(
+            transactionData: state.thisWeekTransactions,
+            dateTitle: 'This Week',
+          ),
+          TransactionsList(
+            transactionData: state.thisMonthTransaction,
+            dateTitle: 'This Month',
+          ),
+          TransactionsList(
+            transactionData: state.olderTransactions,
+            dateTitle: 'Older',
+          ),
+        ]);
   }
 }
