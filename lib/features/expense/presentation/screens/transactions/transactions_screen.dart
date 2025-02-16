@@ -5,10 +5,12 @@ import 'package:expense_tracker/features/expense/presentation/bloc/transaction/f
 import 'package:expense_tracker/features/expense/presentation/screens/upload/add_expense_screen.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_list.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/upload/add_income_screen.dart';
+import 'package:expense_tracker/widgets/buttons/primary_button.dart';
 import 'package:expense_tracker/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TransactionsScreen extends StatefulWidget {
   final AuthUserEntities authUser;
@@ -65,6 +67,38 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
           style:
               TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                    showDragHandle: true,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16),
+                        child: Column(
+                          spacing: 10,
+                          mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Filter transaction'),
+                                  PrimaryButtonWidget(
+                                      title: 'Reset', onclick: () {})
+                                ])
+                          ],
+                        ),
+                      );
+                    });
+              },
+              icon: const Icon(FontAwesomeIcons.filter)),
+        ],
       ),
       body: RefreshIndicator(
           onRefresh: () async {
@@ -126,6 +160,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
 
   _showFilteredData(state) {
     return ListView(
+        shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         children: [
           TransactionsList(
