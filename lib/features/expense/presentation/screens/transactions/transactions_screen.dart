@@ -27,6 +27,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   final _key = GlobalKey<ExpandableFabState>();
   final List<String> _listFilterTransaction = [
     'All',
+    'Today',
     'Yesterday',
     'This Week',
     'This Month',
