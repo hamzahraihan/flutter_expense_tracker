@@ -2,23 +2,17 @@ import 'package:flutter/material.dart';
 
 class SelectButton extends StatefulWidget {
   final List<String> listTitle;
-  final String selectedValue;
+  final Function(String) onClick;
   const SelectButton(
-      {super.key,
-      required this.listTitle,
-      required this.selectedValue});
+      {super.key, required this.listTitle, required this.onClick});
 
   @override
   State<SelectButton> createState() => _SelectButtonState();
 }
 
 class _SelectButtonState extends State<SelectButton> {
+  String? selectedValue = 'All';
   int? activateButtonIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +33,7 @@ class _SelectButtonState extends State<SelectButton> {
   Widget _selectButtonWidget(String item, int index) {
     return TextButton(
         onPressed: () {
-          setState(() {
-            widget.selectedValue = item;
-          });
+          widget.onClick(item);
         },
         child: Text(item));
   }
