@@ -192,31 +192,84 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     );
   }
 
-  _showFilteredData(state) {
-    return ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        children: [
-          TransactionsList(
-            transactionData: state.todayTransactions,
-            dateTitle: 'Today',
-          ),
-          TransactionsList(
-            transactionData: state.yesterdayTransactions,
-            dateTitle: 'Yesterdays',
-          ),
-          TransactionsList(
-            transactionData: state.thisWeekTransactions,
-            dateTitle: 'This Week',
-          ),
-          TransactionsList(
-            transactionData: state.thisMonthTransaction,
-            dateTitle: 'This Month',
-          ),
-          TransactionsList(
-            transactionData: state.olderTransactions,
-            dateTitle: 'Older',
-          ),
-        ]);
+  _showFilteredData(TransactionFirebaseState state) {
+    switch (selectedValue) {
+      case 'Today':
+        return ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: [
+              TransactionsList(
+                transactionData: state.todayTransactions,
+                dateTitle: 'Today',
+              ),
+            ]);
+      case 'Yesterday':
+        return ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: [
+              TransactionsList(
+                transactionData: state.yesterdayTransactions,
+                dateTitle: 'Yesterdays',
+              ),
+            ]);
+      case 'This Week':
+        return ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: [
+              TransactionsList(
+                transactionData: state.thisWeekTransactions,
+                dateTitle: 'This Week',
+              ),
+            ]);
+      case 'This Month':
+        return ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: [
+              TransactionsList(
+                transactionData: state.thisMonthTransaction,
+                dateTitle: 'This Month',
+              ),
+            ]);
+      case 'Older':
+        return ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: [
+              TransactionsList(
+                transactionData: state.olderTransactions,
+                dateTitle: 'Older',
+              )
+            ]);
+      default:
+        return ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: [
+              TransactionsList(
+                transactionData: state.todayTransactions,
+                dateTitle: 'Today',
+              ),
+              TransactionsList(
+                transactionData: state.yesterdayTransactions,
+                dateTitle: 'Yesterdays',
+              ),
+              TransactionsList(
+                transactionData: state.thisWeekTransactions,
+                dateTitle: 'This Week',
+              ),
+              TransactionsList(
+                transactionData: state.thisMonthTransaction,
+                dateTitle: 'This Month',
+              ),
+              TransactionsList(
+                transactionData: state.olderTransactions,
+                dateTitle: 'Older',
+              ),
+            ]);
+    }
   }
 }
