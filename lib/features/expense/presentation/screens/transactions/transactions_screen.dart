@@ -54,7 +54,6 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedValue);
     return BlocBuilder<TransactionFirebaseBloc,
             TransactionFirebaseState>(
         builder:
