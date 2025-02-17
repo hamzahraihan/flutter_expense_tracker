@@ -6,6 +6,7 @@ import 'package:expense_tracker/features/expense/presentation/screens/upload/add
 import 'package:expense_tracker/features/expense/presentation/screens/transactions/transactions_list.dart';
 import 'package:expense_tracker/features/expense/presentation/screens/upload/add_income_screen.dart';
 import 'package:expense_tracker/widgets/buttons/primary_button.dart';
+import 'package:expense_tracker/widgets/buttons/select_button.dart';
 import 'package:expense_tracker/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +33,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     'Older'
   ];
 
-  late String selectedFilter;
+  final String selectedValue = 'All';
 
   void _handleExpandableNavigation(BuildContext context, screen) {
     Navigator.push(
@@ -105,7 +106,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                   PrimaryButtonWidget(
                                       title: 'Reset',
                                       onclick: () {
-                                        selectedFilter =
+                                        selectedValue =
                                             _listFilterTransaction[0];
                                       })
                                 ]),
@@ -115,17 +116,10 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16),
                             ),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  PrimaryButtonWidget(
-                                      title: 'Reset',
-                                      onclick: () {
-                                        selectedFilter =
-                                            _listFilterTransaction[0];
-                                      })
-                                ]),
+                            SelectButton(
+                              listTitle: _listFilterTransaction,
+                              selectedValue: selectedValue,
+                            )
                           ],
                         ),
                       );
