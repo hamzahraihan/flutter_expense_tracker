@@ -29,7 +29,6 @@ class _SelectedWalletState extends State<SelectedWallet> {
         MediaQuery.of(context).orientation;
 
     return GridView.count(
-
         // Create a grid with 2 columns. If you change the scrollDirection to
         // horizontal, this produces 2 rows.
         physics: const NeverScrollableScrollPhysics(),
