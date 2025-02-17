@@ -7,7 +7,6 @@ import 'package:expense_tracker/features/expense/presentation/widgets/select_wal
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class AddAccountWalletScreen extends StatefulWidget {
   const AddAccountWalletScreen({super.key});
@@ -25,8 +24,6 @@ class _AddAccountWalletState extends State<AddAccountWalletScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(
         builder: (BuildContext context, AccountState state) {
-      print(state.props);
-
       final Orientation orientation =
           MediaQuery.of(context).orientation;
 
