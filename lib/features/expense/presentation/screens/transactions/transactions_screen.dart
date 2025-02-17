@@ -24,6 +24,15 @@ class TransactionsScreen extends StatefulWidget {
 
 class _TransactionsScreenState extends State<TransactionsScreen> {
   final _key = GlobalKey<ExpandableFabState>();
+  final List<String> _listFilterTransaction = [
+    'All',
+    'Yesterday',
+    'This Week',
+    'This Month',
+    'Older'
+  ];
+
+  late String selectedFilter;
 
   void _handleExpandableNavigation(BuildContext context, screen) {
     Navigator.push(
@@ -56,8 +65,6 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   }
 
   Widget _buildBody(TransactionFirebaseState state) {
-    String filterDate;
-
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
@@ -71,16 +78,17 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
           IconButton(
               onPressed: () {
                 showModalBottomSheet(
+                    enableDrag: true,
                     showDragHandle: true,
                     context: context,
+                    useSafeArea: true,
                     builder: (BuildContext context) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16),
                         child: Column(
                           spacing: 10,
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment:
                               CrossAxisAlignment.start,
                           children: [
@@ -88,10 +96,36 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text('Filter transaction'),
+                                  const Text(
+                                    'Filter transaction',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
                                   PrimaryButtonWidget(
-                                      title: 'Reset', onclick: () {})
-                                ])
+                                      title: 'Reset',
+                                      onclick: () {
+                                        selectedFilter =
+                                            _listFilterTransaction[0];
+                                      })
+                                ]),
+                            const Text(
+                              'Sort By',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
+                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  PrimaryButtonWidget(
+                                      title: 'Reset',
+                                      onclick: () {
+                                        selectedFilter =
+                                            _listFilterTransaction[0];
+                                      })
+                                ]),
                           ],
                         ),
                       );
