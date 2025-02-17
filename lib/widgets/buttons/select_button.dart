@@ -19,7 +19,9 @@ class _SelectButtonState extends State<SelectButton> {
     return GridView.count(
         physics: const NeverScrollableScrollPhysics(),
         crossAxisCount: 3,
-        mainAxisSpacing: 5,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: 2,
         shrinkWrap: true,
         children: widget.listTitle.asMap().entries.map((
           entry,
@@ -31,9 +33,21 @@ class _SelectButtonState extends State<SelectButton> {
   }
 
   Widget _selectButtonWidget(String item, int index) {
+    final bool isActive = activateButtonIndex == index;
     return TextButton(
+        style: TextButton.styleFrom(
+            backgroundColor: Colors.deepPurple.shade50,
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                    const BorderRadius.all(Radius.circular(10)),
+                side: isActive
+                    ? const BorderSide(color: Colors.deepPurpleAccent)
+                    : BorderSide.none)),
         onPressed: () {
           widget.onClick(item);
+          setState(() {
+            activateButtonIndex = index;
+          });
         },
         child: Text(item));
   }
