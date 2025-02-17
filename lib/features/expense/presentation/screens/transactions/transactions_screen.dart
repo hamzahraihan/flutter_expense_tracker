@@ -33,11 +33,17 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     'Older'
   ];
 
-  final String selectedValue = 'All';
+  late String selectedValue = 'All';
 
   void _handleExpandableNavigation(BuildContext context, screen) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => screen));
+  }
+
+  void updateSelectedValue(String newValue) {
+    setState(() {
+      selectedValue = newValue;
+    });
   }
 
   @override
@@ -48,6 +54,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(selectedValue);
     return BlocBuilder<TransactionFirebaseBloc,
             TransactionFirebaseState>(
         builder:
@@ -118,7 +125,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                             ),
                             SelectButton(
                               listTitle: _listFilterTransaction,
-                              selectedValue: selectedValue,
+                              onClick: updateSelectedValue,
                             )
                           ],
                         ),
