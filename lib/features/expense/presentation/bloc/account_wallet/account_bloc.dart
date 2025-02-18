@@ -43,11 +43,13 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   Future<void> _onFetchAccountWallets(
       GetAccountWallet event, Emitter<AccountState> emit) async {
     emit(state.copyWith(status: AccountWalletStatus.loading));
+
     if (_currentUser.isEmpty) {
       emit(state.copyWith(
           status: AccountWalletStatus.success, accountWallet: []));
       return;
     }
+
     try {
       final List<AccountWalletModel> accountWallet =
           await _getAccountWalletUseCase.execute(
@@ -83,13 +85,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
   void _onAddAccountWalletTypeChanged(
       AccountTypeChanged event, Emitter<AccountState> emit) {
-    if (event.walletType.isNotEmpty) {
-      emit(state.copyWith(
-          walletType: event.walletType,
-          status: AccountWalletStatus.success));
-    } else {
-      emit(state.copyWith(status: AccountWalletStatus.failure));
-    }
+    emit(state.copyWith(
+        walletType: event.walletType,
+        status: AccountWalletStatus.success));
   }
 
   Future<void> _onAddAccountWallet(AddAccountWalletSubmitted event,
