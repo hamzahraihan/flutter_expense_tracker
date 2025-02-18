@@ -38,6 +38,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(
         builder: (BuildContext context, AccountState state) {
+      print(state.status);
       switch (state.status) {
         case AccountWalletStatus.loading:
           return const Loading();
