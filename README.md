@@ -1,3 +1,3 @@
-# expense tracker app
+# Spendly
 
-A new Flutter project.
+https://www.bitfinex.com/images/android-button.svg
