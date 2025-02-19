@@ -1,16 +1,7 @@
-# expense tracker app
+# Spendly
 
-A new Flutter project.
+### Download App ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/hamzahraihan/flutter_expense_tracker/total?color=blue)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+<a href="https://github.com/hamzahraihan/flutter_expense_tracker/releases/download/v0.5.0-alpha/app-release.apk"><img src="https://playerzon.com/asset/download.png" width="200"></img></a>
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
