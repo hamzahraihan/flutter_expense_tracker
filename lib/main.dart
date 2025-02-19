@@ -151,7 +151,7 @@ class MyApp extends StatelessWidget {
           })
         ],
         child: MaterialApp(
-          title: 'My Expense',
+          title: 'Spendly',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
                 seedColor: Colors.white,
