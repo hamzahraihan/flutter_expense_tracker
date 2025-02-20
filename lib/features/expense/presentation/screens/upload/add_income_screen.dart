@@ -49,7 +49,8 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
         return Scaffold(
           appBar: AppBar(),
           body: const Center(
-            child: Text('Create a wallet first before adding income'),
+            child:
+                Text('Create a wallet first before adding incomes'),
           ),
         );
       }
