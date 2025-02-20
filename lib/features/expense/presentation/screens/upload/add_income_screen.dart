@@ -1,3 +1,4 @@
+import 'package:expense_tracker/features/expense/data/model/account_wallet_model.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/account_wallet/account_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_bloc.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/add_transaction/add_transaction_event.dart';
@@ -42,6 +43,16 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
 
     return BlocBuilder<AddTransactionBloc, AddTransactionState>(
         builder: (BuildContext context, AddTransactionState state) {
+      final List<AccountWalletModel>? accountWallet = context
+          .select((AccountBloc bloc) => bloc.state.accountWallet);
+      if (accountWallet!.isEmpty) {
+        return Scaffold(
+          appBar: AppBar(),
+          body: const Center(
+            child: Text('Create a wallet first before adding income'),
+          ),
+        );
+      }
       return Scaffold(
           // resizeToAvoidBottomInset: false,
           appBar: AppBar(
