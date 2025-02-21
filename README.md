@@ -28,3 +28,18 @@
 [<img src="screenshots/09.png" width=160>](screenshots/09.png)
 [<img src="screenshots/10.png" width=160>](screenshots/10.png)
 [<img src="screenshots/11.png" width=160>](screenshots/11.png)
+
+## Supported Services
+
+Spendly currently supports these services:
+
+- Cloud Firestore
+- Firebase Multi-factor Authentication
+
+As you can see, Spendly only supports firebase as a database and authentication. It means that user must connect to network for the application to be function normally as it should.
+
+Currently, Spendly is not support offline access.
+
+## Description
+
+## Features
