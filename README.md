@@ -42,4 +42,15 @@ Currently, Spendly is not support offline access.
 
 ## Description
 
+Spendly works by fetching the required data from cloud firestore(a service from firebase). User must create an account to be able to use the app. This means that you need an account to use Spendly.
+
+Spendly could track your expenses and incomes. Spendly has a feature to add a wallet. It means that you can create a different wallet with different purpose(e.g. shopping).
+
 ## Features
+
+- Create an account using google or email
+- Create expenses and incomes
+- Create a wallet
+- Show statistic of expenses and incomes
+- View and search your transaction history
+- Easy to use
