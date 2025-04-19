@@ -1,4 +1,4 @@
-<p align="center"><a href="https://newpipe.net"><img src="assets/icon/icon.png" width="150"></a></p> 
+<p align="center"><a href="https://github.com/hamzahraihan/flutter_expense_tracker/releases/download/v0.5.0-alpha/app-release.apk"><img src="assets/icon/icon.png" width="150"></a></p> 
 <h2 align="center"><b>Spendly</b></h2>
 
 <h4 align="center">An expense tracker for Android.</h4>
